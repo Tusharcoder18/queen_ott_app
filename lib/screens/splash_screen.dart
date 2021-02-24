@@ -42,7 +42,6 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             Container(
               child: CircularProgressIndicator(
-                // backgroundColor: Colors.white,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             )
