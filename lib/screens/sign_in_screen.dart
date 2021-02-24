@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/screens/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -197,11 +198,17 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(
               height: 15,
             ),
-            Text(
-              "New to Queen? Sign up now.",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+            GestureDetector(
+              child: Text(
+                "New to Queen? Sign up now.",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
+              },
             ),
             SizedBox(
               height: 20,
