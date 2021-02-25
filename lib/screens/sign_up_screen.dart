@@ -150,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (value.isEmpty) {
                       return "Password is Required";
                     }
-                    if (_password != _confirmPassword) {
+                    else if (_password != _confirmPassword) {
                       return "Password did not match";
                     }
                   },
@@ -175,7 +175,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   elevation: 0,
                   minWidth: double.maxFinite,
                   height: 50,
-                  onPressed: () {},
+                  onPressed: () {
+                    if (!_formKey.currentState.validate()) {
+                      return;
+                    }
+                    _formKey.currentState.save();
+                    print(_emailPhone);
+                    print(_password);
+                  },
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: Colors.grey[600]),
                       borderRadius: BorderRadius.circular(3)),
@@ -223,12 +230,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <Widget>[
                     Icon(FontAwesomeIcons.facebook),
                     SizedBox(width: 10),
-                    Text('Sign-in using Facebook',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text(
+                      'Sign-up using Facebook',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ],
                 ),
                 textColor: Colors.white,
               ),
+              SizedBox(
+                height: 10,
+              ),
+
               SizedBox(
                 height: 10,
               ),

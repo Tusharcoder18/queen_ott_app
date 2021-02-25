@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/screens/intermediate_screen.dart';
 import 'package:queen_ott_app/screens/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -190,6 +191,21 @@ class _SignInScreenState extends State<SignInScreen> {
                 ],
               ),
               textColor: Colors.white,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            GestureDetector(
+              child: Container(
+                height: 30,
+                width: 300,
+                color: Colors.green,
+                // This is just for temporary basis
+                child: Center(child: Text('Next Page')),
+              ),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>InterMediateScreen()));
+              },
             ),
             SizedBox(
               height: 10,
