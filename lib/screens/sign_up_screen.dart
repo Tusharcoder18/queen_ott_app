@@ -223,7 +223,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <Widget>[
                     Icon(FontAwesomeIcons.facebook),
                     SizedBox(width: 10),
-                    Text('Sign-in using Facebook',
+                    Text('Sign-up using Facebook',
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ],
                 ),
