@@ -14,6 +14,7 @@ class HomePage extends StatelessWidget {
             RaisedButton(
               onPressed: () {
                 context.read<AuthenticationService>().signOut();
+                context.read<AuthenticationService>().signOutGoogle();
               },
               child: Text("Sign out"),
             ),

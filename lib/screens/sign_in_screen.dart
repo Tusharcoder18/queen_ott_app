@@ -24,7 +24,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
 
-    if(firebaseUser != null) {
+    if (firebaseUser != null) {
       return HomePage();
     }
     return Scaffold(
@@ -34,10 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
           children: [
             _headerWidget(),
             SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.18,
+              height: MediaQuery.of(context).size.height * 0.18,
             ),
             _formWidget(),
           ],
@@ -97,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       return "Email or Phone Number is Required";
                     }
                   },
-                  onChanged: (String value){
+                  onChanged: (String value) {
                     _emailPhone = value;
                     print(_emailPhone);
                   },
@@ -132,7 +129,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   onSaved: (String value) {
                     _password = value;
                   },
-                  onChanged: (String value){
+                  onChanged: (String value) {
                     _password = value;
                     print(_password);
                   },
@@ -158,9 +155,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     print("email: $_emailPhone");
                     print("password : $_password");
                     context.read<AuthenticationService>().signIn(
-                      email: _emailPhone,
-                      password: _password,
-                    );
+                          email: _emailPhone,
+                          password: _password,
+                        );
                   },
                   shape: RoundedRectangleBorder(
                       side: BorderSide(color: Colors.grey[600]),
@@ -182,7 +179,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 elevation: 0,
                 minWidth: double.maxFinite,
                 height: 50,
-                onPressed: () {},
+                onPressed: () {
+                  print(
+                      context.read<AuthenticationService>().signInWithGoogle());
+                },
                 color: Colors.redAccent,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

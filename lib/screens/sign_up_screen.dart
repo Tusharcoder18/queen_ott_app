@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // This is for signUp
     final firebaseUser = context.watch<User>();
 
-    if(firebaseUser != null){
+    if (firebaseUser != null) {
       return HomePage();
     }
 
@@ -95,7 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return "Email or Phone Number is Required";
                     }
                   },
-                  onChanged: (String value){
+                  onChanged: (String value) {
                     _emailPhone = value;
                   },
                 ),
@@ -157,8 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   validator: (String value) {
                     if (value.isEmpty) {
                       return "Password is Required";
-                    }
-                    else if (_password != _confirmPassword) {
+                    } else if (_password != _confirmPassword) {
                       return "Password did not match";
                     }
                   },
@@ -175,14 +174,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 minWidth: double.maxFinite,
                 height: 50,
                 onPressed: () {
-                  if(_password == _confirmPassword){
+                  if (_password == _confirmPassword) {
                     print("password Confirmed");
-                      print(context.read<AuthenticationService>().signUp(
-                        email: _emailPhone,
-                        password: _password,
-                      ));
-                  }
-                  else{
+                    print(context.read<AuthenticationService>().signUp(
+                          email: _emailPhone,
+                          password: _password,
+                        ));
+                  } else {
                     print("password Not Confirmed");
                   }
 
@@ -239,10 +237,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <Widget>[
                     Icon(FontAwesomeIcons.facebook),
                     SizedBox(width: 10),
-                    Text(
-                      'Sign-up using Facebook',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    Text('Sign-up using Facebook',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
                   ],
                 ),
                 textColor: Colors.white,
