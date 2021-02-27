@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "996504561511",
+    "project_id": "queenapp-81e7b",
+    "storage_bucket": "queenapp-81e7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996504561511:android:c104c557837632b5b7f1c2",
+        "android_client_info": {
+          "package_name": "com.example.queen_ott_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996504561511-g6r2r1oh5tcajd8tmjokgvba33vsnjfb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0DWbcNZf1Bckmuz97FtGJ_1OJo8JFkto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "996504561511-g6r2r1oh5tcajd8tmjokgvba33vsnjfb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

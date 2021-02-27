@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/authentication_service.dart';
 import 'package:queen_ott_app/screens/sign_in_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/screens/test_home_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -19,6 +21,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // This is for signUp
+    final firebaseUser = context.watch<User>();
+
+    if(firebaseUser != null){
+      return HomePage();
+    }
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
@@ -39,9 +48,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // SizedBox(
-        //   width: 5.0,
-        // ),
         Text(
           "QUEEN",
           style: TextStyle(
@@ -89,7 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return "Email or Phone Number is Required";
                     }
                   },
-                  onSaved: (String value) {
+                  onChanged: (String value){
                     _emailPhone = value;
                   },
                 ),
@@ -121,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return "Password is Required";
                     }
                   },
-                  onSaved: (String value) {
+                  onChanged: (String value) {
                     _password = value;
                   },
                 ),
@@ -156,7 +162,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return "Password did not match";
                     }
                   },
-                  onSaved: (String value) {
+                  onChanged: (String value) {
                     _confirmPassword = value;
                   },
                 ),
@@ -164,8 +170,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 height: 15,
               ),
-              GestureDetector(
-                onTap: () {
+              MaterialButton(
+                elevation: 0,
+                minWidth: double.maxFinite,
+                height: 50,
+                onPressed: () {
+                  if(_password == _confirmPassword){
+                    print("password Confirmed");
+                      print(context.read<AuthenticationService>().signUp(
+                        email: _emailPhone,
+                        password: _password,
+                      ));
+                  }
+                  else{
+                    print("password Not Confirmed");
+                  }
+
                   if (!_formKey.currentState.validate()) {
                     return;
                   }
@@ -173,39 +193,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   print(_emailPhone);
                   print(_password);
                 },
-                child: MaterialButton(
-                  elevation: 0,
-                  minWidth: double.maxFinite,
-                  height: 50,
-                  onPressed: () {
-                    setState(() {
-                    });
-                    if(_password == _confirmPassword){
-                      print("password Confirmed");
-                    }
-                    else{
-                      print("password Not Confirmed");
-                    }
-
-                    if (!_formKey.currentState.validate()) {
-                      return;
-                    }
-                    _formKey.currentState.save();
-                    print(_emailPhone);
-                    print(_password);
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey[600]),
-                      borderRadius: BorderRadius.circular(3)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Sign up',
-                          style: TextStyle(color: Colors.white, fontSize: 16)),
-                    ],
-                  ),
-                  textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey[600]),
+                    borderRadius: BorderRadius.circular(3)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Sign up',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ],
                 ),
+                textColor: Colors.white,
               ),
               SizedBox(
                 height: 15,
