@@ -45,7 +45,9 @@ class AuthenticationService {
   Future<String> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleSignInAccount =
-          await googleSignIn.signIn();
+          await googleSignIn.signIn().catchError((onError) {
+        print("Error $onError");
+      });
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
@@ -54,8 +56,11 @@ class AuthenticationService {
         idToken: googleSignInAuthentication.idToken,
       );
 
-      final UserCredential authResult =
-          await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential authResult = await _firebaseAuth
+          .signInWithCredential(credential)
+          .catchError((onError) {
+        print("Error: $onError");
+      });
       final User user = authResult.user;
 
       if (user != null) {
