@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  final FacebookLogin facebookLogin = FacebookLogin();
 
   AuthenticationService(this._firebaseAuth);
 
@@ -13,6 +14,8 @@ class AuthenticationService {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+
+    print("User signed out");
   }
 
   Future<String> signIn({String email, String password}) async {
@@ -40,36 +43,74 @@ class AuthenticationService {
   }
 
   Future<String> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    try {
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
 
-    final UserCredential authResult =
-        await _firebaseAuth.signInWithCredential(credential);
-    final User user = authResult.user;
+      final UserCredential authResult =
+          await _firebaseAuth.signInWithCredential(credential);
+      final User user = authResult.user;
 
-    if (user != null) {
-      assert(!user.isAnonymous);
-      assert(await user.getIdToken() != null);
+      if (user != null) {
+        assert(!user.isAnonymous);
+        assert(await user.getIdToken() != null);
 
-      final User currentUser = _firebaseAuth.currentUser;
-      assert(user.uid == currentUser.uid);
+        final User currentUser = _firebaseAuth.currentUser;
+        assert(user.uid == currentUser.uid);
 
-      print('signInWithGoogle succeeded: $user');
+        print('signInWithGoogle succeeded: $user');
 
-      return '$user';
+        return '$user';
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return "Sign In cancelled";
     }
-    return null;
   }
 
   Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
 
-    print("User Signed Out");
+    print("Google User Signed Out");
+  }
+
+  Future<String> signInWithFacebook() async {
+    final FacebookLoginResult result = await facebookLogin.logIn(['email']);
+    switch (result.status) {
+      case FacebookLoginStatus.cancelledByUser:
+        print("Login Cancelled");
+        break;
+      case FacebookLoginStatus.error:
+        print("Login Error!");
+        break;
+      case FacebookLoginStatus.loggedIn:
+        try {
+          final FacebookAccessToken accessToken = result.accessToken;
+          AuthCredential credential =
+              FacebookAuthProvider.credential(accessToken.token);
+          final UserCredential authResult =
+              await _firebaseAuth.signInWithCredential(credential);
+          final User user = authResult.user;
+          return '$user';
+        } catch (e) {
+          print(e);
+        }
+        break;
+    }
+    return null;
+  }
+
+  Future<void> signOutFacebook() async {
+    await facebookLogin.logOut();
+
+    print("Facebook User Signed Out");
   }
 }
