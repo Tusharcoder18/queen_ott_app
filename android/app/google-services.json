@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "996504561511-no2df1ucm801ambtd6mfsb1edscbrm45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.queen_ott_app",
+            "certificate_hash": "fda479a8ad91f97ec697cd82a01ca4211becfa5d"
+          }
+        },
+        {
           "client_id": "996504561511-g6r2r1oh5tcajd8tmjokgvba33vsnjfb.apps.googleusercontent.com",
           "client_type": 3
         }
