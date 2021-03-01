@@ -202,7 +202,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 elevation: 0,
                 minWidth: double.maxFinite,
                 height: 50,
-                onPressed: () {},
+                onPressed: () {
+                  print(context
+                      .read<AuthenticationService>()
+                      .signInWithFacebook());
+                },
                 color: Colors.blue,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -217,6 +221,23 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
               SizedBox(
                 height: 10,
+              ),
+              MaterialButton(
+                elevation: 0,
+                minWidth: double.maxFinite,
+                height: 50,
+                onPressed: () {},
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(FontAwesomeIcons.facebook),
+                    SizedBox(width: 10),
+                    Text('Sign-in using Apple',
+                        style: TextStyle(color: Colors.black, fontSize: 16)),
+                  ],
+                ),
+                textColor: Colors.black,
               ),
               SizedBox(
                 height: 10,

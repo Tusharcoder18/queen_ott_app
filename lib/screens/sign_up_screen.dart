@@ -246,7 +246,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 height: 10,
               ),
-
+              MaterialButton(
+                elevation: 0,
+                minWidth: double.maxFinite,
+                height: 50,
+                onPressed: () {},
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(FontAwesomeIcons.facebook),
+                    SizedBox(width: 10),
+                    Text('Sign-up using Apple',
+                        style: TextStyle(color: Colors.black, fontSize: 16)),
+                  ],
+                ),
+                textColor: Colors.black,
+              ),
               SizedBox(
                 height: 10,
               ),
