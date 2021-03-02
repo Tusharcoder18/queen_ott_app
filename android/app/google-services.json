@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "996504561511-uul9u8768i0omejtcqni4f6rct45525o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.queen_ott_app",
+            "certificate_hash": "1ddbc6f0bc680c0f349c3b1042c231b5ff0b3cd7"
+          }
+        },
+        {
           "client_id": "996504561511-g6r2r1oh5tcajd8tmjokgvba33vsnjfb.apps.googleusercontent.com",
           "client_type": 3
         }

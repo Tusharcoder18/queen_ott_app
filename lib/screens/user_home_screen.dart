@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/constants.dart';
+import 'package:queen_ott_app/modules/home_screen_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,12 +11,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blue);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: kWhiteColor);
+  List<Widget> _widgetOptions = <Widget>[
+    HomeScreenWidget(),
     Text(
       'Index 1: Trending',
       style: optionStyle,
@@ -79,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: kWhiteColor,
         onTap: _onItemTapped,
       ),
       body: Container(
@@ -88,3 +87,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+

@@ -4,8 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/authentication_service.dart';
 import 'package:queen_ott_app/screens/sign_up_screen.dart';
-import 'package:queen_ott_app/screens/test_home_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/screens/user_home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return HomePage();
+      return HomeScreen();
     }
     return Scaffold(
       body: Container(
@@ -136,39 +136,36 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 15,
               ),
-              GestureDetector(
-                onTap: () {
-                  if (!_formKey.currentState.validate()) {
-                    return;
+              MaterialButton(
+                elevation: 0,
+                minWidth: double.maxFinite,
+                height: 50,
+                onPressed: () async{
+                  print("email: $_emailPhone");
+                  print("password : $_password");
+                  context.read<AuthenticationService>().signIn(
+                        email: _emailPhone,
+                        password: _password,
+                      );
+
+                  if(await context.read<AuthenticationService>().signIn(
+                    email: _emailPhone,
+                    password: _password,
+                  )){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
                   }
-                  _formKey.currentState.save();
-                  print(_emailPhone);
-                  print(_password);
                 },
-                child: MaterialButton(
-                  elevation: 0,
-                  minWidth: double.maxFinite,
-                  height: 50,
-                  onPressed: () {
-                    print("email: $_emailPhone");
-                    print("password : $_password");
-                    context.read<AuthenticationService>().signIn(
-                          email: _emailPhone,
-                          password: _password,
-                        );
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey[600]),
-                      borderRadius: BorderRadius.circular(3)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Sign In',
-                          style: TextStyle(color: Colors.white, fontSize: 16)),
-                    ],
-                  ),
-                  textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey[600]),
+                    borderRadius: BorderRadius.circular(3)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Sign In',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ],
                 ),
+                textColor: Colors.white,
               ),
               SizedBox(
                 height: 15,
