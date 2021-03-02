@@ -50,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
         Text(
           "QUEEN",
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.white,
             letterSpacing: 2.0,
             fontFamily: 'Roboto',
             fontSize: 30.0,
@@ -138,107 +138,66 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 15,
               ),
-              GestureDetector(
-                onTap: () {
+              MaterialButton(
+                elevation: 0,
+                minWidth: double.maxFinite,
+                height: 50,
+                onPressed: () {
                   if (!_formKey.currentState.validate()) {
                     return;
                   }
                   _formKey.currentState.save();
                   print(_emailPhone);
                   print(_password);
+                  context.read<AuthenticationService>().signIn(
+                        email: _emailPhone,
+                        password: _password,
+                      );
                 },
-                child: MaterialButton(
-                  elevation: 0,
-                  minWidth: double.maxFinite,
-                  height: 50,
-                  onPressed: () {
-                    print("email: $_emailPhone");
-                    print("password : $_password");
-                    context.read<AuthenticationService>().signIn(
-                          email: _emailPhone,
-                          password: _password,
-                        );
-                  },
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey[600]),
-                      borderRadius: BorderRadius.circular(3)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Sign In',
-                          style: TextStyle(color: Colors.white, fontSize: 16)),
-                    ],
-                  ),
-                  textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey[600]),
+                    borderRadius: BorderRadius.circular(3)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Sign in',
+                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                  ],
                 ),
+                textColor: Colors.white,
               ),
               SizedBox(
                 height: 15,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {
-                  print(
-                      context.read<AuthenticationService>().signInWithGoogle());
-                },
-                color: Colors.redAccent,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.google),
-                    SizedBox(width: 10),
-                    Text('Sign-in using Google',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
-                  ],
-                ),
-                textColor: Colors.white,
-              ),
+              customButton(
+                  text: "Sign-in using Google",
+                  icon: Icon(FontAwesomeIcons.google),
+                  color: Colors.red,
+                  onTap: () {
+                    print(context
+                        .read<AuthenticationService>()
+                        .signInWithGoogle());
+                  }),
               SizedBox(
                 height: 10,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {
-                  print(context
-                      .read<AuthenticationService>()
-                      .signInWithFacebook());
-                },
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.facebook),
-                    SizedBox(width: 10),
-                    Text('Sign-in using Facebook',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
-                  ],
-                ),
-                textColor: Colors.white,
-              ),
+              customButton(
+                  text: "Sign-in using Facebook",
+                  icon: Icon(FontAwesomeIcons.facebook),
+                  color: Colors.blue,
+                  onTap: () {
+                    print(context
+                        .read<AuthenticationService>()
+                        .signInWithFacebook());
+                  }),
               SizedBox(
                 height: 10,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {},
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.facebook),
-                    SizedBox(width: 10),
-                    Text('Sign-in using Apple',
-                        style: TextStyle(color: Colors.black, fontSize: 16)),
-                  ],
-                ),
-                textColor: Colors.black,
-              ),
+              customButton(
+                  text: "Sign-in using Apple",
+                  icon: Icon(FontAwesomeIcons.apple),
+                  color: Colors.white,
+                  onTap: () {}),
               SizedBox(
                 height: 10,
               ),
@@ -265,6 +224,32 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget customButton({String text, Icon icon, Color color, Function onTap}) {
+    return MaterialButton(
+      elevation: 0,
+      minWidth: double.maxFinite,
+      height: 50,
+      onPressed: () {
+        if (onTap != null) {
+          onTap();
+        }
+      },
+      color: color != null ? color : Colors.transparent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          icon != null ? icon : Icon(FontAwesomeIcons.sign),
+          SizedBox(width: 10),
+          Text(text,
+              style: TextStyle(
+                  color: color != Colors.white ? Colors.white : Colors.black,
+                  fontSize: 16)),
+        ],
+      ),
+      textColor: color != Colors.white ? Colors.white : Colors.black,
     );
   }
 

@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Text(
           "QUEEN",
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.white,
             letterSpacing: 2.0,
             fontFamily: 'Roboto',
             fontSize: 30.0,
@@ -255,7 +255,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(FontAwesomeIcons.facebook),
+                    Icon(FontAwesomeIcons.apple),
                     SizedBox(width: 10),
                     Text('Sign-up using Apple',
                         style: TextStyle(color: Colors.black, fontSize: 16)),
