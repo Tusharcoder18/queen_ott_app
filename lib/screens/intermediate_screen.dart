@@ -50,9 +50,9 @@ class IntermediateScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(FontAwesomeIcons.creativeCommons),
+                  Icon(FontAwesomeIcons.laptop),
                   SizedBox(width: 10),
-                  Text('Content Creator',
+                  Text('Content Consumer',
                       style: TextStyle(color: Colors.white, fontSize: 20)),
                 ],
               ),
@@ -77,9 +77,9 @@ class IntermediateScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(FontAwesomeIcons.laptop),
+                  Icon(FontAwesomeIcons.creativeCommons),
                   SizedBox(width: 10),
-                  Text('Content Consumer',
+                  Text('Content Creator',
                       style: TextStyle(color: Colors.white, fontSize: 20)),
                 ],
               ),
