@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/modules/home_screen_widget.dart';
+import 'package:queen_ott_app/screens/test_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -22,10 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
       'Index 2: Subscription',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    )
+    // Text(
+    //   'Index 3: Settings',
+    //   style: optionStyle,
+    // )
+    TestPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               'QUEEN',
               style: TextStyle(
-                color: Colors.red,
+                color: Colors.white,
                 letterSpacing: 2.0,
                 fontFamily: 'Roboto',
                 fontSize: 25.0,
@@ -87,5 +89,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-

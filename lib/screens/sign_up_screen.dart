@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Text(
           "QUEEN",
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.white,
             letterSpacing: 2.0,
             fontFamily: 'Roboto',
             fontSize: 30.0,

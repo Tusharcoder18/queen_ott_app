@@ -48,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
         Text(
           "QUEEN",
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.white,
             letterSpacing: 2.0,
             fontFamily: 'Roboto',
             fontSize: 30.0,
@@ -140,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 elevation: 0,
                 minWidth: double.maxFinite,
                 height: 50,
-                onPressed: () async{
+                onPressed: () async {
                   print("email: $_emailPhone");
                   print("password : $_password");
                   context.read<AuthenticationService>().signIn(
@@ -148,11 +148,12 @@ class _SignInScreenState extends State<SignInScreen> {
                         password: _password,
                       );
 
-                  if(await context.read<AuthenticationService>().signIn(
-                    email: _emailPhone,
-                    password: _password,
-                  )){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+                  if (await context.read<AuthenticationService>().signIn(
+                        email: _emailPhone,
+                        password: _password,
+                      )) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
                   }
                 },
                 shape: RoundedRectangleBorder(
