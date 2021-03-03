@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:queen_ott_app/authentication_service.dart';
 import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/modules/home_screen_widget.dart';
+import 'package:queen_ott_app/screens/test_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: kWhiteColor);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   List<Widget> _widgetOptions = <Widget>[
     HomeScreenWidget(),
     Text(
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'Index 2: Subscription',
       style: optionStyle,
     ),
-    SignOutButton(),
+    TestPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               'QUEEN',
               style: TextStyle(
-                color: Colors.red,
+                color: Colors.white,
                 letterSpacing: 2.0,
                 fontFamily: 'Roboto',
                 fontSize: 25.0,
@@ -81,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: kWhiteColor,
+        selectedItemColor: Colors.blue[600],
         onTap: _onItemTapped,
       ),
       body: Container(
@@ -103,5 +104,4 @@ class SignOutButton extends StatelessWidget {
     );
   }
 }
-
 

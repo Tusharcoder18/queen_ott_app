@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/authentication_service.dart';
+import 'package:queen_ott_app/screens/intermediate_screen.dart';
 import 'package:queen_ott_app/screens/sign_up_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/screens/user_home_screen.dart';
+import '../widgets/custom_button.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _SignInScreenState extends State<SignInScreen> {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return HomeScreen();
+      return IntermediateScreen();
     }
     return Scaffold(
       body: Container(
@@ -48,7 +49,7 @@ class _SignInScreenState extends State<SignInScreen> {
         Text(
           "QUEEN",
           style: TextStyle(
-            color: Colors.red,
+            color: Colors.white,
             letterSpacing: 2.0,
             fontFamily: 'Roboto',
             fontSize: 30.0,
@@ -140,20 +141,17 @@ class _SignInScreenState extends State<SignInScreen> {
                 elevation: 0,
                 minWidth: double.maxFinite,
                 height: 50,
-                onPressed: () async{
-                  print("email: $_emailPhone");
-                  print("password : $_password");
+                onPressed: () {
+                  if (!_formKey.currentState.validate()) {
+                    return;
+                  }
+                  _formKey.currentState.save();
+                  print(_emailPhone);
+                  print(_password);
                   context.read<AuthenticationService>().signIn(
                         email: _emailPhone,
                         password: _password,
                       );
-
-                  if(await context.read<AuthenticationService>().signIn(
-                    email: _emailPhone,
-                    password: _password,
-                  )){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
-                  }
                 },
                 shape: RoundedRectangleBorder(
                     side: BorderSide(color: Colors.grey[600]),
@@ -161,7 +159,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Sign In',
+                    Text('Sign in',
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ],
                 ),
@@ -170,70 +168,35 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 15,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {
-                  print(
-                      context.read<AuthenticationService>().signInWithGoogle());
-                },
-                color: Colors.redAccent,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.google),
-                    SizedBox(width: 10),
-                    Text('Sign-in using Google',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
-                  ],
-                ),
-                textColor: Colors.white,
-              ),
+              CustomButton(
+                  text: "Sign-in using Google",
+                  icon: Icon(FontAwesomeIcons.google),
+                  color: Colors.red,
+                  onTap: () {
+                    print(context
+                        .read<AuthenticationService>()
+                        .signInWithGoogle());
+                  }),
               SizedBox(
                 height: 10,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {
-                  print(context
-                      .read<AuthenticationService>()
-                      .signInWithFacebook());
-                },
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.facebook),
-                    SizedBox(width: 10),
-                    Text('Sign-in using Facebook',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
-                  ],
-                ),
-                textColor: Colors.white,
-              ),
+              CustomButton(
+                  text: "Sign-in using Facebook",
+                  icon: Icon(FontAwesomeIcons.facebook),
+                  color: Colors.blue,
+                  onTap: () {
+                    print(context
+                        .read<AuthenticationService>()
+                        .signInWithFacebook());
+                  }),
               SizedBox(
                 height: 10,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {},
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.facebook),
-                    SizedBox(width: 10),
-                    Text('Sign-in using Apple',
-                        style: TextStyle(color: Colors.black, fontSize: 16)),
-                  ],
-                ),
-                textColor: Colors.black,
-              ),
+              CustomButton(
+                  text: "Sign-in using Apple",
+                  icon: Icon(FontAwesomeIcons.apple),
+                  color: Colors.white,
+                  onTap: () {}),
               SizedBox(
                 height: 10,
               ),

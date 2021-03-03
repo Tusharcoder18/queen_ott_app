@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenWidget extends StatelessWidget {
-
   // This is to give font style to the different headings
   // on the screen
   final TextStyle _textStyle = TextStyle(
@@ -23,47 +22,48 @@ class HomeScreenWidget extends StatelessWidget {
               height: screenHeight * 0.2,
               width: screenWidth,
               color: Colors.pink,
-              child: Image.asset('assets/moviePoster.jpg', fit: BoxFit.cover,),
+              child: Image.asset(
+                'assets/moviePoster.jpg',
+                fit: BoxFit.cover,
+              ),
             ),
-            SizedBox(height: screenHeight *0.022,),
-            /*
-            This part would contain the movie that the user was watching already
-            and after returning can return back to the place where he left the movie
-            */
+            SizedBox(
+              height: screenHeight * 0.022,
+            ),
             Container(
               height: 20,
               width: screenWidth,
-              child: Text('Continue Watching', style: _textStyle, ),
+              child: Text(
+                'Continue Watching',
+                style: _textStyle,
+              ),
             ),
             ContinueWatchingWidget(screenWidth: screenWidth),
-            /*
-            After this we should provide recommended movies to the user
-            as per the behaviour of the user
-             */
             Container(
               height: 20,
               width: screenWidth,
-              child: Text('Recommended Shows',
-              style: _textStyle,),
+              child: Text(
+                'Recommended Shows',
+                style: _textStyle,
+              ),
             ),
             RecommendedShowWidget(screenWidth: screenWidth),
-            /*
-            After this we can give user the language specific
-            content the user wants to watch
-             */
             Container(
               height: 20,
               width: screenWidth,
-              child: Text('Watch shows in you Language', style: _textStyle, ),
+              child: Text(
+                'Watch shows in you Language',
+                style: _textStyle,
+              ),
             ),
             LanguageShowsWidget(screenWidth: screenWidth),
-            /*
-            can go forward with some award winning movies or videos
-             */
             Container(
               height: 20,
               width: screenWidth,
-              child: Text('Award Winning Shows', style: _textStyle,),
+              child: Text(
+                'Award Winning Shows',
+                style: _textStyle,
+              ),
             ),
             AwardWinningShowsWidget(screenWidth: screenWidth),
           ],
@@ -74,7 +74,9 @@ class HomeScreenWidget extends StatelessWidget {
 }
 
 class AwardWinningShowsWidget extends StatelessWidget {
-  const AwardWinningShowsWidget({@required this.screenWidth,});
+  const AwardWinningShowsWidget({
+    @required this.screenWidth,
+  });
 
   final double screenWidth;
 
@@ -95,8 +97,10 @@ class AwardWinningShowsWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieOne.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieOne.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
@@ -105,8 +109,10 @@ class AwardWinningShowsWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieThree.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieThree.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
@@ -115,8 +121,10 @@ class AwardWinningShowsWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieTwo.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieTwo.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ],
@@ -128,8 +136,9 @@ class AwardWinningShowsWidget extends StatelessWidget {
 }
 
 class LanguageShowsWidget extends StatelessWidget {
-
-    LanguageShowsWidget({@required this.screenWidth,});
+  LanguageShowsWidget({
+    @required this.screenWidth,
+  });
 
   final double screenWidth;
 
@@ -156,12 +165,15 @@ class LanguageShowsWidget extends StatelessWidget {
                   width: 150,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Colors.green, Colors.lightBlueAccent]
-                    ),
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.green, Colors.lightBlueAccent]),
                   ),
-                  child: Center(child: Text('Hindi', style: _textStyle,)),
+                  child: Center(
+                      child: Text(
+                    'Hindi',
+                    style: _textStyle,
+                  )),
                 ),
               ),
               Padding(
@@ -173,10 +185,13 @@ class LanguageShowsWidget extends StatelessWidget {
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [Colors.green, Colors.lightBlueAccent]
-                    ),
+                        colors: [Colors.green, Colors.lightBlueAccent]),
                   ),
-                  child: Center(child: Text('English', style: _textStyle,)),
+                  child: Center(
+                      child: Text(
+                    'English',
+                    style: _textStyle,
+                  )),
                 ),
               ),
               Padding(
@@ -188,10 +203,13 @@ class LanguageShowsWidget extends StatelessWidget {
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [Colors.green, Colors.lightBlueAccent]
-                    ),
+                        colors: [Colors.green, Colors.lightBlueAccent]),
                   ),
-                  child: Center(child: Text('Punjabi', style: _textStyle,)),
+                  child: Center(
+                      child: Text(
+                    'Punjabi',
+                    style: _textStyle,
+                  )),
                 ),
               ),
             ],
@@ -201,11 +219,12 @@ class LanguageShowsWidget extends StatelessWidget {
     );
   }
 }
-
 
 // This Widget contains all the shows to be displayed under recommended shows
 class RecommendedShowWidget extends StatelessWidget {
-  const RecommendedShowWidget({@required this.screenWidth,});
+  const RecommendedShowWidget({
+    @required this.screenWidth,
+  });
 
   final double screenWidth;
 
@@ -226,8 +245,10 @@ class RecommendedShowWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieTwo.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieTwo.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
@@ -236,8 +257,10 @@ class RecommendedShowWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieThree.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieThree.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
@@ -246,8 +269,10 @@ class RecommendedShowWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieOne.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieOne.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ],
@@ -258,10 +283,11 @@ class RecommendedShowWidget extends StatelessWidget {
   }
 }
 
-
 // This widget contains all the shows which the user was previously watching
 class ContinueWatchingWidget extends StatelessWidget {
-  const ContinueWatchingWidget({@required this.screenWidth,});
+  const ContinueWatchingWidget({
+    @required this.screenWidth,
+  });
 
   final double screenWidth;
 
@@ -282,8 +308,10 @@ class ContinueWatchingWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieOne.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieOne.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
@@ -292,8 +320,10 @@ class ContinueWatchingWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieOne.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieOne.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(
@@ -302,8 +332,10 @@ class ContinueWatchingWidget extends StatelessWidget {
                   height: 100,
                   width: 200,
                   color: Colors.green,
-                  child: Image.asset('assets/movieOne.jpg', fit: BoxFit.cover,),
-
+                  child: Image.asset(
+                    'assets/movieOne.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ],
