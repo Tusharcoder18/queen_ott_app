@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:queen_ott_app/authentication_service.dart';
+import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/modules/home_screen_widget.dart';
 import 'package:queen_ott_app/screens/test_home_screen.dart';
 
@@ -9,6 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
@@ -33,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -84,3 +91,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+class SignOutButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      child: Text('Sign Out'),
+      onPressed: (){
+        context.read<AuthenticationService>().signOut();
+        Navigator.pop(context);
+      },
+    );
+  }
+}
+
