@@ -5,9 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/authentication_service.dart';
 import 'package:queen_ott_app/screens/intermediate_screen.dart';
 import 'package:queen_ott_app/screens/sign_up_screen.dart';
-import 'package:queen_ott_app/screens/test_home_screen.dart';
-import 'package:queen_ott_app/screens/user_home_screen.dart';
 import 'package:provider/provider.dart';
+import '../widgets/custom_button.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -25,7 +24,7 @@ class _SignInScreenState extends State<SignInScreen> {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return HomePage();
+      return IntermediateScreen();
     }
     return Scaffold(
       body: Container(
@@ -169,7 +168,7 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 15,
               ),
-              customButton(
+              CustomButton(
                   text: "Sign-in using Google",
                   icon: Icon(FontAwesomeIcons.google),
                   color: Colors.red,
@@ -181,7 +180,7 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 10,
               ),
-              customButton(
+              CustomButton(
                   text: "Sign-in using Facebook",
                   icon: Icon(FontAwesomeIcons.facebook),
                   color: Colors.blue,
@@ -193,7 +192,7 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 10,
               ),
-              customButton(
+              CustomButton(
                   text: "Sign-in using Apple",
                   icon: Icon(FontAwesomeIcons.apple),
                   color: Colors.white,
@@ -224,32 +223,6 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget customButton({String text, Icon icon, Color color, Function onTap}) {
-    return MaterialButton(
-      elevation: 0,
-      minWidth: double.maxFinite,
-      height: 50,
-      onPressed: () {
-        if (onTap != null) {
-          onTap();
-        }
-      },
-      color: color != null ? color : Colors.transparent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          icon != null ? icon : Icon(FontAwesomeIcons.sign),
-          SizedBox(width: 10),
-          Text(text,
-              style: TextStyle(
-                  color: color != Colors.white ? Colors.white : Colors.black,
-                  fontSize: 16)),
-        ],
-      ),
-      textColor: color != Colors.white ? Colors.white : Colors.black,
     );
   }
 

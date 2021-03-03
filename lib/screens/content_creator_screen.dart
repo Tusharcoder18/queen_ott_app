@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/modules/creator_screen_widget.dart';
+import 'test_home_screen.dart';
 
 class ContentCreatorScreen extends StatefulWidget {
   @override
@@ -8,24 +10,22 @@ class ContentCreatorScreen extends StatefulWidget {
 class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Analytics',
       style: optionStyle,
     ),
-    Text(
-      'Index 1: Video',
-      style: optionStyle,
-    ),
+    CreatorScreenWidget(),
     Text(
       'Index 2: Monetization',
       style: optionStyle,
     ),
-    Text(
-      'Index 3: Settings',
-      style: optionStyle,
-    )
+    // Text(
+    //   'Index 3: Settings',
+    //   style: optionStyle,
+    // )
+    TestPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -33,17 +33,19 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
       _selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'QUEEN',
               style: TextStyle(
-                color: Colors.red,
+                color: Colors.white,
                 letterSpacing: 2.0,
                 fontFamily: 'Roboto',
                 fontSize: 25.0,
@@ -76,7 +78,7 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red,
+        selectedItemColor: Colors.blue[600],
         onTap: _onItemTapped,
       ),
       body: Container(
