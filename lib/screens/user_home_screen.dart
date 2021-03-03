@@ -92,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+
 class SignOutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -104,4 +105,3 @@ class SignOutButton extends StatelessWidget {
     );
   }
 }
-
