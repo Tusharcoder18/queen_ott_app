@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/screens/upload_screen.dart';
 import '../widgets/custom_button.dart';
 
+// This is for the upload video section for content creator
 class CreatorScreenWidget extends StatelessWidget {
   final TextStyle _textStyle = TextStyle(
     color: Colors.white,
@@ -24,7 +26,14 @@ class CreatorScreenWidget extends StatelessWidget {
               text: "UPLOAD",
               icon: Icon(FontAwesomeIcons.upload),
               color: Colors.blue[600],
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UploadScreen(),
+                  ),
+                );
+              },
             ),
           ),
           SizedBox(
