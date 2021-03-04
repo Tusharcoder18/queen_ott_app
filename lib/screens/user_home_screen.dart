@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:queen_ott_app/authentication_service.dart';
 import 'package:queen_ott_app/modules/home_screen_widget.dart';
 import 'package:queen_ott_app/screens/test_home_screen.dart';
+import 'package:queen_ott_app/modules/trending_screen_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,10 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   List<Widget> _widgetOptions = <Widget>[
     HomeScreenWidget(),
-    Text(
-      'Index 1: Trending',
-      style: optionStyle,
-    ),
+    TrendingScreenWidget(),
     Text(
       'Index 2: Subscription',
       style: optionStyle,
@@ -90,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
 
 class SignOutButton extends StatelessWidget {
   @override
