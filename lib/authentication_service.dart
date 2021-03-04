@@ -24,8 +24,8 @@ class AuthenticationService {
           email: email, password: password);
       return true;
     } on FirebaseAuthException catch (e) {
-       print(e.message);
-       return false;
+      print(e.message);
+      return false;
     }
   }
 
@@ -41,6 +41,7 @@ class AuthenticationService {
         }
       }
     }
+    return "";
   }
 
   Future<String> signInWithGoogle() async {
