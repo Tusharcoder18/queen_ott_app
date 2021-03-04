@@ -9,7 +9,6 @@ String name;
 class UploadScreen extends StatelessWidget {
   final File videoFile;
   UploadScreen({this.videoFile});
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -221,6 +220,7 @@ class AddToPlaylistWidget extends StatelessWidget {
             SizedBox(
               width: 20,
             ),
+
             Text(
               'Add to play list',
               style: TextStyle(
