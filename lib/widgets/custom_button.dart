@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomButton extends StatelessWidget {
-  String text;
-  Icon icon;
-  Color color;
-  Function onTap;
+  final String text;
+  final Icon icon;
+  final Color color;
+  final Function onTap;
   CustomButton({this.text, this.icon, this.color, this.onTap});
 
   @override

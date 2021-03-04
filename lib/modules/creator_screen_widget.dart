@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/custom_button.dart';
+import '../services/upload_service.dart';
+import '../screens/upload_details_screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreatorScreenWidget extends StatelessWidget {
   final TextStyle _textStyle = TextStyle(
@@ -24,7 +28,19 @@ class CreatorScreenWidget extends StatelessWidget {
               text: "UPLOAD",
               icon: Icon(FontAwesomeIcons.upload),
               color: Colors.blue[600],
-              onTap: () {},
+              onTap: () async {
+                final file =
+                    await ImagePicker().getVideo(source: ImageSource.gallery);
+                String downloadUrl = await UploadService()
+                    .uploadVideo(video: File(file.path), name: "Video1");
+                print(downloadUrl);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UploadDetailsPage(
+                              videoUrl: downloadUrl,
+                            )));
+              },
             ),
           ),
           SizedBox(

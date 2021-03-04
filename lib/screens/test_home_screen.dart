@@ -11,7 +11,7 @@ class TestPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("HOME"),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () {
                 context.read<AuthenticationService>().signOut();
                 context.read<AuthenticationService>().signOutGoogle();
