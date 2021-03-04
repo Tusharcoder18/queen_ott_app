@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/custom_button.dart';
 import '../services/upload_service.dart';
-import '../screens/upload_details_screen.dart';
+import '../screens/upload_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreatorScreenWidget extends StatelessWidget {
@@ -31,14 +31,11 @@ class CreatorScreenWidget extends StatelessWidget {
               onTap: () async {
                 final file =
                     await ImagePicker().getVideo(source: ImageSource.gallery);
-                String downloadUrl = await UploadService()
-                    .uploadVideo(video: File(file.path), name: "Video1");
-                print(downloadUrl);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => UploadDetailsPage(
-                              videoUrl: downloadUrl,
+                        builder: (context) => UploadScreen(
+                              videoFile: File(file.path),
                             )));
               },
             ),
