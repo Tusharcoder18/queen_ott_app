@@ -1,4 +1,3 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
 class TrendingScreenWidget extends StatelessWidget {
@@ -17,7 +16,8 @@ class TrendingScreenWidget extends StatelessWidget {
             width: screenWidth,
             child: Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text('Trending shows',
+              child: Text(
+                'Trending shows',
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 20.0,
@@ -40,11 +40,11 @@ class TrendingVideoListWidget extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              VideoInfoWidget( imagePath: 'assets/movieThree.jpg'),
-              VideoInfoWidget( imagePath: 'assets/movieTwo.jpg'),
-              VideoInfoWidget( imagePath: 'assets/movieOne.jpg'),
-              VideoInfoWidget( imagePath: 'assets/movieThree.jpg'),
-              VideoInfoWidget( imagePath: 'assets/movieOne.jpg'),
+              VideoInfoWidget(imagePath: 'assets/movieThree.jpg'),
+              VideoInfoWidget(imagePath: 'assets/movieTwo.jpg'),
+              VideoInfoWidget(imagePath: 'assets/movieOne.jpg'),
+              VideoInfoWidget(imagePath: 'assets/movieThree.jpg'),
+              VideoInfoWidget(imagePath: 'assets/movieOne.jpg'),
             ],
           ),
         ),
@@ -69,7 +69,10 @@ class VideoInfoWidget extends StatelessWidget {
         height: 200,
         width: screenWidth,
         color: Colors.red,
-        child: Image.asset(imagePath, fit: BoxFit.cover,),
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

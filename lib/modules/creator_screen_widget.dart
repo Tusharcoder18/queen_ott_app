@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/screens/upload_screen.dart';
 import '../widgets/custom_button.dart';
+import '../services/upload_service.dart';
+import '../screens/upload_screen.dart';
+import 'package:image_picker/image_picker.dart';
 
 // This is for the upload video section for content creator
 class CreatorScreenWidget extends StatelessWidget {
@@ -26,13 +30,15 @@ class CreatorScreenWidget extends StatelessWidget {
               text: "UPLOAD",
               icon: Icon(FontAwesomeIcons.upload),
               color: Colors.blue[600],
-              onTap: () {
+              onTap: () async {
+                final file =
+                    await ImagePicker().getVideo(source: ImageSource.gallery);
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UploadScreen(),
-                  ),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UploadScreen(
+                              videoFile: File(file.path),
+                            )));
               },
             ),
           ),
