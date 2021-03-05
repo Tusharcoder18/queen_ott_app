@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:queen_ott_app/screens/add_description_screen.dart';
-import 'package:queen_ott_app/screens/upload_details_screen.dart';
+import 'package:queen_ott_app/screens/test.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
 
 String name;
+File videoFile;
 
 class UploadScreen extends StatelessWidget {
-  final File videoFile;
-  UploadScreen({this.videoFile});
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -21,33 +21,38 @@ class UploadScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Add details'),
-              UploadButtonWidget(
-                video: videoFile,
-              )
+              UploadButtonWidget(),
             ],
           ),
         ),
         body: Column(
           children: [
-            Container(
-              height: screenHeight * 0.3,
-              width: screenWidth,
-              color: Color(0xFF343837),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.upload_sharp,
-                    size: 34.0,
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    'Choose Video from device',
-                    style: TextStyle(fontSize: 23.0),
-                  ),
-                ],
+            GestureDetector(
+              onTap: () async {
+                final file =
+                    await ImagePicker().getVideo(source: ImageSource.gallery);
+                videoFile = File(file.path);
+              },
+              child: Container(
+                height: screenHeight * 0.3,
+                width: screenWidth,
+                color: Color(0xFF343837),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload_sharp,
+                      size: 34.0,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      'Choose Video from device',
+                      style: TextStyle(fontSize: 23.0),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -72,10 +77,8 @@ class UploadScreen extends StatelessWidget {
 }
 
 class UploadButtonWidget extends StatelessWidget {
-  final File video;
   const UploadButtonWidget({
     Key key,
-    this.video,
   }) : super(key: key);
 
   @override
@@ -98,12 +101,12 @@ class UploadButtonWidget extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        String downloadUrl = await UploadService()
-            .uploadVideo(video: File(video.path), name: "video1");
+        String downloadUrl =
+            await UploadService().uploadVideo(video: videoFile, name: "video1");
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => UploadDetailsPage(
+                builder: (context) => Test(
                       videoUrl: downloadUrl,
                     )));
       },
@@ -159,8 +162,9 @@ class AddDescriptionWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 4.0),
       child: GestureDetector(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddDescriptionScreen()));
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddDescriptionScreen()));
         },
         child: Container(
           height: screenHeight * 0.1,
@@ -226,7 +230,6 @@ class AddToPlaylistWidget extends StatelessWidget {
             SizedBox(
               width: 20,
             ),
-
             Text(
               'Add to playlist',
               style: TextStyle(
