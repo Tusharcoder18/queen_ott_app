@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/authentication_service.dart';
+import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
 import 'package:queen_ott_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';

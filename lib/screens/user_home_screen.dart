@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/authentication_service.dart';
+import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/modules/home_screen_widget.dart';
 import 'package:queen_ott_app/screens/test_home_screen.dart';
 import 'package:queen_ott_app/modules/trending_screen_widget.dart';

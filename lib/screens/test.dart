@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class UploadDetailsPage extends StatelessWidget {
+class Test extends StatelessWidget {
   final String videoUrl;
-  UploadDetailsPage({this.videoUrl});
+  Test({this.videoUrl});
 
   @override
   Widget build(BuildContext context) {
