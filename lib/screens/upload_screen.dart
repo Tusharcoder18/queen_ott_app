@@ -5,11 +5,22 @@ import 'package:queen_ott_app/screens/add_description_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 String name;
 File videoFile;
 
 class UploadScreen extends StatelessWidget {
+  Future<String> generateThumbnail() async {
+    final uint8list = await VideoThumbnail.thumbnailData(
+      video: videoFile.path,
+      imageFormat: ImageFormat.JPEG,
+      maxWidth:
+          128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      quality: 25,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
