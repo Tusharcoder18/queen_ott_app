@@ -7,19 +7,38 @@ import 'package:queen_ott_app/screens/test.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:path_provider/path_provider.dart';
 
 String name;
 File videoFile;
+File videoThumbnail;
+String tempDir;
 
-class UploadScreen extends StatelessWidget {
-  Future<String> generateThumbnail() async {
-    final uint8list = await VideoThumbnail.thumbnailData(
+class UploadScreen extends StatefulWidget {
+  @override
+  _UploadScreenState createState() => _UploadScreenState();
+}
+
+class _UploadScreenState extends State<UploadScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getTemporaryDirectory().then((d) => tempDir = d.path);
+  }
+
+  Future<void> generateThumbnail() async {
+    // tempDir += "/thumbs";
+    final imageData = await VideoThumbnail.thumbnailFile(
       video: videoFile.path,
       imageFormat: ImageFormat.JPEG,
-      maxWidth:
-          128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      thumbnailPath: tempDir,
+      maxWidth: 128,
       quality: 25,
     );
+    setState(() {
+      videoThumbnail = File(imageData);
+    });
+    print(videoThumbnail);
   }
 
   @override
@@ -44,27 +63,33 @@ class UploadScreen extends StatelessWidget {
                 final file =
                     await ImagePicker().getVideo(source: ImageSource.gallery);
                 videoFile = File(file.path);
+                generateThumbnail();
               },
               child: Container(
                 height: screenHeight * 0.3,
                 width: screenWidth,
                 color: Color(0xFF343837),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.upload_sharp,
-                      size: 34.0,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      'Choose Video from device',
-                      style: TextStyle(fontSize: 23.0),
-                    ),
-                  ],
-                ),
+                child: videoThumbnail != null
+                    ? Image.file(
+                        videoThumbnail,
+                        fit: BoxFit.cover,
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.upload_sharp,
+                            size: 34.0,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            'Choose Video from device',
+                            style: TextStyle(fontSize: 23.0),
+                          ),
+                        ],
+                      ),
               ),
             ),
             Expanded(
@@ -83,7 +108,6 @@ class UploadScreen extends StatelessWidget {
             ),
           ],
         ),
-
       ),
     );
   }
@@ -114,15 +138,20 @@ class UploadButtonWidget extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        String downloadUrl =
-            await Provider.of<UploadService>(context, listen: false)
-                .uploadVideo(video: videoFile, name: "video1");
-        //await UploadService().uploadVideo(video: videoFile, name: "video1");
+        final urls = await Provider.of<UploadService>(context, listen: false)
+            .uploadVideo(
+                video: videoFile, thumbnail: videoThumbnail, name: "video1");
+        String videoUrl = urls[0];
+        String thumbnailUrl = urls[1];
+        print(videoUrl);
+        print(thumbnailUrl);
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => Test(
-                      videoUrl: downloadUrl,
+                      videoUrl: videoUrl,
+                      thumbnailUrl: thumbnailUrl,
                     )));
       },
     );
@@ -203,7 +232,8 @@ class AddDescriptionWidget extends StatelessWidget {
                             .returnVideoDescription() !=
                         ''
                     ? Provider.of<UploadService>(context, listen: false)
-                        .returnVideoDescription() : 'Add Description',
+                        .returnVideoDescription()
+                    : 'Add Description',
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white38,

@@ -6,26 +6,37 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 
 class UploadService extends ChangeNotifier {
-
   UploadService(this._firebaseFirestore);
 
   final FirebaseFirestore _firebaseFirestore;
 
-  CollectionReference videoInfo = FirebaseFirestore.instance.collection("VideoInfo");
-  final Reference ref = FirebaseStorage.instance.ref().child("videos");
-  String downloadUrl;
+  CollectionReference videoInfo =
+      FirebaseFirestore.instance.collection("VideoInfo");
+  final Reference videoRef = FirebaseStorage.instance.ref().child("videos");
+  final Reference thumbnailRef =
+      FirebaseStorage.instance.ref().child("thumbnails");
+  String videoUrl;
+  String thumbnailUrl;
 
-  Future<String> uploadVideo({File video, String name}) async {
+  Future<List<String>> uploadVideo(
+      {File video, File thumbnail, String name}) async {
     try {
-      UploadTask uploadTask = ref.child(name).putFile(video);
-      TaskSnapshot snapshot = (await uploadTask);
-      downloadUrl = (await snapshot.ref.getDownloadURL());
+      UploadTask videoUploadTask = videoRef
+          .child(name)
+          .putFile(video, SettableMetadata(contentType: "video/MP4"));
+      UploadTask thumbnailUploadTask = thumbnailRef
+          .child(name)
+          .putFile(thumbnail, SettableMetadata(contentType: "image/jpeg"));
+      TaskSnapshot videoSnapshot = (await videoUploadTask);
+      TaskSnapshot thumbnailSnapshot = (await thumbnailUploadTask);
+      videoUrl = (await videoSnapshot.ref.getDownloadURL());
+      thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
       uploadVideoInfo();
     } catch (e) {
       print(e);
     }
 
-    return downloadUrl;
+    return [videoUrl, thumbnailUrl];
   }
 
   // Info of all the video to be updated
@@ -34,18 +45,17 @@ class UploadService extends ChangeNotifier {
   String _videoDescription;
   String _videoGenre;
 
-
-  void getVideoTitle(String videoTitle){
+  void getVideoTitle(String videoTitle) {
     _videoTitle = videoTitle;
     notifyListeners();
   }
 
-  void getVideoDescription(String videoDescription){
+  void getVideoDescription(String videoDescription) {
     _videoDescription = videoDescription;
     notifyListeners();
   }
 
-  void getVideoGenre(String videoGenre){
+  void getVideoGenre(String videoGenre) {
     _videoGenre = videoGenre;
     notifyListeners();
   }
@@ -59,28 +69,30 @@ class UploadService extends ChangeNotifier {
 
     videoInfo
         .add({
-          'title': _videoTitle??'',
-          'decription': _videoDescription??'',
-          'genre': _videoGenre??'',
+          'title': _videoTitle ?? '',
+          'decription': _videoDescription ?? '',
+          'genre': _videoGenre ?? '',
           'date': date,
           'time': time,
-          'downloadUrl': downloadUrl,
+          'videoUrl': videoUrl,
+          'thumbnailUrl': thumbnailUrl,
         })
         .then((value) => print("Data added to firebase!"))
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  String returnVideoTitle(){
+  String returnVideoTitle() {
     return _videoTitle;
   }
 
-  String returnVideoDescription(){
-    if(_videoDescription != null)
+  String returnVideoDescription() {
+    if (_videoDescription != null)
       return _videoDescription;
-    else return '';
+    else
+      return '';
   }
 
-  void videoInfoNull(){
+  void videoInfoNull() {
     this._videoGenre = null;
     this._videoDescription = null;
     this._videoTitle = null;
