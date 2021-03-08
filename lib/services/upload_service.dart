@@ -34,6 +34,7 @@ class UploadService extends ChangeNotifier {
   String _videoDescription;
   String _videoGenre;
 
+
   void getVideoTitle(String videoTitle){
     _videoTitle = videoTitle;
     notifyListeners();
@@ -77,5 +78,12 @@ class UploadService extends ChangeNotifier {
     if(_videoDescription != null)
       return _videoDescription;
     else return '';
+  }
+
+  void videoInfoNull(){
+    this._videoGenre = null;
+    this._videoDescription = null;
+    this._videoTitle = null;
+    notifyListeners();
   }
 }

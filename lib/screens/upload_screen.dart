@@ -72,6 +72,7 @@ class UploadScreen extends StatelessWidget {
             ),
           ],
         ),
+
       ),
     );
   }
@@ -187,12 +188,11 @@ class AddDescriptionWidget extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                Provider.of<UploadService>(context, listen: true)
-                            .returnVideoDescription() ==
+                Provider.of<UploadService>(context, listen: false)
+                            .returnVideoDescription() !=
                         ''
-                    ? 'Add Description'
-                    : Provider.of<UploadService>(context, listen: true)
-                        .returnVideoDescription(),
+                    ? Provider.of<UploadService>(context, listen: false)
+                        .returnVideoDescription() : 'Add Description',
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white38,

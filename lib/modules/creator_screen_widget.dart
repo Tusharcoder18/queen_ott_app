@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/upload_screen.dart';
 import '../widgets/custom_button.dart';
 import '../services/upload_service.dart';
@@ -31,6 +32,7 @@ class CreatorScreenWidget extends StatelessWidget {
               icon: Icon(FontAwesomeIcons.upload),
               color: Colors.blue[600],
               onTap: () {
+                Provider.of<UploadService>(context, listen : false).videoInfoNull();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => UploadScreen()));
               },
