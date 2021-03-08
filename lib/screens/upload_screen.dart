@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/add_description_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'dart:io';
@@ -82,6 +83,7 @@ class UploadScreen extends StatelessWidget {
             ),
           ],
         ),
+
       ),
     );
   }
@@ -113,7 +115,9 @@ class UploadButtonWidget extends StatelessWidget {
       ),
       onTap: () async {
         String downloadUrl =
-            await UploadService().uploadVideo(video: videoFile, name: "video1");
+            await Provider.of<UploadService>(context, listen: false)
+                .uploadVideo(video: videoFile, name: "video1");
+        //await UploadService().uploadVideo(video: videoFile, name: "video1");
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -150,6 +154,8 @@ class CreateATitleWidget extends StatelessWidget {
             ),
             onChanged: (value) {
               name = value;
+              Provider.of<UploadService>(context, listen: false)
+                  .getVideoTitle(value);
             },
           )
           //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
@@ -193,9 +199,13 @@ class AddDescriptionWidget extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                'Add Description',
+                Provider.of<UploadService>(context, listen: false)
+                            .returnVideoDescription() !=
+                        ''
+                    ? Provider.of<UploadService>(context, listen: false)
+                        .returnVideoDescription() : 'Add Description',
                 style: TextStyle(
-                  fontSize: 21.0,
+                  fontSize: 14.0,
                   color: Colors.white38,
                 ),
               ),
