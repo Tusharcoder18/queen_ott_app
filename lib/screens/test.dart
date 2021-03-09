@@ -3,7 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Test extends StatelessWidget {
   final String videoUrl;
-  Test({this.videoUrl});
+  final String thumbnailUrl;
+  Test({this.videoUrl, this.thumbnailUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,15 @@ class Test extends StatelessWidget {
                 launch(videoUrl);
               },
               child: Text("Play Video"),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                launch(thumbnailUrl);
+              },
+              child: Text("Show thumbnail"),
             ),
           ],
         ),
