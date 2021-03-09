@@ -138,13 +138,15 @@ class UploadButtonWidget extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        final urls = await Provider.of<UploadService>(context, listen: false)
-            .uploadVideo(
-                video: videoFile, thumbnail: videoThumbnail, name: "video1");
-        String videoUrl = urls[0];
-        String thumbnailUrl = urls[1];
-        print(videoUrl);
-        print(thumbnailUrl);
+        final String videoUrl = await Provider.of<UploadService>(context, listen: false).uploadOnlyVideo(videoFile);
+        final String thumbnailUrl = 'www.google.com';
+        // final urls = await Provider.of<UploadService>(context, listen: false)
+        //     .uploadVideo(
+        //         video: videoFile, thumbnail: videoThumbnail, name: "video1");
+        // String videoUrl = urls[0];
+        // String thumbnailUrl = urls[1];
+        // print(videoUrl);
+        // print(thumbnailUrl);
 
         Navigator.push(
             context,

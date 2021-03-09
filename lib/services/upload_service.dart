@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
@@ -18,6 +19,24 @@ class UploadService extends ChangeNotifier {
   String videoUrl;
   String thumbnailUrl;
 
+  Future<String> uploadOnlyVideo(
+      File video,
+      ) async{
+    try{
+      UploadTask videoUploadTask = videoRef.child('VideoUpload').putFile(video, SettableMetadata(contentType: 'video/MP4'));
+
+      TaskSnapshot videoSnapshots = await videoUploadTask;
+
+      videoUrl = await videoSnapshots.ref.getDownloadURL();
+
+
+      return videoUrl;
+    } catch(e){
+      print(e.message);
+      return e.message;
+    }
+  }
+
   Future<List<String>> uploadVideo(
       {File video, File thumbnail, String name}) async {
     try {
@@ -32,8 +51,11 @@ class UploadService extends ChangeNotifier {
       videoUrl = (await videoSnapshot.ref.getDownloadURL());
       thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
       uploadVideoInfo();
+
+      return [videoUrl, thumbnailUrl];
     } catch (e) {
       print(e);
+      return [];
     }
 
     return [videoUrl, thumbnailUrl];
@@ -98,4 +120,23 @@ class UploadService extends ChangeNotifier {
     this._videoTitle = null;
     notifyListeners();
   }
+
+
+  // This is to take the input for videoPlayer path and video Thumbnail
+
+  String _videoPath;
+  String _videoThumbnailPath;
+
+  Future<String> getVideoPath() async{
+    final file = await ImagePicker().getVideo(source: ImageSource.gallery);
+
+    this._videoPath = File(file.path).toString();
+    this._videoThumbnailPath = this._videoPath;
+
+    notifyListeners();
+
+    return _videoPath;
+  }
+
+
 }
