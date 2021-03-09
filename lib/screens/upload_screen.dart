@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/add_description_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
+import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -13,6 +14,7 @@ String name;
 File videoFile;
 File videoThumbnail;
 String tempDir;
+bool isLoading = false;
 
 class UploadScreen extends StatefulWidget {
   @override
@@ -26,20 +28,22 @@ class _UploadScreenState extends State<UploadScreen> {
     getTemporaryDirectory().then((d) => tempDir = d.path);
   }
 
-  Future<void> generateThumbnail() async {
-    // tempDir += "/thumbs";
-    final imageData = await VideoThumbnail.thumbnailFile(
-      video: videoFile.path,
-      imageFormat: ImageFormat.JPEG,
-      thumbnailPath: tempDir,
-      maxWidth: 128,
-      quality: 25,
-    );
-    setState(() {
-      videoThumbnail = File(imageData);
-    });
-    print(videoThumbnail);
-  }
+  // Future<void> generateThumbnail() async {
+  //   final videoFilePath = videoFile.path;
+  //   final imageData = await VideoThumbnail.thumbnailFile(
+  //     video: videoFilePath,
+  //     imageFormat: ImageFormat.JPEG,
+  //     thumbnailPath: tempDir,
+  //     maxWidth: 128,
+  //     quality: 25,
+  //   );
+  //   setState(() {
+  //     videoThumbnail = File(imageData);
+  //   });
+  //   print(videoThumbnail);
+  //   print(videoFile.path);
+  //   print(tempDir);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,7 @@ class _UploadScreenState extends State<UploadScreen> {
                 final file =
                     await ImagePicker().getVideo(source: ImageSource.gallery);
                 videoFile = File(file.path);
-                generateThumbnail();
+                // await generateThumbnail();
               },
               child: Container(
                 height: screenHeight * 0.3,
@@ -102,6 +106,21 @@ class _UploadScreenState extends State<UploadScreen> {
                     AddToPlaylistWidget(screenHeight: screenHeight),
                     // This would be a drop down list
                     SelectGenreWidget(screenHeight: screenHeight),
+                    Padding(
+                      padding: EdgeInsets.only(top: 4.0),
+                      child: CustomButton(
+                        text: "Select Thumbnail",
+                        icon: Icon(Icons.image),
+                        color: Colors.blue,
+                        onTap: () async {
+                          final file = await ImagePicker()
+                              .getImage(source: ImageSource.gallery);
+                          setState(() {
+                            videoThumbnail = File(file.path);
+                          });
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -113,48 +132,66 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 }
 
-class UploadButtonWidget extends StatelessWidget {
+class UploadButtonWidget extends StatefulWidget {
   const UploadButtonWidget({
     Key key,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        width: 90,
-        height: 40,
-        color: Colors.blue,
-        child: Center(
-          child: Text(
-            'UPLOAD',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-      onTap: () async {
-        final urls = await Provider.of<UploadService>(context, listen: false)
-            .uploadVideo(
-                video: videoFile, thumbnail: videoThumbnail, name: "video1");
-        String videoUrl = urls[0];
-        String thumbnailUrl = urls[1];
-        print(videoUrl);
-        print(thumbnailUrl);
+  _UploadButtonWidgetState createState() => _UploadButtonWidgetState();
+}
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Test(
-                      videoUrl: videoUrl,
-                      thumbnailUrl: thumbnailUrl,
-                    )));
-      },
-    );
+class _UploadButtonWidgetState extends State<UploadButtonWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          )
+        : GestureDetector(
+            child: Container(
+              width: 90,
+              height: 40,
+              color: Colors.blue,
+              child: Center(
+                child: Text(
+                  'UPLOAD',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            onTap: () async {
+              setState(() {
+                isLoading = true;
+              });
+              final urls =
+                  await Provider.of<UploadService>(context, listen: false)
+                      .uploadVideo(
+                          video: videoFile,
+                          thumbnail: videoThumbnail,
+                          name: "video1");
+              String videoUrl = urls[0];
+              String thumbnailUrl = urls[1];
+              setState(() {
+                isLoading = false;
+              });
+              print(videoUrl);
+              print(thumbnailUrl);
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Test(
+                            videoUrl: videoUrl,
+                            thumbnailUrl: thumbnailUrl,
+                          )));
+            },
+          );
   }
 }
 
