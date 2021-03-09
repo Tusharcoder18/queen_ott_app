@@ -9,7 +9,6 @@ import 'package:queen_ott_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
-  Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());

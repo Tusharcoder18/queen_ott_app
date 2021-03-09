@@ -4,15 +4,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/add_description_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 
 String name;
 File videoFile;
 File videoThumbnail;
+File copiedVideoFile;
 String tempDir;
+String videoUrl;
 
 class UploadScreen extends StatefulWidget {
   @override
@@ -20,31 +22,23 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  @override
-  void initState() {
-    super.initState();
-    getTemporaryDirectory().then((d) => tempDir = d.path);
-  }
 
-  Future<void> generateThumbnail() async {
-    // tempDir += "/thumbs";
-    final imageData = await VideoThumbnail.thumbnailFile(
-      video: videoFile.path,
-      imageFormat: ImageFormat.JPEG,
-      thumbnailPath: tempDir,
-      maxWidth: 128,
-      quality: 25,
-    );
-    setState(() {
-      videoThumbnail = File(imageData);
-    });
-    print(videoThumbnail);
-  }
+  // @override
+  // void initState() {
+  //   getTemporaryDirectory().then((value) => tempDir = value.path);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -61,35 +55,42 @@ class _UploadScreenState extends State<UploadScreen> {
             GestureDetector(
               onTap: () async {
                 final file =
-                    await ImagePicker().getVideo(source: ImageSource.gallery);
+                await ImagePicker().getVideo(source: ImageSource.gallery);
                 videoFile = File(file.path);
-                generateThumbnail();
+                copiedVideoFile = videoFile;
+                videoUrl = await Provider.of<UploadService>(context, listen: false).uploadVideo(video: videoFile, name: "video101");
+                final uint8list = await VideoThumbnail.thumbnailFile(
+                  video: copiedVideoFile.path,
+                  thumbnailPath: (await getTemporaryDirectory()).path,
+                  imageFormat: ImageFormat.JPEG,
+                  quality: 75,
+                );
+                videoThumbnail = File(uint8list);
+                // to update the value of videoThumbnail and videoFile
+                setState(() {});
               },
               child: Container(
                 height: screenHeight * 0.3,
                 width: screenWidth,
                 color: Color(0xFF343837),
-                child: videoThumbnail != null
-                    ? Image.file(
-                        videoThumbnail,
-                        fit: BoxFit.cover,
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.upload_sharp,
-                            size: 34.0,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Choose Video from device',
-                            style: TextStyle(fontSize: 23.0),
-                          ),
-                        ],
-                      ),
+                child: videoThumbnail != null ?
+                Image.file(videoThumbnail, fit: BoxFit.cover,) :
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload_sharp,
+                      size: 34.0,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      'Choose Video from device',
+                      style: TextStyle(fontSize: 23.0),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -138,22 +139,20 @@ class UploadButtonWidget extends StatelessWidget {
         ),
       ),
       onTap: () async {
-        final String videoUrl = await Provider.of<UploadService>(context, listen: false).uploadOnlyVideo(videoFile);
-        final String thumbnailUrl = 'www.google.com';
-        // final urls = await Provider.of<UploadService>(context, listen: false)
-        //     .uploadVideo(
-        //         video: videoFile, thumbnail: videoThumbnail, name: "video1");
-        // String videoUrl = urls[0];
-        // String thumbnailUrl = urls[1];
-        // print(videoUrl);
-        // print(thumbnailUrl);
+        // String videoDownloadUrl =
+        // await Provider.of<UploadService>(context, listen: false)
+        //     .uploadVideo(video: videoFile, name: "video1");
+        String thumbnailDownloadUrl = await Provider.of<UploadService>(context, listen: false)
+            .uploadThumbnail(video: videoThumbnail, name: "video1Thumbnail");
 
+        print("videThumbnail : $thumbnailDownloadUrl");
+        //await UploadService().uploadVideo(video: videoFile, name: "video1");
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Test(
+                builder: (context) =>
+                    Test(
                       videoUrl: videoUrl,
-                      thumbnailUrl: thumbnailUrl,
                     )));
       },
     );
@@ -189,8 +188,8 @@ class CreateATitleWidget extends StatelessWidget {
                   .getVideoTitle(value);
             },
           )
-          //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
-          ),
+        //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
+      ),
     );
   }
 }
@@ -230,12 +229,12 @@ class AddDescriptionWidget extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                Provider.of<UploadService>(context, listen: false)
-                            .returnVideoDescription() !=
-                        ''
-                    ? Provider.of<UploadService>(context, listen: false)
-                        .returnVideoDescription()
-                    : 'Add Description',
+                Provider.of<UploadService>(context, listen: true)
+                    .returnVideoDescription() ==
+                    ''
+                    ? 'Add Description'
+                    : Provider.of<UploadService>(context, listen: true)
+                    .returnVideoDescription(),
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white38,

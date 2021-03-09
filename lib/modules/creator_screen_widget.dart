@@ -32,7 +32,7 @@ class CreatorScreenWidget extends StatelessWidget {
               icon: Icon(FontAwesomeIcons.upload),
               color: Colors.blue[600],
               onTap: () {
-                Provider.of<UploadService>(context, listen : false).videoInfoNull();
+                Provider.of<UploadService>(context, listen: false).makeVideoDescriptionNull();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => UploadScreen()));
               },

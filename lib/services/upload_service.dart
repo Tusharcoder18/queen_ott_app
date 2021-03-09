@@ -2,63 +2,45 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
 class UploadService extends ChangeNotifier {
+
   UploadService(this._firebaseFirestore);
 
   final FirebaseFirestore _firebaseFirestore;
 
-  CollectionReference videoInfo =
-      FirebaseFirestore.instance.collection("VideoInfo");
-  final Reference videoRef = FirebaseStorage.instance.ref().child("videos");
-  final Reference thumbnailRef =
-      FirebaseStorage.instance.ref().child("thumbnails");
-  String videoUrl;
-  String thumbnailUrl;
+  CollectionReference videoInfo = FirebaseFirestore.instance.collection("VideoInfo");
+  final Reference videoUploadRef = FirebaseStorage.instance.ref().child("videos");
+  final Reference thumbnailUploadRef = FirebaseStorage.instance.ref().child('thumbnails');
+  String videoDownloadUrl;
+  String thumbnailDownloadUrl;
 
-  Future<String> uploadOnlyVideo(
-      File video,
-      ) async{
-    try{
-      UploadTask videoUploadTask = videoRef.child('VideoUpload').putFile(video, SettableMetadata(contentType: 'video/MP4'));
-
-      TaskSnapshot videoSnapshots = await videoUploadTask;
-
-      videoUrl = await videoSnapshots.ref.getDownloadURL();
-
-
-      return videoUrl;
-    } catch(e){
-      print(e.message);
-      return e.message;
-    }
-  }
-
-  Future<List<String>> uploadVideo(
-      {File video, File thumbnail, String name}) async {
+  Future<String> uploadVideo({File video, String name}) async {
     try {
-      UploadTask videoUploadTask = videoRef
-          .child(name)
-          .putFile(video, SettableMetadata(contentType: "video/MP4"));
-      UploadTask thumbnailUploadTask = thumbnailRef
-          .child(name)
-          .putFile(thumbnail, SettableMetadata(contentType: "image/jpeg"));
-      TaskSnapshot videoSnapshot = (await videoUploadTask);
-      TaskSnapshot thumbnailSnapshot = (await thumbnailUploadTask);
-      videoUrl = (await videoSnapshot.ref.getDownloadURL());
-      thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
+      UploadTask uploadTask = videoUploadRef.child(name).putFile(video);
+      TaskSnapshot snapshot = (await uploadTask);
+      videoDownloadUrl = (await snapshot.ref.getDownloadURL());
       uploadVideoInfo();
-
-      return [videoUrl, thumbnailUrl];
     } catch (e) {
       print(e);
-      return [];
     }
 
-    return [videoUrl, thumbnailUrl];
+    return videoDownloadUrl;
+  }
+
+  Future<String> uploadThumbnail({File video, String name}) async {
+    try {
+      UploadTask uploadTask = thumbnailUploadRef.child(name).putFile(video);
+      TaskSnapshot snapshot = (await uploadTask);
+      thumbnailDownloadUrl = (await snapshot.ref.getDownloadURL());
+      uploadVideoInfo();
+    } catch (e) {
+      print(e);
+    }
+
+    return thumbnailDownloadUrl;
   }
 
   // Info of all the video to be updated
@@ -67,17 +49,17 @@ class UploadService extends ChangeNotifier {
   String _videoDescription;
   String _videoGenre;
 
-  void getVideoTitle(String videoTitle) {
+  void getVideoTitle(String videoTitle){
     _videoTitle = videoTitle;
     notifyListeners();
   }
 
-  void getVideoDescription(String videoDescription) {
+  void getVideoDescription(String videoDescription){
     _videoDescription = videoDescription;
     notifyListeners();
   }
 
-  void getVideoGenre(String videoGenre) {
+  void getVideoGenre(String videoGenre){
     _videoGenre = videoGenre;
     notifyListeners();
   }
@@ -91,52 +73,29 @@ class UploadService extends ChangeNotifier {
 
     videoInfo
         .add({
-          'title': _videoTitle ?? '',
-          'decription': _videoDescription ?? '',
-          'genre': _videoGenre ?? '',
+          'title': _videoTitle??'',
+          'decription': _videoDescription??'',
+          'genre': _videoGenre??'',
           'date': date,
           'time': time,
-          'videoUrl': videoUrl,
-          'thumbnailUrl': thumbnailUrl,
+          'downloadUrl': videoDownloadUrl,
         })
         .then((value) => print("Data added to firebase!"))
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  String returnVideoTitle() {
+  void makeVideoDescriptionNull(){
+    this._videoDescription = null;
+    notifyListeners();
+  }
+
+  String returnVideoTitle(){
     return _videoTitle;
   }
 
-  String returnVideoDescription() {
-    if (_videoDescription != null)
+  String returnVideoDescription(){
+    if(_videoDescription != null)
       return _videoDescription;
-    else
-      return '';
+    else return '';
   }
-
-  void videoInfoNull() {
-    this._videoGenre = null;
-    this._videoDescription = null;
-    this._videoTitle = null;
-    notifyListeners();
-  }
-
-
-  // This is to take the input for videoPlayer path and video Thumbnail
-
-  String _videoPath;
-  String _videoThumbnailPath;
-
-  Future<String> getVideoPath() async{
-    final file = await ImagePicker().getVideo(source: ImageSource.gallery);
-
-    this._videoPath = File(file.path).toString();
-    this._videoThumbnailPath = this._videoPath;
-
-    notifyListeners();
-
-    return _videoPath;
-  }
-
-
 }
