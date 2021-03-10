@@ -32,15 +32,30 @@ class UploadService extends ChangeNotifier {
 
   Future<String> uploadThumbnail({File video, String name}) async {
     try {
-      UploadTask uploadTask = thumbnailUploadRef.child(name).putFile(video);
-      TaskSnapshot snapshot = (await uploadTask);
-      thumbnailDownloadUrl = (await snapshot.ref.getDownloadURL());
+      UploadTask videoUploadTask = videoRef
+          .child(name)
+          .putFile(video, SettableMetadata(contentType: "video/MP4"));
+      TaskSnapshot videoSnapshot = (await videoUploadTask);
+      videoUrl = (await videoSnapshot.ref.getDownloadURL());
+      await uploadThumbnail(thumbnail: thumbnail);
       uploadVideoInfo();
     } catch (e) {
       print(e);
     }
 
     return thumbnailDownloadUrl;
+  }
+
+  Future<void> uploadThumbnail({File thumbnail}) async {
+    try {
+      UploadTask thumbnailUploadTask = thumbnailRef
+          .child("image1")
+          .putFile(thumbnail, SettableMetadata(contentType: "image/jpeg"));
+      TaskSnapshot thumbnailSnapshot = (await thumbnailUploadTask);
+      thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
+    } catch (e) {
+      print(e);
+    }
   }
 
   // Info of all the video to be updated
