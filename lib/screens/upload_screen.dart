@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/add_description_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
-import 'package:queen_ott_app/widgets/custom_button.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,7 +14,7 @@ File videoFile;
 File videoThumbnail;
 File copiedVideoFile;
 String tempDir;
-bool isLoading = false;
+String videoUrl;
 
 class UploadScreen extends StatefulWidget {
   @override
@@ -22,6 +22,12 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+
+  // @override
+  // void initState() {
+  //   getTemporaryDirectory().then((value) => tempDir = value.path);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,17 @@ class _UploadScreenState extends State<UploadScreen> {
                 final file =
                 await ImagePicker().getVideo(source: ImageSource.gallery);
                 videoFile = File(file.path);
-                // await generateThumbnail();
+                copiedVideoFile = videoFile;
+                videoUrl = await Provider.of<UploadService>(context, listen: false).uploadVideo(video: videoFile, name: "video101");
+                final uint8list = await VideoThumbnail.thumbnailFile(
+                  video: copiedVideoFile.path,
+                  thumbnailPath: (await getTemporaryDirectory()).path,
+                  imageFormat: ImageFormat.JPEG,
+                  quality: 75,
+                );
+                videoThumbnail = File(uint8list);
+                // to update the value of videoThumbnail and videoFile
+                setState(() {});
               },
               child: Container(
                 height: screenHeight * 0.3,
@@ -87,21 +103,6 @@ class _UploadScreenState extends State<UploadScreen> {
                     AddToPlaylistWidget(screenHeight: screenHeight),
                     // This would be a drop down list
                     SelectGenreWidget(screenHeight: screenHeight),
-                    Padding(
-                      padding: EdgeInsets.only(top: 4.0),
-                      child: CustomButton(
-                        text: "Select Thumbnail",
-                        icon: Icon(Icons.image),
-                        color: Colors.blue,
-                        onTap: () async {
-                          final file = await ImagePicker()
-                              .getImage(source: ImageSource.gallery);
-                          setState(() {
-                            videoThumbnail = File(file.path);
-                          });
-                        },
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -113,66 +114,48 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 }
 
-class UploadButtonWidget extends StatefulWidget {
+class UploadButtonWidget extends StatelessWidget {
   const UploadButtonWidget({
     Key key,
   }) : super(key: key);
 
   @override
-  _UploadButtonWidgetState createState() => _UploadButtonWidgetState();
-}
-
-class _UploadButtonWidgetState extends State<UploadButtonWidget> {
-  @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          )
-        : GestureDetector(
-            child: Container(
-              width: 90,
-              height: 40,
-              color: Colors.blue,
-              child: Center(
-                child: Text(
-                  'UPLOAD',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+    return GestureDetector(
+      child: Container(
+        width: 90,
+        height: 40,
+        color: Colors.blue,
+        child: Center(
+          child: Text(
+            'UPLOAD',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.bold,
             ),
-            onTap: () async {
-              setState(() {
-                isLoading = true;
-              });
-              final urls =
-                  await Provider.of<UploadService>(context, listen: false)
-                      .uploadVideo(
-                          video: videoFile,
-                          thumbnail: videoThumbnail,
-                          name: "video1");
-              String videoUrl = urls[0];
-              String thumbnailUrl = urls[1];
-              setState(() {
-                isLoading = false;
-              });
-              print(videoUrl);
-              print(thumbnailUrl);
+          ),
+        ),
+      ),
+      onTap: () async {
+        // String videoDownloadUrl =
+        // await Provider.of<UploadService>(context, listen: false)
+        //     .uploadVideo(video: videoFile, name: "video1");
+        String thumbnailDownloadUrl = await Provider.of<UploadService>(context, listen: false)
+            .uploadThumbnail(video: videoThumbnail, name: "video1Thumbnail");
 
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Test(
-                            videoUrl: videoUrl,
-                            thumbnailUrl: thumbnailUrl,
-                          )));
-            },
-          );
+        print("videThumbnail : $thumbnailDownloadUrl");
+        //await UploadService().uploadVideo(video: videoFile, name: "video1");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    Test(
+                      videoUrl: videoUrl,
+                    )));
+      },
+    );
   }
 }
 
