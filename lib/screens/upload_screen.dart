@@ -7,12 +7,12 @@ import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 
 String name;
 File videoFile;
 File videoThumbnail;
+File copiedVideoFile;
 String tempDir;
 bool isLoading = false;
 
@@ -22,33 +22,17 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
-  @override
-  void initState() {
-    super.initState();
-    getTemporaryDirectory().then((d) => tempDir = d.path);
-  }
-
-  // Future<void> generateThumbnail() async {
-  //   final videoFilePath = videoFile.path;
-  //   final imageData = await VideoThumbnail.thumbnailFile(
-  //     video: videoFilePath,
-  //     imageFormat: ImageFormat.JPEG,
-  //     thumbnailPath: tempDir,
-  //     maxWidth: 128,
-  //     quality: 25,
-  //   );
-  //   setState(() {
-  //     videoThumbnail = File(imageData);
-  //   });
-  //   print(videoThumbnail);
-  //   print(videoFile.path);
-  //   print(tempDir);
-  // }
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -65,7 +49,7 @@ class _UploadScreenState extends State<UploadScreen> {
             GestureDetector(
               onTap: () async {
                 final file =
-                    await ImagePicker().getVideo(source: ImageSource.gallery);
+                await ImagePicker().getVideo(source: ImageSource.gallery);
                 videoFile = File(file.path);
                 // await generateThumbnail();
               },
@@ -73,27 +57,24 @@ class _UploadScreenState extends State<UploadScreen> {
                 height: screenHeight * 0.3,
                 width: screenWidth,
                 color: Color(0xFF343837),
-                child: videoThumbnail != null
-                    ? Image.file(
-                        videoThumbnail,
-                        fit: BoxFit.cover,
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.upload_sharp,
-                            size: 34.0,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Choose Video from device',
-                            style: TextStyle(fontSize: 23.0),
-                          ),
-                        ],
-                      ),
+                child: videoThumbnail != null ?
+                Image.file(videoThumbnail, fit: BoxFit.cover,) :
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload_sharp,
+                      size: 34.0,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      'Choose Video from device',
+                      style: TextStyle(fontSize: 23.0),
+                    ),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -224,8 +205,8 @@ class CreateATitleWidget extends StatelessWidget {
                   .getVideoTitle(value);
             },
           )
-          //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
-          ),
+        //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
+      ),
     );
   }
 }
@@ -265,12 +246,12 @@ class AddDescriptionWidget extends StatelessWidget {
                 width: 20,
               ),
               Text(
-                Provider.of<UploadService>(context, listen: false)
-                            .returnVideoDescription() !=
-                        ''
-                    ? Provider.of<UploadService>(context, listen: false)
-                        .returnVideoDescription()
-                    : 'Add Description',
+                Provider.of<UploadService>(context, listen: true)
+                    .returnVideoDescription() ==
+                    ''
+                    ? 'Add Description'
+                    : Provider.of<UploadService>(context, listen: true)
+                    .returnVideoDescription(),
                 style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white38,
