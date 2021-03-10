@@ -14,6 +14,7 @@ String name;
 File videoFile;
 File videoThumbnail;
 String tempDir;
+String genre;
 bool isLoading = false;
 
 class UploadScreen extends StatefulWidget {
@@ -155,9 +156,11 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
               final urls =
                   await Provider.of<UploadService>(context, listen: false)
                       .uploadVideo(
-                          video: videoFile,
-                          thumbnail: videoThumbnail,
-                          name: "video1");
+                video: videoFile,
+                thumbnail: videoThumbnail,
+                name: "video1",
+                genre: genre,
+              );
               String videoUrl = urls[0];
               String thumbnailUrl = urls[1];
               setState(() {
@@ -357,12 +360,12 @@ class _SelectGenreWidgetState extends State<SelectGenreWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                        'Select Genre',
-                        style: TextStyle(
-                          fontSize: 21.0,
-                          color: Colors.white38,
-                        ),
-                      ),
+                  'Select Genre',
+                  style: TextStyle(
+                    fontSize: 21.0,
+                    color: Colors.white38,
+                  ),
+                ),
                 GestureDetector(
                   child: Icon(
                     arrowIcon,
@@ -376,19 +379,39 @@ class _SelectGenreWidgetState extends State<SelectGenreWidget> {
               ],
             ),
           ),
-          showOptions == false ? Container() : Column(
-            children: [
-              CheckBoxListVale(itemName: 'Action',),
-              CheckBoxListVale(itemName: 'Animation',),
-              CheckBoxListVale(itemName: 'Crime',),
-              CheckBoxListVale(itemName: 'Comedy',),
-              CheckBoxListVale(itemName: 'Drama',),
-              CheckBoxListVale(itemName: 'Fantasy',),
-              CheckBoxListVale(itemName: 'Historical',),
-              CheckBoxListVale(itemName: 'Horror',),
-              CheckBoxListVale(itemName: 'Romance',),
-            ],
-          )
+          showOptions == false
+              ? Container()
+              : Column(
+                  children: [
+                    CheckBoxListVale(
+                      itemName: 'Action',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Animation',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Crime',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Comedy',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Drama',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Fantasy',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Historical',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Horror',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Romance',
+                    ),
+                  ],
+                )
         ],
       ),
     );
@@ -414,10 +437,14 @@ class _CheckBoxListValeState extends State<CheckBoxListVale> {
       value: _checked,
       onChanged: (bool value) {
         setState(() {
-          if(!_checked)
-              _checked = true;
-          else
+          if (!_checked) {
+            _checked = true;
+            genre = widget.itemName;
+            print(widget.itemName);
+          } else {
             _checked = false;
+            genre = "";
+          }
         });
       },
     );
