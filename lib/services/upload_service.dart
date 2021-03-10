@@ -6,41 +6,45 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 
 class UploadService extends ChangeNotifier {
-
   UploadService(this._firebaseFirestore);
 
   final FirebaseFirestore _firebaseFirestore;
 
-  CollectionReference videoInfo = FirebaseFirestore.instance.collection("VideoInfo");
-  final Reference videoUploadRef = FirebaseStorage.instance.ref().child("videos");
-  final Reference thumbnailUploadRef = FirebaseStorage.instance.ref().child('thumbnails');
-  String videoDownloadUrl;
-  String thumbnailDownloadUrl;
+  CollectionReference videoInfo =
+      FirebaseFirestore.instance.collection("VideoInfo");
+  final Reference videoRef = FirebaseStorage.instance.ref().child("videos");
+  final Reference thumbnailRef =
+      FirebaseStorage.instance.ref().child("thumbnails");
+  String videoUrl;
+  String thumbnailUrl;
 
-  Future<String> uploadVideo({File video, String name}) async {
+  Future<List<String>> uploadVideo(
+      {File video, File thumbnail, String name}) async {
     try {
-      UploadTask uploadTask = videoUploadRef.child(name).putFile(video);
-      TaskSnapshot snapshot = (await uploadTask);
-      videoDownloadUrl = (await snapshot.ref.getDownloadURL());
+      UploadTask videoUploadTask = videoRef
+          .child(name)
+          .putFile(video, SettableMetadata(contentType: "video/MP4"));
+      TaskSnapshot videoSnapshot = (await videoUploadTask);
+      videoUrl = (await videoSnapshot.ref.getDownloadURL());
+      await uploadThumbnail(thumbnail: thumbnail);
       uploadVideoInfo();
     } catch (e) {
       print(e);
     }
 
-    return videoDownloadUrl;
+    return [videoUrl, thumbnailUrl];
   }
 
-  Future<String> uploadThumbnail({File video, String name}) async {
+  Future<void> uploadThumbnail({File thumbnail}) async {
     try {
-      UploadTask uploadTask = thumbnailUploadRef.child(name).putFile(video);
-      TaskSnapshot snapshot = (await uploadTask);
-      thumbnailDownloadUrl = (await snapshot.ref.getDownloadURL());
-      uploadVideoInfo();
+      UploadTask thumbnailUploadTask = thumbnailRef
+          .child("image1")
+          .putFile(thumbnail, SettableMetadata(contentType: "image/jpeg"));
+      TaskSnapshot thumbnailSnapshot = (await thumbnailUploadTask);
+      thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
     } catch (e) {
       print(e);
     }
-
-    return thumbnailDownloadUrl;
   }
 
   // Info of all the video to be updated
@@ -49,17 +53,17 @@ class UploadService extends ChangeNotifier {
   String _videoDescription;
   String _videoGenre;
 
-  void getVideoTitle(String videoTitle){
+  void getVideoTitle(String videoTitle) {
     _videoTitle = videoTitle;
     notifyListeners();
   }
 
-  void getVideoDescription(String videoDescription){
+  void getVideoDescription(String videoDescription) {
     _videoDescription = videoDescription;
     notifyListeners();
   }
 
-  void getVideoGenre(String videoGenre){
+  void getVideoGenre(String videoGenre) {
     _videoGenre = videoGenre;
     notifyListeners();
   }
@@ -73,29 +77,33 @@ class UploadService extends ChangeNotifier {
 
     videoInfo
         .add({
-          'title': _videoTitle??'',
-          'decription': _videoDescription??'',
-          'genre': _videoGenre??'',
+          'title': _videoTitle ?? '',
+          'decription': _videoDescription ?? '',
+          'genre': _videoGenre ?? '',
           'date': date,
           'time': time,
-          'downloadUrl': videoDownloadUrl,
+          'videoUrl': videoUrl,
+          'thumbnailUrl': thumbnailUrl,
         })
         .then((value) => print("Data added to firebase!"))
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  void makeVideoDescriptionNull(){
-    this._videoDescription = null;
-    notifyListeners();
-  }
-
-  String returnVideoTitle(){
+  String returnVideoTitle() {
     return _videoTitle;
   }
 
-  String returnVideoDescription(){
-    if(_videoDescription != null)
+  String returnVideoDescription() {
+    if (_videoDescription != null)
       return _videoDescription;
-    else return '';
+    else
+      return '';
+  }
+
+  void videoInfoNull() {
+    this._videoGenre = null;
+    this._videoDescription = null;
+    this._videoTitle = null;
+    notifyListeners();
   }
 }
