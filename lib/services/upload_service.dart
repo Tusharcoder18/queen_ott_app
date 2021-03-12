@@ -19,7 +19,7 @@ class UploadService extends ChangeNotifier {
   String thumbnailUrl;
 
   Future<List<String>> uploadVideo(
-      {File video, File thumbnail, String name}) async {
+      {File video, File thumbnail, String name, String genre}) async {
     try {
       UploadTask videoUploadTask = videoRef
           .child(name)
@@ -27,6 +27,7 @@ class UploadService extends ChangeNotifier {
       TaskSnapshot videoSnapshot = (await videoUploadTask);
       videoUrl = (await videoSnapshot.ref.getDownloadURL());
       await uploadThumbnail(thumbnail: thumbnail);
+      _videoGenre = genre;
       uploadVideoInfo();
     } catch (e) {
       print(e);

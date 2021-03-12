@@ -14,6 +14,7 @@ String name;
 File videoFile;
 File videoThumbnail;
 String tempDir;
+String genre;
 bool isLoading = false;
 
 class UploadScreen extends StatefulWidget {
@@ -104,6 +105,15 @@ class _UploadScreenState extends State<UploadScreen> {
                         },
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: ElevatedButton(
+                        child: Text("Temp next Page for player"),
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Test()));
+                        },
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -155,9 +165,11 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
               final urls =
                   await Provider.of<UploadService>(context, listen: false)
                       .uploadVideo(
-                          video: videoFile,
-                          thumbnail: videoThumbnail,
-                          name: "video1");
+                video: videoFile,
+                thumbnail: videoThumbnail,
+                name: "video1",
+                genre: genre,
+              );
               String videoUrl = urls[0];
               String thumbnailUrl = urls[1];
               setState(() {
@@ -349,46 +361,66 @@ class _SelectGenreWidgetState extends State<SelectGenreWidget> {
       padding: EdgeInsets.only(top: 4.0),
       child: Column(
         children: [
-          Container(
-            height: widget.screenHeight * 0.1,
-            padding: EdgeInsets.all(16.0),
-            color: Color(0xFF1C1C1C),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                        'Select Genre',
-                        style: TextStyle(
-                          fontSize: 21.0,
-                          color: Colors.white38,
-                        ),
-                      ),
-                GestureDetector(
-                  child: Icon(
+          GestureDetector(
+            child: Container(
+              height: widget.screenHeight * 0.1,
+              padding: EdgeInsets.all(16.0),
+              color: Color(0xFF1C1C1C),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Select Genre',
+                    style: TextStyle(
+                      fontSize: 21.0,
+                      color: Colors.white38,
+                    ),
+                  ),
+                  Icon(
                     arrowIcon,
                     color: Colors.white38,
                     size: 35.0,
-                  ),
-                  onTap: () {
-                    changeShowOptions();
-                  },
-                )
-              ],
+                  )
+                ],
+              ),
             ),
+            onTap: () {
+              changeShowOptions();
+            },
           ),
-          showOptions == false ? Container() : Column(
-            children: [
-              CheckBoxListVale(itemName: 'Action',),
-              CheckBoxListVale(itemName: 'Animation',),
-              CheckBoxListVale(itemName: 'Crime',),
-              CheckBoxListVale(itemName: 'Comedy',),
-              CheckBoxListVale(itemName: 'Drama',),
-              CheckBoxListVale(itemName: 'Fantasy',),
-              CheckBoxListVale(itemName: 'Historical',),
-              CheckBoxListVale(itemName: 'Horror',),
-              CheckBoxListVale(itemName: 'Romance',),
-            ],
-          )
+          showOptions == false
+              ? Container()
+              : Column(
+                  children: [
+                    CheckBoxListVale(
+                      itemName: 'Action',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Animation',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Crime',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Comedy',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Drama',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Fantasy',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Historical',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Horror',
+                    ),
+                    CheckBoxListVale(
+                      itemName: 'Romance',
+                    ),
+                  ],
+                )
         ],
       ),
     );
@@ -414,10 +446,14 @@ class _CheckBoxListValeState extends State<CheckBoxListVale> {
       value: _checked,
       onChanged: (bool value) {
         setState(() {
-          if(!_checked)
-              _checked = true;
-          else
+          if (!_checked) {
+            _checked = true;
+            genre = widget.itemName;
+            print(widget.itemName);
+          } else {
             _checked = false;
+            genre = "";
+          }
         });
       },
     );
