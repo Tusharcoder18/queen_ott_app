@@ -17,6 +17,7 @@ class _TestState extends State<Test> {
   double videoDuration = 0;
   double currentValue;
   double totalDuration;
+  bool displayButtons = true;
 
   @override
   void initState() {
@@ -53,17 +54,28 @@ class _TestState extends State<Test> {
             children: [
               Positioned(
                 top: 0,
-                child: _controller.value.isInitialized
-                  ? Container(
-                    height: MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? 250 : MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: AspectRatio(
-                        aspectRatio: _controller.value.aspectRatio,
-                        child: VideoPlayer(_controller),
-                      ),
-                  )
-                  : Container(),
+                child: GestureDetector(
+                  onTap: (){
+                    if(displayButtons)
+                      displayButtons = false;
+                    else
+                      displayButtons = true;
+                    setState(() {
+                    });
+                  },
+                  child: _controller.value.isInitialized
+                    ? Container(
+                      height: MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? 250 : MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: VideoPlayer(_controller),
+                        ),
+                    )
+                    : Container(),
+                ),
               ),
+              displayButtons == false ? Container() :
               Positioned(
                 top: 0,
                 child: Container(
