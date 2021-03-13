@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
@@ -17,13 +18,75 @@ class UploadService extends ChangeNotifier {
       FirebaseStorage.instance.ref().child("thumbnails");
   String videoUrl;
   String thumbnailUrl;
+  bool isLoading = false;
 
-  Future<List<String>> uploadVideo(
+  Future<void> showMyDialog(BuildContext context, UploadTask uploadTask) async {
+    print("Show Dialog called");
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      // ignore: missing_return
+      builder: (BuildContext context) {
+        if (uploadTask != null) {
+          return StreamBuilder<TaskSnapshot>(
+              stream: uploadTask.snapshotEvents,
+              builder: (context, snapshot) {
+                var event = snapshot?.data;
+
+                double progressPercent = event != null
+                    ? event.bytesTransferred / event.totalBytes
+                    : 0;
+
+                return AlertDialog(
+                  title: Text('Upload Progress'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('${(progressPercent * 100).toStringAsFixed(2)} %'),
+                      SizedBox(
+                        height: 3.0,
+                      ),
+                      LinearProgressIndicator(
+                        value: progressPercent,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                      ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              });
+        } else {
+          return AlertDialog(
+            title: Text('Upload Progress'),
+            content: Text('Upload Done!'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Done'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  Future<List<String>> uploadVideo(BuildContext context,
       {File video, File thumbnail, String name, String genre}) async {
     try {
       UploadTask videoUploadTask = videoRef
           .child(name)
           .putFile(video, SettableMetadata(contentType: "video/MP4"));
+      showMyDialog(context, videoUploadTask);
       TaskSnapshot videoSnapshot = (await videoUploadTask);
       videoUrl = (await videoSnapshot.ref.getDownloadURL());
       await uploadThumbnail(thumbnail: thumbnail);

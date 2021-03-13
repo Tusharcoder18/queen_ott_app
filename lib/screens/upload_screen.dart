@@ -7,6 +7,7 @@ import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
+import 'package:queen_ott_app/screens/test.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -128,56 +129,49 @@ class UploadButtonWidget extends StatefulWidget {
 class _UploadButtonWidgetState extends State<UploadButtonWidget> {
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-          )
-        : GestureDetector(
-            child: Container(
-              width: 90,
-              height: 40,
-              color: Colors.blue,
-              child: Center(
-                child: Text(
-                  'UPLOAD',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20.0,
-                    fontFamily: 'Roboto',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+    return GestureDetector(
+      child: Container(
+        width: 90,
+        height: 40,
+        color: Colors.blue,
+        child: Center(
+          child: Text(
+            'UPLOAD',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.bold,
             ),
-            onTap: () async {
-              setState(() {
-                isLoading = true;
-              });
-              final urls =
-                  await Provider.of<UploadService>(context, listen: false)
-                      .uploadVideo(
-                video: videoFile,
-                thumbnail: videoThumbnail,
-                name: "video1",
-                genre: genre,
-              );
-              String videoUrl = urls[0];
-              String thumbnailUrl = urls[1];
-              setState(() {
-                isLoading = false;
-              });
-              print(videoUrl);
-              print(thumbnailUrl);
+          ),
+        ),
+      ),
+      onTap: () async {
+        isLoading = true;
+        final urls = await Provider.of<UploadService>(context, listen: false)
+            .uploadVideo(
+          context,
+          video: videoFile,
+          thumbnail: videoThumbnail,
+          name: "video1",
+          genre: genre,
+        );
+        String videoUrl = urls[0];
+        String thumbnailUrl = urls[1];
+        isLoading = false;
+        print(videoUrl);
+        print(thumbnailUrl);
+        setState(() {});
 
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Test(
-                            videoUrl: videoUrl,
-                            thumbnailUrl: thumbnailUrl,
-                          )));
-            },
-          );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Test(
+                      videoUrl: videoUrl,
+                      thumbnailUrl: thumbnailUrl,
+                    )));
+      },
+    );
   }
 }
 
