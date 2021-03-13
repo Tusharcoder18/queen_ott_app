@@ -110,8 +110,9 @@ class _UploadScreenState extends State<UploadScreen> {
                       padding: EdgeInsets.only(top: 10),
                       child: ElevatedButton(
                         child: Text("Temp next Page for player"),
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>Test()));
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => Test()));
                         },
                       ),
                     )
@@ -170,7 +171,6 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
         isLoading = false;
         print(videoUrl);
         print(thumbnailUrl);
-        setState(() {});
 
         Navigator.push(
             context,
@@ -355,32 +355,32 @@ class _SelectGenreWidgetState extends State<SelectGenreWidget> {
       padding: EdgeInsets.only(top: 4.0),
       child: Column(
         children: [
-          GestureDetector(
-            child: Container(
-              height: widget.screenHeight * 0.1,
-              padding: EdgeInsets.all(16.0),
-              color: Color(0xFF1C1C1C),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Select Genre',
-                    style: TextStyle(
-                      fontSize: 21.0,
-                      color: Colors.white38,
-                    ),
+          Container(
+            height: widget.screenHeight * 0.1,
+            padding: EdgeInsets.all(16.0),
+            color: Color(0xFF1C1C1C),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Select Genre',
+                  style: TextStyle(
+                    fontSize: 21.0,
+                    color: Colors.white38,
                   ),
-                  Icon(
+                ),
+                GestureDetector(
+                  child: Icon(
                     arrowIcon,
                     color: Colors.white38,
                     size: 35.0,
-                  )
-                ],
-              ),
+                  ),
+                  onTap: () {
+                    changeShowOptions();
+                  },
+                )
+              ],
             ),
-            onTap: () {
-              changeShowOptions();
-            },
           ),
           showOptions == false
               ? Container()
