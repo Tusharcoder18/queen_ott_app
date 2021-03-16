@@ -173,6 +173,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   icon: Icon(FontAwesomeIcons.google),
                   color: Colors.red,
                   onTap: () {
+                    print('User Details:');
                     print(context
                         .read<AuthenticationService>()
                         .signInWithGoogle());
