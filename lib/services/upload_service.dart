@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-class UploadService extends ChangeNotifier {
-  UploadService(this._firebaseFirestore);
+import 'package:provider/provider.dart';
+import 'package:queen_ott_app/services/authentication_service.dart';
 
+class UploadService extends ChangeNotifier {
   final FirebaseFirestore _firebaseFirestore;
+  UploadService(this._firebaseFirestore);
 
   CollectionReference videoInfo =
       FirebaseFirestore.instance.collection("VideoInfo");
@@ -18,6 +19,8 @@ class UploadService extends ChangeNotifier {
       FirebaseStorage.instance.ref().child("thumbnails");
   String videoUrl;
   String thumbnailUrl;
+  final List<String> vUrls = [];
+  final List<String> tUrls = [];
   bool isLoading = false;
 
   Future<void> showMyDialog(BuildContext context, UploadTask uploadTask) async {
@@ -87,11 +90,16 @@ class UploadService extends ChangeNotifier {
           .child(name)
           .putFile(video, SettableMetadata(contentType: "video/MP4"));
       showMyDialog(context, videoUploadTask);
+
       TaskSnapshot videoSnapshot = (await videoUploadTask);
       videoUrl = (await videoSnapshot.ref.getDownloadURL());
+
       await uploadThumbnail(thumbnail: thumbnail);
       _videoGenre = genre;
-      uploadVideoInfo();
+
+      final uid = Provider.of<AuthenticationService>(context).currentUser.uid;
+
+      uploadVideoInfo(uid);
     } catch (e) {
       print(e);
     }
@@ -108,6 +116,42 @@ class UploadService extends ChangeNotifier {
       thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
     } catch (e) {
       print(e);
+    }
+  }
+
+  void uploadVideoInfo(String uid) {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String date = formatter.format(now);
+    formatter = DateFormat('HH-mm-ss');
+    String time = formatter.format(now);
+
+    videoInfo
+        .add({
+          'uploaderID': uid,
+          'title': _videoTitle ?? '',
+          'decription': _videoDescription ?? '',
+          'genre': _videoGenre ?? '',
+          'date': date,
+          'time': time,
+          'videoUrl': videoUrl,
+          'thumbnailUrl': thumbnailUrl,
+        })
+        .then((value) => print("Data added to firebase!"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  Future<void> getCurrentUrls() async {
+    if (vUrls.isEmpty) {
+      final collection = await videoInfo.get();
+      final List<DocumentSnapshot> documents = collection.docs;
+      print('Documents are:');
+      documents.forEach((element) {
+        vUrls.add(element.data()['videoUrl'].toString());
+        tUrls.add(element.data()['thumbnailUrl'].toString());
+        // print(element.data()['videoUrl']);
+        // print(element.data()['thumbnailUrl']);
+      });
     }
   }
 
@@ -132,27 +176,6 @@ class UploadService extends ChangeNotifier {
     notifyListeners();
   }
 
-  void uploadVideoInfo() {
-    DateTime now = DateTime.now();
-    DateFormat formatter = DateFormat('yyyy-MM-dd');
-    String date = formatter.format(now);
-    formatter = DateFormat('HH-mm-ss');
-    String time = formatter.format(now);
-
-    videoInfo
-        .add({
-          'title': _videoTitle ?? '',
-          'decription': _videoDescription ?? '',
-          'genre': _videoGenre ?? '',
-          'date': date,
-          'time': time,
-          'videoUrl': videoUrl,
-          'thumbnailUrl': thumbnailUrl,
-        })
-        .then((value) => print("Data added to firebase!"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
   String returnVideoTitle() {
     return _videoTitle;
   }
@@ -162,6 +185,14 @@ class UploadService extends ChangeNotifier {
       return _videoDescription;
     else
       return '';
+  }
+
+  List<String> returnVideoUrls() {
+    return vUrls;
+  }
+
+  List<String> returnThumbnailUrls() {
+    return tUrls;
   }
 
   void videoInfoNull() {
