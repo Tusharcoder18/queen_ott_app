@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -111,8 +112,13 @@ class _UploadScreenState extends State<UploadScreen> {
                       child: ElevatedButton(
                         child: Text("Temp next Page for player"),
                         onPressed: () {
+                          
+                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Test()), (Route<dynamic>route) => false);
+                          
+                          /*
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) => Test()));
+                        */
                         },
                       ),
                     )

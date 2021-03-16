@@ -7,7 +7,7 @@ import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
 import 'package:queen_ott_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:flutter/services.dart';
 Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
