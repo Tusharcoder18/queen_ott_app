@@ -108,8 +108,6 @@ class _TestState extends State<Test> {
                                 value: (getCurrentDuration()/getTotalDuration())*100 != null ? (getCurrentDuration()/getTotalDuration())*100 : 0,
                                 onChanged: (double newValue){
                                   videoDuration = newValue;
-                                  print(videoDuration);
-                                  print(_controller.value.position);
                                   setState(() {
                                     _controller.seekTo(_controller.value.duration*(videoDuration/100));
                                   });
@@ -122,8 +120,8 @@ class _TestState extends State<Test> {
                         Container(
                           child: ElevatedButton(
                             onPressed: (){
-                              videoDuration = 0;
                               _controller.seekTo(Duration.zero);
+                              getCurrentDuration();
                               setState(() {
                               });
                             },
@@ -142,6 +140,8 @@ class _TestState extends State<Test> {
     );
   }
 
+
+  // To dispose the controller
   @override
   void dispose() {
     super.dispose();
