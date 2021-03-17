@@ -23,6 +23,11 @@ class UploadService extends ChangeNotifier {
   final List<String> tUrls = [];
   bool isLoading = false;
 
+
+  /// This list is made to take in all the possible genre that the user has chosen
+  List<String> genreList = [];
+
+  /// This is for the popUp screen that shown
   Future<void> showMyDialog(BuildContext context, UploadTask uploadTask) async {
     print("Show Dialog called");
     return showDialog<void>(
@@ -39,7 +44,6 @@ class UploadService extends ChangeNotifier {
                 double progressPercent = event != null
                     ? event.bytesTransferred / event.totalBytes
                     : 0;
-
                 return AlertDialog(
                   title: Text('Upload Progress'),
                   content: Column(
@@ -84,7 +88,7 @@ class UploadService extends ChangeNotifier {
   }
 
   Future<List<String>> uploadVideo(BuildContext context,
-      {File video, File thumbnail, String name, String genre}) async {
+      {File video, File thumbnail, String name}) async {
     try {
       UploadTask videoUploadTask = videoRef
           .child(name)
@@ -95,7 +99,6 @@ class UploadService extends ChangeNotifier {
       videoUrl = (await videoSnapshot.ref.getDownloadURL());
 
       await uploadThumbnail(thumbnail: thumbnail);
-      _videoGenre = genre;
 
       final uid = Provider.of<AuthenticationService>(context).currentUser.uid;
 
@@ -106,7 +109,9 @@ class UploadService extends ChangeNotifier {
 
     return [videoUrl, thumbnailUrl];
   }
-
+  /*
+  This is for video thumbnail upload service
+   */
   Future<void> uploadThumbnail({File thumbnail}) async {
     try {
       UploadTask thumbnailUploadTask = thumbnailRef
@@ -155,7 +160,12 @@ class UploadService extends ChangeNotifier {
     }
   }
 
-  // Info of all the video to be updated
+  /*
+  This is to get the information of the
+  Video Title
+  Video Description
+  and Video Genre
+   */
 
   String _videoTitle;
   String _videoDescription;
@@ -199,6 +209,37 @@ class UploadService extends ChangeNotifier {
     this._videoGenre = null;
     this._videoDescription = null;
     this._videoTitle = null;
+    notifyListeners();
+  }
+
+  /*
+  This is made to get the video genre
+   */
+
+  /// To make the genre in list format
+  void addThisToGenreString(){
+    _videoGenre = '';
+    for(int i = 0; i<genreList.length; i++) {
+      if (i != genreList.length - 1) {
+        _videoGenre = _videoGenre + genreList[i] + "+";
+        print(_videoGenre);
+      } else
+        _videoGenre = _videoGenre + genreList[i];
+    }
+    print("Official last $_videoGenre");
+  }
+
+  void addGenreToList({String genreName}){
+    genreList.add(genreName);
+    print(genreList);
+    addThisToGenreString();
+    notifyListeners();
+  }
+
+  void removeGenreFromList({String genreName}){
+    genreList.remove(genreName);
+    addThisToGenreString();
+    print(genreList);
     notifyListeners();
   }
 }

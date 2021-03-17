@@ -23,7 +23,7 @@ class _TestState extends State<Test> {
   void initState() {
     super.initState();
     _chewieController = ChewieController(
-        videoPlayerController: VideoPlayerController.asset('assets/nature.mp4'),
+        videoPlayerController: VideoPlayerController.network(widget.videoUrl), //'assets/nature.mp4')'assets/nature.mp4'),
         aspectRatio: 19.9 / 9,
         autoInitialize: false,
         autoPlay: true,
@@ -31,7 +31,7 @@ class _TestState extends State<Test> {
         showControls: true,
         materialProgressColors: ChewieProgressColors(
           playedColor: Colors.white,
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.grey,
           handleColor: Colors.white,
           bufferedColor: Colors.grey,
         ),
@@ -42,7 +42,7 @@ class _TestState extends State<Test> {
             ),
           );
         });
-    _controller = VideoPlayerController.asset('assets/nature.mp4')
+    _controller = VideoPlayerController.asset(widget.videoUrl) //'assets/nature.mp4')
       ..initialize().then((_) {
         setState(() {});
       });
@@ -71,7 +71,12 @@ class _TestState extends State<Test> {
       child: WillPopScope(
         onWillPop: () async{
           _chewieController.pause();
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>UploadScreen()), (Route<dynamic>route) => false);
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+          Navigator.pop(context);
+          //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>UploadScreen()), (Route<dynamic>route) => false);
           return false;
         },
         child: Scaffold(
