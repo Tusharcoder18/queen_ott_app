@@ -1,16 +1,11 @@
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/screens/upload_screen.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
 import '../widgets/custom_button.dart';
 import '../services/upload_service.dart';
 import '../screens/upload_screen.dart';
-import 'package:image_picker/image_picker.dart';
 
 // This is for the upload video section for content creator
 class CreatorScreenWidget extends StatelessWidget {
@@ -60,72 +55,6 @@ class CreatorScreenWidget extends StatelessWidget {
           ),
           UserUploads(),
         ],
-      ),
-    );
-  }
-
-  Widget getUserUploads(BuildContext context) {
-    List<String> videoUrls;
-    List<String> thumbnailUrls;
-
-    Future<void> getDetails() async {
-      await Provider.of<UploadService>(context, listen: false).getCurrentUrls();
-      videoUrls =
-          Provider.of<UploadService>(context, listen: false).returnVideoUrls();
-      thumbnailUrls = Provider.of<UploadService>(context, listen: false)
-          .returnThumbnailUrls();
-    }
-
-    return Expanded(
-      flex: 1,
-      child: Container(
-        child: Center(
-          child: ListView.builder(
-            itemCount: videoUrls.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: <Widget>[
-                  SizedBox(
-                    child: Image.asset(
-                      'assets/movieThree.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                    width: double.infinity,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.fromLTRB(12, 12, 16, 15),
-                        child: CircleAvatar(
-                          child: Icon(FontAwesomeIcons.user),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Video Name",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.more_vert),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
       ),
     );
   }

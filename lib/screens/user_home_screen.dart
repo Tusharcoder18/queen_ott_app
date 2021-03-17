@@ -88,16 +88,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-class SignOutButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: Text('Sign Out'),
-      onPressed: () {
-        context.read<AuthenticationService>().signOut();
-        Navigator.pop(context);
-      },
-    );
-  }
-}

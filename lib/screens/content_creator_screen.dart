@@ -21,10 +21,6 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
       'Index 2: Monetization',
       style: optionStyle,
     ),
-    // Text(
-    //   'Index 3: Settings',
-    //   style: optionStyle,
-    // )
     TestPage(),
   ];
 
