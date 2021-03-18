@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/screens/add_description_screen.dart';
 import 'package:queen_ott_app/screens/content_creator_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
+import 'package:queen_ott_app/widgets/add_description_widget.dart';
+import 'package:queen_ott_app/widgets/add_playlist_widget.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
+import 'package:queen_ott_app/widgets/select_genre_widget.dart';
 import 'dart:io';
 import '../services/upload_service.dart';
-import 'package:queen_ott_app/screens/test.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 
 String name;
@@ -26,6 +24,10 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+  temp(String value) => setState(() {
+        genre = value;
+      });
+
   @override
   void initState() {
     super.initState();
@@ -38,10 +40,13 @@ class _UploadScreenState extends State<UploadScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
       child: WillPopScope(
-        onWillPop: () async{
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ContentCreatorScreen()), (Route<dynamic>route) => false);
+        onWillPop: () async {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => ContentCreatorScreen()),
+              (Route<dynamic> route) => false);
           return false;
-          },
+        },
         child: Scaffold(
           appBar: AppBar(
             title: Row(
@@ -59,7 +64,6 @@ class _UploadScreenState extends State<UploadScreen> {
                   final file =
                       await ImagePicker().getVideo(source: ImageSource.gallery);
                   videoFile = File(file.path);
-                  // await generateThumbnail();
                 },
                 child: Container(
                   height: screenHeight * 0.3,
@@ -92,12 +96,14 @@ class _UploadScreenState extends State<UploadScreen> {
                 child: Container(
                   child: ListView(
                     children: [
-                      CreateATitleWidget(screenHeight: screenHeight),
-                      AddDescriptionWidget(
-                          screenHeight: screenHeight, screenWidth: screenWidth),
-                      AddToPlaylistWidget(screenHeight: screenHeight),
+                      titleWidget(context, screenHeight),
+                      addDescriptionWidget(context, screenHeight, screenWidth),
+                      addPlaylistWidget(context, screenHeight),
                       // This would be a drop down list
-                      SelectGenreWidget(screenHeight: screenHeight),
+                      SelectGenreWidget(
+                        screenHeight: screenHeight,
+                        temp: temp,
+                      ),
                       Padding(
                         padding: EdgeInsets.only(top: 4.0),
                         child: CustomButton(
@@ -118,9 +124,11 @@ class _UploadScreenState extends State<UploadScreen> {
                         child: ElevatedButton(
                           child: Text("Temp next Page for player"),
                           onPressed: () {
-                            
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Test()), (Route<dynamic>route) => false);
-                            
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Test()),
+                                (Route<dynamic> route) => false);
+
                             /*
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) => Test()));
@@ -176,7 +184,6 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
           context,
           video: videoFile,
           thumbnail: videoThumbnail,
-          name: "video1",
         );
         String videoUrl = urls[0];
         String thumbnailUrl = urls[1];
@@ -196,274 +203,28 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
   }
 }
 
-class CreateATitleWidget extends StatelessWidget {
-  const CreateATitleWidget({
-    Key key,
-    @required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Container(
-          height: screenHeight * 0.1,
-          padding: EdgeInsets.all(15.0),
-          color: Color(0xFF1C1C1C),
-          child: TextField(
-            style: TextStyle(fontSize: 21.0, fontWeight: FontWeight.w300),
-            decoration: InputDecoration(
-              hintText: 'Create a title',
-              hintStyle: TextStyle(fontSize: 21.0),
-              border: InputBorder.none,
-            ),
-            autofocus: false,
-            onChanged: (value) {
-              name = value;
-              Provider.of<UploadService>(context, listen: false)
-                  .getVideoTitle(value);
-            },
-          )
-          //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
-          ),
-    );
-  }
-}
-
-class AddDescriptionWidget extends StatelessWidget {
-  const AddDescriptionWidget({
-    Key key,
-    @required this.screenHeight,
-    @required this.screenWidth,
-  }) : super(key: key);
-
-  final double screenHeight;
-  final double screenWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddDescriptionScreen()));
-        },
-        child: Container(
-          height: screenHeight * 0.1,
-          padding: EdgeInsets.all(16.0),
-          color: Color(0xFF1C1C1C),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(
-                FontAwesomeIcons.pen,
-                color: Colors.white38,
-                size: 20.0,
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width*0.73,
-                child: Text(
-                  Provider.of<UploadService>(context, listen: false)
-                              .returnVideoDescription() !=
-                          ''
-                      ? Provider.of<UploadService>(context, listen: false)
-                          .returnVideoDescription()
-                      : 'Add Description',
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white38,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios_outlined,
-                color: Colors.white38,
-                size: 25.0,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddToPlaylistWidget extends StatelessWidget {
-  const AddToPlaylistWidget({
-    Key key,
-    @required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 4.0),
-      child: Container(
+Widget titleWidget(BuildContext context, double screenHeight) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 4.0),
+    child: Container(
         height: screenHeight * 0.1,
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(15.0),
         color: Color(0xFF1C1C1C),
-        child: Row(
-          children: [
-            Icon(
-              Icons.playlist_add,
-              color: Colors.white38,
-              size: 25.0,
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              'Add to playlist',
-              style: TextStyle(
-                fontSize: 21.0,
-                color: Colors.white38,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SelectGenreWidget extends StatefulWidget {
-  const SelectGenreWidget({
-    Key key,
-    @required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenHeight;
-
-  @override
-  _SelectGenreWidgetState createState() => _SelectGenreWidgetState();
-}
-
-class _SelectGenreWidgetState extends State<SelectGenreWidget> {
-  bool showOptions = false;
-  IconData arrowIcon = Icons.keyboard_arrow_down_sharp;
-
-  void changeShowOptions() {
-    if (!showOptions) {
-      showOptions = true;
-      arrowIcon = Icons.keyboard_arrow_up_sharp;
-    } else {
-      showOptions = false;
-      arrowIcon = Icons.keyboard_arrow_down_sharp;
-    }
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 4.0),
-      child: Column(
-        children: [
-          Container(
-            height: widget.screenHeight * 0.1,
-            padding: EdgeInsets.all(16.0),
-            color: Color(0xFF1C1C1C),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Select Genre',
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    color: Colors.white38,
-                  ),
-                ),
-                GestureDetector(
-                  child: Icon(
-                    arrowIcon,
-                    color: Colors.white38,
-                    size: 35.0,
-                  ),
-                  onTap: () {
-                    changeShowOptions();
-                  },
-                )
-              ],
-            ),
+        child: TextField(
+          style: TextStyle(fontSize: 21.0, fontWeight: FontWeight.w300),
+          decoration: InputDecoration(
+            hintText: 'Create a title',
+            hintStyle: TextStyle(fontSize: 21.0),
+            border: InputBorder.none,
           ),
-          showOptions == false
-              ? Container()
-              : Column(
-                  children: [
-                    CheckBoxListVale(
-                      itemName: 'Action',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Animation',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Crime',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Comedy',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Drama',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Fantasy',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Historical',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Horror',
-                    ),
-                    CheckBoxListVale(
-                      itemName: 'Romance',
-                    ),
-                  ],
-                )
-        ],
-      ),
-    );
-  }
-}
-
-class CheckBoxListVale extends StatefulWidget {
-  CheckBoxListVale({this.itemName});
-
-  final String itemName;
-
-  @override
-  _CheckBoxListValeState createState() => _CheckBoxListValeState();
-}
-
-class _CheckBoxListValeState extends State<CheckBoxListVale> {
-  bool _checked = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return CheckboxListTile(
-      title: Text(widget.itemName),
-      value: _checked,
-      onChanged: (bool value) {
-        setState(() {
-          if (!_checked) {
-            Provider.of<UploadService>(context, listen: false).addGenreToList(genreName: widget.itemName.toString());
-            print(widget.itemName);
-            _checked = true;
-            genre = widget.itemName;
-          } else {
-            _checked = false;
-            Provider.of<UploadService>(context, listen: false).removeGenreFromList(genreName: widget.itemName);
-            genre = "";
-          }
-        });
-      },
-    );
-  }
+          autofocus: false,
+          onChanged: (value) {
+            name = value;
+            Provider.of<UploadService>(context, listen: false)
+                .getVideoTitle(value);
+          },
+        )
+        //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
+        ),
+  );
 }

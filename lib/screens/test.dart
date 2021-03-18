@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/screens/upload_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
 import 'package:chewie/chewie.dart';
@@ -23,7 +21,8 @@ class _TestState extends State<Test> {
   void initState() {
     super.initState();
     _chewieController = ChewieController(
-        videoPlayerController: VideoPlayerController.network(widget.videoUrl), //'assets/nature.mp4')'assets/nature.mp4'),
+        videoPlayerController: VideoPlayerController.network(
+            widget.videoUrl), //'assets/nature.mp4')'assets/nature.mp4'),
         aspectRatio: 19.9 / 9,
         autoInitialize: false,
         autoPlay: true,
@@ -42,10 +41,11 @@ class _TestState extends State<Test> {
             ),
           );
         });
-    _controller = VideoPlayerController.asset(widget.videoUrl) //'assets/nature.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-      });
+    _controller =
+        VideoPlayerController.asset(widget.videoUrl) //'assets/nature.mp4')
+          ..initialize().then((_) {
+            setState(() {});
+          });
   }
 
   bool isShow = false;
@@ -69,7 +69,7 @@ class _TestState extends State<Test> {
               ? true
               : false,
       child: WillPopScope(
-        onWillPop: () async{
+        onWillPop: () async {
           _chewieController.pause();
           SystemChrome.setPreferredOrientations([
             DeviceOrientation.portraitUp,
