@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/modules/creator_screen_widget.dart';
+import 'package:queen_ott_app/pages/creator_screen_page.dart';
 import 'test_home_screen.dart';
 
 class ContentCreatorScreen extends StatefulWidget {

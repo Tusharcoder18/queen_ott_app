@@ -98,66 +98,71 @@ class _UserUploadsState extends State<UserUploads> {
         child: Center(
           child: isLoading
               ? CircularProgressIndicator()
-              : ListView.builder(
-                  itemCount: videoUrls.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Test(
-                                      videoUrl: videoUrls[index],
-                                      thumbnailUrl: thumbnailUrls[index],
-                                    )));
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            child: thumbnailUrls[index] != null
-                                ? Image.network(
-                                    thumbnailUrls[index],
-                                    fit: BoxFit.cover,
-                                  )
-                                : Image.asset(
-                                    'assets/movieThree.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                            width: double.infinity,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.fromLTRB(12, 12, 16, 15),
-                                child: CircleAvatar(
-                                  child: Icon(FontAwesomeIcons.user),
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      "Video Name",
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+              : RefreshIndicator(
+                  onRefresh: getDetails,
+                  child: ListView.builder(
+                    itemCount: videoUrls.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Test(
+                                        videoUrl: videoUrls[index],
+                                        thumbnailUrl: thumbnailUrls[index],
+                                      )));
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.30,
+                              child: thumbnailUrls[index] != null
+                                  ? Image.network(
+                                      thumbnailUrls[index],
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/movieThree.jpg',
+                                      fit: BoxFit.cover,
                                     ),
-                                  ],
+                              width: double.infinity,
+                            ),
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(12, 12, 16, 15),
+                                  child: CircleAvatar(
+                                    child: Icon(FontAwesomeIcons.user),
+                                  ),
                                 ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.more_vert),
-                                onPressed: () {},
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        "Video Name",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.more_vert),
+                                  onPressed: () {},
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
         ),
       ),

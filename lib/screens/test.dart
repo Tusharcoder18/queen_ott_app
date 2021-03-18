@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/services.dart';
+import 'package:chewie/chewie.dart';
 
 class Test extends StatefulWidget {
   final String videoUrl;
   final String thumbnailUrl;
+
   Test({this.videoUrl, this.thumbnailUrl});
 
   @override
@@ -12,149 +14,79 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> {
+  ChewieController _chewieController;
   VideoPlayerController _controller;
-  double videoDuration = 0;
-  double currentValue;
-  double totalDuration;
-  bool displayButtons = true;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {
-          currentValue = _controller.value.position.inSeconds.toDouble();
-          totalDuration = _controller.value.duration.inSeconds.toDouble();
+    _chewieController = ChewieController(
+        videoPlayerController: VideoPlayerController.network(
+            widget.videoUrl), //'assets/nature.mp4')'assets/nature.mp4'),
+        aspectRatio: 19.9 / 9,
+        autoInitialize: false,
+        autoPlay: true,
+        looping: false,
+        showControls: true,
+        materialProgressColors: ChewieProgressColors(
+          playedColor: Colors.white,
+          backgroundColor: Colors.grey,
+          handleColor: Colors.white,
+          bufferedColor: Colors.grey,
+        ),
+        errorBuilder: (context, errorMessage) {
+          return Center(
+            child: Text(
+              errorMessage,
+            ),
+          );
         });
-      });
+    _controller =
+        VideoPlayerController.asset(widget.videoUrl) //'assets/nature.mp4')
+          ..initialize().then((_) {
+            setState(() {});
+          });
   }
 
-  double getCurrentDuration() {
-    currentValue = _controller.value.position.inSeconds.toDouble();
-    return currentValue;
-  }
+  bool isShow = false;
 
-  double getTotalDuration() {
-    totalDuration = _controller.value.duration.inSeconds.toDouble();
-    if (totalDuration == 0) return 1;
-    return totalDuration;
+  void showContainer() {
+    if (isShow) {
+      isShow = false;
+    } else {
+      isShow = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
-        ? SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom])
-        : SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    //MediaQuery.of(context).size.width > MediaQuery.of(context).size.height
+    SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    // : SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return SafeArea(
       top:
           MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
               ? true
               : false,
-      child: Scaffold(
-        body: Center(
-          child: Stack(children: [
-            Positioned(
-              top: 0,
-              child: GestureDetector(
-                onTap: () {
-                  if (displayButtons)
-                    displayButtons = false;
-                  else
-                    displayButtons = true;
-                  setState(() {});
-                },
-                child: _controller.value.isInitialized
-                    ? Container(
-                        height: MediaQuery.of(context).size.width <
-                                MediaQuery.of(context).size.height
-                            ? 250
-                            : MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: VideoPlayer(_controller),
-                        ),
-                      )
-                    : Container(),
-              ),
+      child: WillPopScope(
+        onWillPop: () async {
+          _chewieController.pause();
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+          Navigator.pop(context);
+          //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>UploadScreen()), (Route<dynamic>route) => false);
+          return false;
+        },
+        child: Scaffold(
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Chewie(
+              controller: _chewieController,
             ),
-            displayButtons == false
-                ? Container()
-                : Positioned(
-                    top: 0,
-                    child: Container(
-                      height: MediaQuery.of(context).size.width <
-                              MediaQuery.of(context).size.height
-                          ? 250
-                          : MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, bottom: 10, right: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  print("play pressed");
-                                  print(_controller.value.position.inSeconds);
-                                  setState(() {
-                                    _controller.value.isPlaying
-                                        ? _controller.pause()
-                                        : _controller.play();
-                                  });
-                                },
-                                child: Icon(_controller.value.isPlaying
-                                    ? Icons.pause
-                                    : Icons.play_arrow),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 30,
-                                child: Slider(
-                                  activeColor: Colors.white,
-                                  inactiveColor: Colors.grey,
-                                  value: (getCurrentDuration() /
-                                                  getTotalDuration()) *
-                                              100 !=
-                                          null
-                                      ? (getCurrentDuration() /
-                                              getTotalDuration()) *
-                                          100
-                                      : 0,
-                                  onChanged: (double newValue) {
-                                    videoDuration = newValue;
-                                    setState(() {
-                                      _controller.seekTo(
-                                          _controller.value.duration *
-                                              (videoDuration / 100));
-                                    });
-                                  },
-                                  min: 0,
-                                  max: 100,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _controller.seekTo(Duration.zero);
-                                  getCurrentDuration();
-                                  setState(() {});
-                                },
-                                child: Icon(Icons.replay),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-          ]),
+          ),
         ),
       ),
     );
@@ -165,5 +97,6 @@ class _TestState extends State<Test> {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    _chewieController.dispose();
   }
 }

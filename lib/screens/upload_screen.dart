@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/screens/content_creator_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/widgets/add_description_widget.dart';
 import 'package:queen_ott_app/widgets/add_playlist_widget.dart';
@@ -38,93 +39,109 @@ class _UploadScreenState extends State<UploadScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Add details'),
-              UploadButtonWidget(),
-            ],
-          ),
-        ),
-        body: Column(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                final file =
-                    await ImagePicker().getVideo(source: ImageSource.gallery);
-                videoFile = File(file.path);
-              },
-              child: Container(
-                height: screenHeight * 0.3,
-                width: screenWidth,
-                color: Color(0xFF343837),
-                child: videoThumbnail != null
-                    ? Image.file(
-                        videoThumbnail,
-                        fit: BoxFit.cover,
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.upload_sharp,
-                            size: 34.0,
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Text(
-                            'Choose Video from device',
-                            style: TextStyle(fontSize: 23.0),
-                          ),
-                        ],
-                      ),
-              ),
+      child: WillPopScope(
+        onWillPop: () async {
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => ContentCreatorScreen()),
+              (Route<dynamic> route) => false);
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Add details'),
+                UploadButtonWidget(),
+              ],
             ),
-            Expanded(
-              child: Container(
-                child: ListView(
-                  children: [
-                    titleWidget(context, screenHeight),
-                    addDescriptionWidget(context, screenHeight, screenWidth),
-                    addPlaylistWidget(context, screenHeight),
-                    // This would be a drop down list
-                    SelectGenreWidget(
-                      screenHeight: screenHeight,
-                      temp: temp,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 4.0),
-                      child: CustomButton(
-                        text: "Select Thumbnail",
-                        icon: Icon(Icons.image),
-                        color: Colors.blue,
-                        onTap: () async {
-                          final file = await ImagePicker()
-                              .getImage(source: ImageSource.gallery);
-                          setState(() {
-                            videoThumbnail = File(file.path);
-                          });
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10),
-                      child: ElevatedButton(
-                        child: Text("Temp next Page for player"),
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Test()));
-                        },
-                      ),
-                    )
-                  ],
+          ),
+          body: Column(
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  final file =
+                      await ImagePicker().getVideo(source: ImageSource.gallery);
+                  videoFile = File(file.path);
+                },
+                child: Container(
+                  height: screenHeight * 0.3,
+                  width: screenWidth,
+                  color: Color(0xFF343837),
+                  child: videoThumbnail != null
+                      ? Image.file(
+                          videoThumbnail,
+                          fit: BoxFit.cover,
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.upload_sharp,
+                              size: 34.0,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                              'Choose Video from device',
+                              style: TextStyle(fontSize: 23.0),
+                            ),
+                          ],
+                        ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  child: ListView(
+                    children: [
+                      titleWidget(context, screenHeight),
+                      addDescriptionWidget(context, screenHeight, screenWidth),
+                      addPlaylistWidget(context, screenHeight),
+                      // This would be a drop down list
+                      SelectGenreWidget(
+                        screenHeight: screenHeight,
+                        temp: temp,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 4.0),
+                        child: CustomButton(
+                          text: "Select Thumbnail",
+                          icon: Icon(Icons.image),
+                          color: Colors.blue,
+                          onTap: () async {
+                            final file = await ImagePicker()
+                                .getImage(source: ImageSource.gallery);
+                            setState(() {
+                              videoThumbnail = File(file.path);
+                            });
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: ElevatedButton(
+                          child: Text("Temp next Page for player"),
+                          onPressed: () {
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Test()),
+                                (Route<dynamic> route) => false);
+
+                            /*
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => Test()));
+                          */
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -167,8 +184,6 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
           context,
           video: videoFile,
           thumbnail: videoThumbnail,
-          name: "video1",
-          genre: genre,
         );
         String videoUrl = urls[0];
         String thumbnailUrl = urls[1];

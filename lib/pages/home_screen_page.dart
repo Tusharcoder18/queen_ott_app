@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/widgets/home_video_display_list_widget.dart';
 
 class HomeScreenWidget extends StatelessWidget {
   // This is to give font style to the different headings
@@ -295,7 +296,14 @@ class ContinueWatchingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: Container(
+      child: HomeVideoListWidget(),
+    );
+  }
+}
+
+
+/*
+Container(
         height: 120,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -342,6 +350,4 @@ class ContinueWatchingWidget extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
+ */

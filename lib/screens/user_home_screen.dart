@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
-import 'package:queen_ott_app/modules/home_screen_widget.dart';
+import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/screens/test_home_screen.dart';
-import 'package:queen_ott_app/modules/trending_screen_widget.dart';
+import 'package:queen_ott_app/pages/trending_screen_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -66,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.trending_up),
-            label: 'Trending',
+            icon: Icon(Icons.search),
+            label: 'search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.subscriptions_sharp),

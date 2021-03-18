@@ -23,6 +23,10 @@ class UploadService extends ChangeNotifier {
   final List<String> tUrls = [];
   bool isLoading = false;
 
+  /// This list is made to take in all the possible genre that the user has chosen
+  List<String> genreList = [];
+
+  /// This is for the popUp screen that shown
   Future<void> showMyDialog(BuildContext context, UploadTask uploadTask) async {
     print("Show Dialog called");
     return showDialog<void>(
@@ -39,7 +43,6 @@ class UploadService extends ChangeNotifier {
                 double progressPercent = event != null
                     ? event.bytesTransferred / event.totalBytes
                     : 0;
-
                 return AlertDialog(
                   title: Text('Upload Progress'),
                   content: Column(
@@ -84,8 +87,12 @@ class UploadService extends ChangeNotifier {
   }
 
   Future<List<String>> uploadVideo(BuildContext context,
-      {File video, File thumbnail, String name, String genre}) async {
+      {File video, File thumbnail}) async {
     try {
+      final uid = Provider.of<AuthenticationService>(context, listen: false)
+          .currentUser
+          .uid;
+      String name = uid + _videoTitle ?? '';
       UploadTask videoUploadTask = videoRef
           .child(name)
           .putFile(video, SettableMetadata(contentType: "video/MP4"));
@@ -94,10 +101,7 @@ class UploadService extends ChangeNotifier {
       TaskSnapshot videoSnapshot = (await videoUploadTask);
       videoUrl = (await videoSnapshot.ref.getDownloadURL());
 
-      await uploadThumbnail(thumbnail: thumbnail);
-      _videoGenre = genre;
-
-      final uid = Provider.of<AuthenticationService>(context).currentUser.uid;
+      await uploadThumbnail(thumbnail: thumbnail, name: name);
 
       uploadVideoInfo(uid);
     } catch (e) {
@@ -107,10 +111,13 @@ class UploadService extends ChangeNotifier {
     return [videoUrl, thumbnailUrl];
   }
 
-  Future<void> uploadThumbnail({File thumbnail}) async {
+  /*
+  This is for video thumbnail upload service
+   */
+  Future<void> uploadThumbnail({File thumbnail, String name}) async {
     try {
       UploadTask thumbnailUploadTask = thumbnailRef
-          .child("image1")
+          .child(name)
           .putFile(thumbnail, SettableMetadata(contentType: "image/jpeg"));
       TaskSnapshot thumbnailSnapshot = (await thumbnailUploadTask);
       thumbnailUrl = (await thumbnailSnapshot.ref.getDownloadURL());
@@ -147,15 +154,20 @@ class UploadService extends ChangeNotifier {
       final List<DocumentSnapshot> documents = collection.docs;
       print('Documents are:');
       documents.forEach((element) {
-        vUrls.add(element.data()['videoUrl'].toString());
-        tUrls.add(element.data()['thumbnailUrl'].toString());
-        // print(element.data()['videoUrl']);
-        // print(element.data()['thumbnailUrl']);
+        vUrls.add(element.data()['videoUrl']);
+        tUrls.add(element.data()['thumbnailUrl']);
+        print(element.data()['videoUrl']);
+        print(element.data()['thumbnailUrl']);
       });
     }
   }
 
-  // Info of all the video to be updated
+  /*
+  This is to get the information of the
+  Video Title
+  Video Description
+  and Video Genre
+   */
 
   String _videoTitle;
   String _videoDescription;
@@ -199,6 +211,37 @@ class UploadService extends ChangeNotifier {
     this._videoGenre = null;
     this._videoDescription = null;
     this._videoTitle = null;
+    notifyListeners();
+  }
+
+  /*
+  This is made to get the video genre
+   */
+
+  /// To make the genre in list format
+  void addThisToGenreString() {
+    _videoGenre = '';
+    for (int i = 0; i < genreList.length; i++) {
+      if (i != genreList.length - 1) {
+        _videoGenre = _videoGenre + genreList[i] + "+";
+        print(_videoGenre);
+      } else
+        _videoGenre = _videoGenre + genreList[i];
+    }
+    print("Official last $_videoGenre");
+  }
+
+  void addGenreToList({String genreName}) {
+    genreList.add(genreName);
+    print(genreList);
+    addThisToGenreString();
+    notifyListeners();
+  }
+
+  void removeGenreFromList({String genreName}) {
+    genreList.remove(genreName);
+    addThisToGenreString();
+    print(genreList);
     notifyListeners();
   }
 }
