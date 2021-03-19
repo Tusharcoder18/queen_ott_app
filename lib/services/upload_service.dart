@@ -19,9 +19,8 @@ class UploadService extends ChangeNotifier {
       FirebaseStorage.instance.ref().child("thumbnails");
   String videoUrl;
   String thumbnailUrl;
-  final List<String> vUrls = [];
-  final List<String> tUrls = [];
   bool isLoading = false;
+  List<DocumentSnapshot> documents = [];
 
   /// This list is made to take in all the possible genre that the user has chosen
   List<String> genreList = [];
@@ -58,14 +57,14 @@ class UploadService extends ChangeNotifier {
                       ),
                     ],
                   ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
+                  // actions: <Widget>[
+                  //   TextButton(
+                  //     child: Text('Cancel'),
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //   ),
+                  // ],
                 );
               });
         } else {
@@ -148,18 +147,12 @@ class UploadService extends ChangeNotifier {
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  Future<void> getCurrentUrls() async {
-    if (vUrls.isEmpty) {
-      final collection = await videoInfo.get();
-      final List<DocumentSnapshot> documents = collection.docs;
-      print('Documents are:');
-      documents.forEach((element) {
-        vUrls.add(element.data()['videoUrl']);
-        tUrls.add(element.data()['thumbnailUrl']);
-        print(element.data()['videoUrl']);
-        print(element.data()['thumbnailUrl']);
-      });
-    }
+  // ignore: missing_return
+  Future<List<DocumentSnapshot>> getCurrentUrls() async {
+    final collection = await videoInfo.get();
+    documents = collection.docs;
+    print('Documents are:');
+    return documents;
   }
 
   /*
@@ -197,14 +190,6 @@ class UploadService extends ChangeNotifier {
       return _videoDescription;
     else
       return '';
-  }
-
-  List<String> returnVideoUrls() {
-    return vUrls;
-  }
-
-  List<String> returnThumbnailUrls() {
-    return tUrls;
   }
 
   void videoInfoNull() {

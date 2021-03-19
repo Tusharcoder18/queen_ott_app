@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/test.dart';
@@ -9,16 +10,12 @@ class HomeVideoListWidget extends StatefulWidget {
 }
 
 class _HomeVideoListWidgetState extends State<HomeVideoListWidget> {
-  List<String> videoUrls = [];
-  List<String> thumbnailUrls = [];
   bool isLoading = true;
+  List<DocumentSnapshot> documents = [];
 
   Future<void> getDetails() async {
-    await Provider.of<UploadService>(context, listen: false).getCurrentUrls();
-    videoUrls =
-        Provider.of<UploadService>(context, listen: false).returnVideoUrls();
-    thumbnailUrls = Provider.of<UploadService>(context, listen: false)
-        .returnThumbnailUrls();
+    documents = await Provider.of<UploadService>(context, listen: false)
+        .getCurrentUrls();
   }
 
   void updateDetails() {
@@ -38,17 +35,19 @@ class _HomeVideoListWidgetState extends State<HomeVideoListWidget> {
     return Container(
       height: 200,
       child: ListView.builder(
-        itemCount: videoUrls.length,
+        itemCount: documents.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          final videoUrl = documents[index].data()['videoUrl'];
+          final thumbnailUrl = documents[index].data()['thumbnailUrl'];
           return GestureDetector(
             onTap: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => Test(
-                            videoUrl: videoUrls[index],
-                            thumbnailUrl: thumbnailUrls[index],
+                            videoUrl: videoUrl,
+                            thumbnailUrl: thumbnailUrl,
                           )));
             },
             child: Padding(
@@ -56,9 +55,9 @@ class _HomeVideoListWidgetState extends State<HomeVideoListWidget> {
               child: Container(
                 height: 100,
                 width: 200,
-                child: thumbnailUrls[index] != null
+                child: thumbnailUrl != null
                     ? Image.network(
-                        thumbnailUrls[index],
+                        thumbnailUrl,
                         fit: BoxFit.fitWidth,
                       )
                     : Container(),
