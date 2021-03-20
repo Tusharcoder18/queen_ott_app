@@ -121,4 +121,10 @@ class AuthenticationService {
 
     print("Facebook User Signed Out");
   }
+
+  Future<void> signOutFromAll() async {
+    signOut();
+    signOutGoogle();
+    signOutFacebook();
+  }
 }
