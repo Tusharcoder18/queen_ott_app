@@ -154,7 +154,7 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
       child: Container(
         padding: EdgeInsets.only(left: 20, right: 20),
         height: 60,
-        color: Colors.purple,
+        color: Colors.black26,
         width: MediaQuery.of(context).size.width,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
