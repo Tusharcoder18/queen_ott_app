@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/screens/season_list_screen.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ class AddToSeriesScreen extends StatefulWidget {
 }
 
 class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
-  // This is for the pop up window
+  /// This is for the pop up window
   Future<void> _showMyDialog() async {
     String textFieldValue;
     return showDialog<void>(
@@ -50,9 +50,11 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                 Provider.of<AddSeriesServices>(context, listen: false)
                     .addNewSeries(
                         seriesName: textFieldValue,
-                        seriesList: "Series " + _seriesList.length.toString());
-                _seriesList.add(SeriesInfoContainer(inputText: textFieldValue));
-                setState(() {});
+                        seriesList: "Series " + _seriesNameList.length.toString());
+                setState(() {
+                  _seriesList.add(SeriesInfoContainer(inputText: textFieldValue));
+                  _seriesNameList.add(textFieldValue);
+                });
                 Navigator.of(context).pop();
               },
             ),
@@ -63,6 +65,16 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
   }
 
   List<Widget> _seriesList = <Widget>[];
+  List<String> _seriesNameList = <String>[];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      _seriesNameList = context.read<AddSeriesServices>().returnSeriesInfoList();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +88,16 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                height: _seriesList.length.toDouble() * 60,
+                height: _seriesNameList.length.toDouble() * 60,
                 child: ListView.builder(
-                  itemCount: _seriesList.length,
+                  itemCount: _seriesNameList.length,
                   itemBuilder: (context, index) {
-                    return _seriesList[index];
+                    return SeriesInfoContainer(inputText: _seriesNameList[index]);
                   },
                 ),
               ),
@@ -144,8 +157,11 @@ class SeriesInfoContainer extends StatefulWidget {
 }
 
 class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
+
+
   @override
   Widget build(BuildContext context) {
+    context.read<AddSeriesServices>().getSeriesInfo();
     return GestureDetector(
       onTap: () {
         Navigator.push(context,

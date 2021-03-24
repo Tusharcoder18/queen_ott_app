@@ -98,7 +98,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     children: [
                       titleWidget(context, screenHeight),
                       addDescriptionWidget(context, screenHeight, screenWidth),
-                      addSeriesButton(context, screenHeight),
+                      AddSeriesButton(),
                       // This would be a drop down list
                       SelectGenreWidget(
                         screenHeight: screenHeight,

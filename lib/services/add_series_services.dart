@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:queen_ott_app/services/authentication_service.dart';
 
 class AddSeriesServices extends ChangeNotifier{
   AddSeriesServices(this._firebaseFirestore);
@@ -30,13 +32,39 @@ class AddSeriesServices extends ChangeNotifier{
   }
   /// End of to add a series in the firebase
 
-  /// To fetch a series from the firebase
-  Future<void> getSeries() async{
+  int seriesLength;
+  List<String> _seriesList = [];
+  /// Return a list of type string
+  Future<void> getSeriesInfo() async{
     try{
-      print(_firebaseFirestore.collection("Series").doc(_email).get());
-    } catch (e){
+      var temp =  await _firebaseFirestore.collection("Series").doc(_email).collection("Series name").get();
+      final List<DocumentSnapshot> documents = temp.docs;
+      int len = temp.docs.length;
+      _seriesList = [];
+      print("Documents are: ");
+      documents.forEach((element) {
+        _seriesList.add(element.data()["seriesName"].toString());
+        print(element.data()["seriesName"]);
+      });
+      print(_seriesList);
+      seriesLength = _seriesList.length;
+      return _seriesList;
+    } catch(e){
       print(e);
+      return [];
     }
   }
-  /// End of fetching a series from the firebase
+
+  List<String> returnSeriesInfoList(){
+    return _seriesList;
+  }
+
+
+  /// To return the length of current series
+  int returnSeriesListLength(){
+    getSeriesInfo();
+    return seriesLength;
+  }
+
+
 }
