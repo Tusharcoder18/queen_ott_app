@@ -10,6 +10,58 @@ class AddToSeriesScreen extends StatefulWidget {
 }
 
 class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
+
+  Widget _listInformation({String inputText, int indexNumber}) {
+    return Container(
+      padding: EdgeInsets.only(left: 10),
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () async{
+              print("Delete Service Called");
+              context.read<AddSeriesServices>().deleteSeries(
+                  inputText: inputText,
+              );
+              print(_seriesNameList);
+              setState(() {
+                _seriesNameList.remove(inputText);
+              });
+              print(_seriesNameList);
+            },
+            child: Container(
+              child: Icon(Icons.restore_from_trash_outlined),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async{
+              print("Index number = $indexNumber");
+              context.read<AddSeriesServices>().getEpisodeNumber(
+                  episodeNumber: indexNumber
+              );
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen()));
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              height: 60,
+              color: Colors.black38,
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(inputText),
+                  Icon(Icons.chevron_right_rounded),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
   /// This is for the pop up window
   Future<void> _showMyDialog() async {
     String textFieldValue;
@@ -48,8 +100,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
               onPressed: () {
                 Provider.of<AddSeriesServices>(context, listen: false)
                     .addNewSeries(
-                        seriesName: textFieldValue,
-                        seriesList: "Series " + _seriesNameList.length.toString());
+                        seriesName: textFieldValue);
                 setState(() {
                   _seriesList.add(SeriesInfoContainer(inputText: textFieldValue, notifyParent: refresh,));
                   _seriesNameList.add(textFieldValue);
@@ -101,7 +152,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                 child: ListView.builder(
                   itemCount: _seriesNameList.length,
                   itemBuilder: (context, index) {
-                    return SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index, notifyParent: refresh,);
+                    return  _listInformation(inputText: _seriesNameList[index], indexNumber: index);//SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index, notifyParent: refresh,);
                   },
                 ),
               ),
@@ -179,7 +230,7 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
             onTap: () async{
               print("Delete Service Called");
               context.read<AddSeriesServices>().deleteSeries(
-                  episodeNumber: widget.indexNumber
+                  inputText: widget.inputText
               );
               widget.notifyParent();
             },

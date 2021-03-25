@@ -20,15 +20,22 @@ class AddSeriesServices extends ChangeNotifier {
   /// End of the function to get the current Email Id
 
   /// TO add a series in the firebase
-  Future<void> addNewSeries({String seriesName, String seriesList}) async {
+  Future<void> addNewSeries({String seriesName}) async {
     try {
       _firebaseFirestore
           .collection("Series")
           .doc(_email)
           .collection("Series name")
-          .doc(seriesList)
-          .set({"seriesName": seriesName}).then(
-              (value) => print("// Series Added \\\\"));
+          .doc(seriesName)
+          .set({"seriesName": seriesName}).then((value) {
+        print("Added the value");
+        _firebaseFirestore
+            .collection("Series")
+            .doc(_email)
+            .collection("Series name").doc(seriesName).collection("Episodes").doc("episode1").set({
+          "episodeName": [],
+        });
+      });
     } catch (e) {
       print(e);
     }
@@ -68,12 +75,16 @@ class AddSeriesServices extends ChangeNotifier {
   /*
     For deleting an existing series
    */
-  Future<void> deleteSeries({int episodeNumber}) async{
-    await _firebaseFirestore.collection("Series").doc(_email).collection("Series name").doc("Series $episodeNumber").delete();
+  Future<void> deleteSeries({String inputText}) async {
+    await _firebaseFirestore
+        .collection("Series")
+        .doc(_email)
+        .collection("Series name")
+        .doc(inputText)
+        .delete();
     print("Deleted Successfully");
     notifyListeners();
   }
-
 
   /// To get information about the episodes of given series
   Future<List<dynamic>> getEpisodeInfo(
@@ -107,19 +118,19 @@ class AddSeriesServices extends ChangeNotifier {
   }
 
   int _episodeNumber;
+
   /// To get the current series number
-  void getEpisodeNumber({int episodeNumber}){
+  void getEpisodeNumber({int episodeNumber}) {
     _episodeNumber = episodeNumber;
   }
 
-  int returnEpisodeNumber(){
+  int returnEpisodeNumber() {
     return _episodeNumber;
   }
 
   /// End of to get the current series number
 
-
-  /*
+/*
   TO add new season for the given series
    */
 }
