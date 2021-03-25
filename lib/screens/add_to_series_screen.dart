@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/screens/season_list_screen.dart';
@@ -97,7 +96,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                 child: ListView.builder(
                   itemCount: _seriesNameList.length,
                   itemBuilder: (context, index) {
-                    return SeriesInfoContainer(inputText: _seriesNameList[index]);
+                    return SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index,);
                   },
                 ),
               ),
@@ -148,9 +147,10 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
 }
 
 class SeriesInfoContainer extends StatefulWidget {
-  SeriesInfoContainer({@required this.inputText});
+  SeriesInfoContainer({@required this.inputText, this.indexNumber});
 
   final String inputText;
+  final int indexNumber;
 
   @override
   _SeriesInfoContainerState createState() => _SeriesInfoContainerState();
@@ -163,7 +163,11 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
   Widget build(BuildContext context) {
     context.read<AddSeriesServices>().getSeriesInfo();
     return GestureDetector(
-      onTap: () {
+      onTap: () async{
+        print("Index number = ${widget.indexNumber}");
+        context.read<AddSeriesServices>().getEpisodeNumber(
+          episodeNumber: widget.indexNumber
+        );
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => SeasonListScreen()));
       },

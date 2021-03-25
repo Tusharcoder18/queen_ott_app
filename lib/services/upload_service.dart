@@ -9,8 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 
 class UploadService extends ChangeNotifier {
-  final FirebaseFirestore _firebaseFirestore;
-  UploadService(this._firebaseFirestore);
 
 
   String videoUrl;

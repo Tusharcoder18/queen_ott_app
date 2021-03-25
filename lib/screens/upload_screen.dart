@@ -119,23 +119,6 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: ElevatedButton(
-                          child: Text("Temp next Page for player"),
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => Test()),
-                                (Route<dynamic> route) => false);
-
-                            /*
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => Test()));
-                          */
-                          },
-                        ),
-                      )
                     ],
                   ),
                 ),

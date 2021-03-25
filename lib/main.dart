@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
               context.read<AuthenticationService>().authStateChanges,
         ),
         Provider<UploadService>(
-          create: (_) => UploadService(FirebaseFirestore.instance),
+          create: (_) => UploadService(),
         ),
         Provider<AddSeriesServices>(
           create: (_) => AddSeriesServices(FirebaseFirestore.instance),
