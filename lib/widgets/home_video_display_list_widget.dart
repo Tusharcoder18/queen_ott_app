@@ -27,20 +27,25 @@ class _HomeVideoListWidgetState extends State<HomeVideoListWidget> {
   @override
   void initState() {
     super.initState();
-    getDetails().whenComplete(() => updateDetails());
+    getDetails().whenComplete(
+        () => updateDetails()); // Call this after layout is complete
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: 200,
-      child: ListView.builder(
-        itemCount: documents.length,
+      height: screenHeight * 0.4,
+      child: GridView.count(
+        // Creates a 2 row scrollable listview
+        crossAxisCount: 2,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
+        childAspectRatio: 1.2,
+        children: List.generate(documents.length, (index) {
           final videoUrl = documents[index].data()['videoUrl'];
           final thumbnailUrl = documents[index].data()['thumbnailUrl'];
-          return GestureDetector(
+          return InkWell(
             onTap: () {
               Navigator.push(
                   context,
@@ -50,22 +55,98 @@ class _HomeVideoListWidgetState extends State<HomeVideoListWidget> {
                             thumbnailUrl: thumbnailUrl,
                           )));
             },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 100,
-                width: 200,
-                child: thumbnailUrl != null
-                    ? Image.network(
-                        thumbnailUrl,
-                        fit: BoxFit.fitWidth,
-                      )
-                    : Container(),
+            child: Container(
+              // margin: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      margin: EdgeInsets.all(5),
+                      height: screenWidth * 0.37,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.pink),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: thumbnailUrl != null
+                            ? Image.network(
+                                thumbnailUrl,
+                                fit: BoxFit.cover,
+                                height: screenWidth * 0.54,
+                              )
+                            : Image.asset(
+                                'assets/movieTwo.jpg',
+                                fit: BoxFit.cover,
+                                height: screenWidth * 0.37,
+                                width: screenWidth * 0.3,
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
-        },
+        }),
       ),
     );
   }
 }
+
+
+// ListView.builder(
+//             itemCount: 6,
+//             scrollDirection: Axis.horizontal,
+//             itemBuilder: (context, index) {
+//               // final videoUrl = documents[index].data()['videoUrl'];
+//               // final thumbnailUrl = documents[index].data()['thumbnailUrl'];
+//               return GestureDetector(
+//                 onTap: () {
+//                   // Navigator.push(
+//                   //     context,
+//                   //     MaterialPageRoute(
+//                   //         builder: (context) => Test(
+//                   //               videoUrl: videoUrl,
+//                   //               thumbnailUrl: thumbnailUrl,
+//                   //             )));
+//                 },
+//                 child: Container(
+//                   child: Row(
+//                     children: [
+//                       Padding(
+//                         padding: EdgeInsets.only(
+//                             left: screenWidth * 0.015,
+//                             right: screenWidth * 0.015),
+//                         child: Container(
+//                           width: screenWidth * 0.3,
+//                           alignment: Alignment.center,
+//                           decoration: BoxDecoration(
+//                             borderRadius: BorderRadius.circular(8.0),
+//                             color: Colors.pink,
+//                           ),
+//                           // child: thumbnailUrl != null
+//                           //     ? Image.network(
+//                           //         thumbnailUrl,
+//                           //         fit: BoxFit.cover,
+//                           //         height: screenWidth * 0.54,
+//                           //       )
+//                           //     : Container(),
+//                           child: ClipRRect(
+//                             borderRadius: BorderRadius.circular(8.0),
+//                             child: Image.asset(
+//                               'assets/movieTwo.jpg',
+//                               fit: BoxFit.cover,
+//                               height: screenWidth * 0.35,
+//                               width: screenWidth * 0.3,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),

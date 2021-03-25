@@ -23,7 +23,9 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
       style: optionStyle,
     ),
     // TestPage(),
-    SettingsPage(),
+    SettingsPage(
+      isCreator: true,
+    ),
   ];
 
   void _onItemTapped(int index) {

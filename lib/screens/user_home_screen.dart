@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/pages/settings_page.dart';
-import 'package:queen_ott_app/screens/test_home_screen.dart';
 import 'package:queen_ott_app/pages/trending_screen_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +22,9 @@ class _HomeScreenState extends State<HomeScreen> {
       style: optionStyle,
     ),
     // TestPage(),
-    SettingsPage(),
+    SettingsPage(
+      isCreator: false,
+    ),
   ];
 
   void _onItemTapped(int index) {
