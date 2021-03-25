@@ -57,7 +57,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
                   SeasonListInfo(
                     textInfo: "Season " + (_seasonList.length + 1).toString(),
                     episodeNumber: context.read<AddSeriesServices>().returnEpisodeNumber(),
-                    indexNumber: _seasonList.length,
+                    indexNumber: _seasonList.length + 1,
                   ),
                 );
                 setState(() {});
