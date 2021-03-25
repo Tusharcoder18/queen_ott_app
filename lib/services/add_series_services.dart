@@ -55,16 +55,25 @@ class AddSeriesServices extends ChangeNotifier {
       });
       //print(_seriesList);
       seriesLength = _seriesList.length;
-      return _seriesList;
+      notifyListeners();
     } catch (e) {
       print(e);
-      return [];
     }
   }
 
   List<String> returnSeriesInfoList() {
     return _seriesList;
   }
+
+  /*
+    For deleting an existing series
+   */
+  Future<void> deleteSeries({int episodeNumber}) async{
+    await _firebaseFirestore.collection("Series").doc(_email).collection("Series name").doc("Series $episodeNumber").delete();
+    print("Deleted Successfully");
+    notifyListeners();
+  }
+
 
   /// To get information about the episodes of given series
   Future<List<dynamic>> getEpisodeInfo(
@@ -108,4 +117,9 @@ class AddSeriesServices extends ChangeNotifier {
   }
 
   /// End of to get the current series number
+
+
+  /*
+  TO add new season for the given series
+   */
 }

@@ -18,7 +18,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('AlertDialog Title'),
+          title: Text('Add New Series'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -51,7 +51,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                         seriesName: textFieldValue,
                         seriesList: "Series " + _seriesNameList.length.toString());
                 setState(() {
-                  _seriesList.add(SeriesInfoContainer(inputText: textFieldValue));
+                  _seriesList.add(SeriesInfoContainer(inputText: textFieldValue, notifyParent: refresh,));
                   _seriesNameList.add(textFieldValue);
                 });
                 Navigator.of(context).pop();
@@ -61,6 +61,11 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
         );
       },
     );
+  }
+
+  void refresh() {
+    setState(() {
+    });
   }
 
   List<Widget> _seriesList = <Widget>[];
@@ -96,7 +101,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                 child: ListView.builder(
                   itemCount: _seriesNameList.length,
                   itemBuilder: (context, index) {
-                    return SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index,);
+                    return SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index, notifyParent: refresh,);
                   },
                 ),
               ),
@@ -146,43 +151,65 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
   }
 }
 
+
+/// Widget which contains the bin icon, Series name and right arrow icon
+/// On clicked it would take you to the season Screen
 class SeriesInfoContainer extends StatefulWidget {
-  SeriesInfoContainer({@required this.inputText, this.indexNumber});
+  SeriesInfoContainer({@required this.inputText, this.indexNumber, this.notifyParent});
 
   final String inputText;
   final int indexNumber;
+  final Function()  notifyParent;
 
   @override
   _SeriesInfoContainerState createState() => _SeriesInfoContainerState();
 }
 
 class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
-
-
   @override
   Widget build(BuildContext context) {
     context.read<AddSeriesServices>().getSeriesInfo();
-    return GestureDetector(
-      onTap: () async{
-        print("Index number = ${widget.indexNumber}");
-        context.read<AddSeriesServices>().getEpisodeNumber(
-          episodeNumber: widget.indexNumber
-        );
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SeasonListScreen()));
-      },
-      child: Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        height: 60,
-        color: Colors.black26,
-        width: MediaQuery.of(context).size.width,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(widget.inputText),
-            Icon(Icons.chevron_right_rounded),
-          ],
-        ),
+    return Container(
+      padding: EdgeInsets.only(left: 10),
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          GestureDetector(
+            onTap: () async{
+              print("Delete Service Called");
+              context.read<AddSeriesServices>().deleteSeries(
+                  episodeNumber: widget.indexNumber
+              );
+              widget.notifyParent();
+            },
+            child: Container(
+              child: Icon(Icons.restore_from_trash_outlined),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async{
+              print("Index number = ${widget.indexNumber}");
+              context.read<AddSeriesServices>().getEpisodeNumber(
+                episodeNumber: widget.indexNumber
+              );
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen()));
+            },
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              height: 60,
+              color: Colors.black38,
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(widget.inputText),
+                  Icon(Icons.chevron_right_rounded),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

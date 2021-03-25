@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
@@ -10,7 +11,6 @@ class SeasonListScreen extends StatefulWidget {
 }
 
 class _SeasonListScreenState extends State<SeasonListScreen> {
-
   List<Widget> _seasonList =[];
 
   void initialiseLIst() {
@@ -53,14 +53,17 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
             /// Create new series button
             GestureDetector(
               onTap: () {
-                _seasonList.add(
-                  SeasonListInfo(
-                    textInfo: "Season " + (_seasonList.length + 1).toString(),
-                    episodeNumber: context.read<AddSeriesServices>().returnEpisodeNumber(),
-                    indexNumber: _seasonList.length + 1,
-                  ),
-                );
-                setState(() {});
+                print("Add new season pressed");
+                print(_seasonList.length);
+                setState(() {
+                  _seasonList.add(
+                    SeasonListInfo(
+                      textInfo: "Season " + (_seasonList.length + 1).toString(),
+                      episodeNumber: context.read<AddSeriesServices>().returnEpisodeNumber(),
+                      indexNumber: _seasonList.length + 1,
+                    ),
+                  );
+                });
               },
               child: Container(
                 padding: EdgeInsets.only(left: 20, right: 20),
@@ -96,6 +99,8 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
     );
   }
 }
+
+
 
 class SeasonListInfo extends StatefulWidget {
   SeasonListInfo({this.textInfo = "Season 1", this.indexNumber, this.episodeNumber});
@@ -181,50 +186,3 @@ class SeasonEpisodeNameWidget extends StatelessWidget {
     );
   }
 }
-
-/// Temporarily commenting this code
-/*
-  Future<void> _showMyDialog() async {
-    String textFieldValue;
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add a new season'),
-          content: Column(
-            children: <Widget>[
-              Container(
-                height: 200,
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Center(
-                  child: Container(
-                    height: 40,
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: TextField(
-                      onChanged: (String value) {
-                        textFieldValue = value;
-                        print(textFieldValue);
-                      },
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Add'),
-              onPressed: () {
-                _seasonList.add(SeasonListInfo());
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
- */

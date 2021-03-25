@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         Provider<UploadService>(
           create: (_) => UploadService(),
         ),
-        Provider<AddSeriesServices>(
+        ChangeNotifierProvider<AddSeriesServices>(
           create: (_) => AddSeriesServices(FirebaseFirestore.instance),
         )
       ],
