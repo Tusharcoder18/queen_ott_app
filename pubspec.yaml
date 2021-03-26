@@ -40,9 +40,9 @@ dependencies:
   path_provider: ^2.0.1
   video_player: ^2.0.1
   chewie: ^1.0.0
+  settings_ui: ^0.6.0
   google_fonts: ^2.0.0
   pull_to_refresh: ^1.6.4
-
 
 dev_dependencies:
   flutter_test:

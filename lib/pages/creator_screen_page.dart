@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -66,16 +67,15 @@ class UserUploads extends StatefulWidget {
 }
 
 class _UserUploadsState extends State<UserUploads> {
-  List<String> videoUrls;
-  List<String> thumbnailUrls;
   bool isLoading = true;
+  List<DocumentSnapshot> documents = [];
 
   Future<void> getDetails() async {
-    await Provider.of<UploadService>(context, listen: false).getCurrentUrls();
-    videoUrls =
-        Provider.of<UploadService>(context, listen: false).returnVideoUrls();
-    thumbnailUrls = Provider.of<UploadService>(context, listen: false)
-        .returnThumbnailUrls();
+    documents = await Provider.of<UploadService>(context, listen: false)
+        .getCurrentUrls();
+    for (int i = 0; i < documents.length; i++) {
+      print(documents[i].data()['title']);
+    }
   }
 
   void updateDetails() {
@@ -101,25 +101,29 @@ class _UserUploadsState extends State<UserUploads> {
               : RefreshIndicator(
                   onRefresh: getDetails,
                   child: ListView.builder(
-                    itemCount: videoUrls.length,
+                    itemCount: documents.length,
                     itemBuilder: (context, index) {
+                      final videoUrl = documents[index].data()['videoUrl'];
+                      final thumbnailUrl =
+                          documents[index].data()['thumbnailUrl'];
+                      final title = documents[index].data()['title'];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Test(
-                                        videoUrl: videoUrls[index],
-                                        thumbnailUrl: thumbnailUrls[index],
+                                        videoUrl: videoUrl ?? '',
+                                        thumbnailUrl: thumbnailUrl ?? '',
                                       )));
                         },
                         child: Column(
                           children: <Widget>[
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.30,
-                              child: thumbnailUrls[index] != null
+                              child: thumbnailUrl != null
                                   ? Image.network(
-                                      thumbnailUrls[index],
+                                      thumbnailUrl ?? '',
                                       fit: BoxFit.cover,
                                     )
                                   : Image.asset(
@@ -142,7 +146,7 @@ class _UserUploadsState extends State<UserUploads> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        "Video Name",
+                                        title ?? '',
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontSize: 15,

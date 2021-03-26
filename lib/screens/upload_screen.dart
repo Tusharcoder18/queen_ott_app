@@ -174,6 +174,8 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
         print(videoUrl);
         print(thumbnailUrl);
 
+        Navigator.pop(context);
+
         Navigator.push(
             context,
             MaterialPageRoute(

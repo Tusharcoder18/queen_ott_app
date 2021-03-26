@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/pages/creator_screen_page.dart';
+import 'package:queen_ott_app/pages/settings_page.dart';
 import 'test_home_screen.dart';
 
 class ContentCreatorScreen extends StatefulWidget {
@@ -21,7 +22,10 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
       'Index 2: Monetization',
       style: optionStyle,
     ),
-    TestPage(),
+    // TestPage(),
+    SettingsPage(
+      isCreator: true,
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -78,7 +82,7 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
         onTap: _onItemTapped,
       ),
       body: Container(
-        child: Center(child: _widgetOptions.elementAt(_selectedIndex)),
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
     );
   }

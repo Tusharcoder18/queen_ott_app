@@ -13,9 +13,8 @@ class UploadService extends ChangeNotifier {
 
   String videoUrl;
   String thumbnailUrl;
-  final List<String> vUrls = [];
-  final List<String> tUrls = [];
   bool isLoading = false;
+  List<DocumentSnapshot> documents = [];
 
 
   /// Function to get email address of the current user
@@ -72,14 +71,14 @@ class UploadService extends ChangeNotifier {
                       ),
                     ],
                   ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
+                  // actions: <Widget>[
+                  //   TextButton(
+                  //     child: Text('Cancel'),
+                  //     onPressed: () {
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //   ),
+                  // ],
                 );
               });
         } else {
@@ -163,6 +162,12 @@ class UploadService extends ChangeNotifier {
         .catchError((error) => print("Failed to add user: $error"));
   }
 
+  // ignore: missing_return
+  Future<List<DocumentSnapshot>> getCurrentUrls() async {
+    final collection = await videoInfo.get();
+    documents = collection.docs;
+    print('Documents are:');
+    return documents;
 
 
   Future<void> getCurrentUrls() async {
@@ -215,14 +220,6 @@ class UploadService extends ChangeNotifier {
       return _videoDescription;
     else
       return '';
-  }
-
-  List<String> returnVideoUrls() {
-    return vUrls;
-  }
-
-  List<String> returnThumbnailUrls() {
-    return tUrls;
   }
 
   void videoInfoNull() {
