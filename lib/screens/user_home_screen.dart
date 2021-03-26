@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/pages/home_screen_page.dart';
+import 'package:queen_ott_app/pages/menu_page.dart';
 import 'package:queen_ott_app/pages/settings_page.dart';
 import 'package:queen_ott_app/pages/trending_screen_page.dart';
 
@@ -16,13 +18,19 @@ class _HomeScreenState extends State<HomeScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   List<Widget> _widgetOptions = <Widget>[
     HomeScreenWidget(),
-    TrendingScreenWidget(),
     Text(
-      'Index 2: Subscription',
+      'Index 2: Shows',
       style: optionStyle,
     ),
-    // TestPage(),
-    SettingsPage(
+    Text(
+      'Index 3: Movies',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 4: Upcoming',
+      style: optionStyle,
+    ),
+    MenuPage(
       isCreator: false,
     ),
   ];
@@ -67,16 +75,20 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'search',
+            icon: Icon(Icons.slideshow),
+            label: 'Shows',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.subscriptions_sharp),
-            label: 'Subscription',
+            icon: Icon(Icons.movie),
+            label: 'Movies',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.update),
+            label: 'Upcoming',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu),
+            label: 'Menu',
           ),
         ],
         currentIndex: _selectedIndex,

@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:queen_ott_app/screens/test.dart';
-import 'package:queen_ott_app/services/upload_service.dart';
 
 class VideoGridWidget extends StatefulWidget {
-  Function
+  final Function
       fetchVideoDetails; // We can use this to fetch future video types such as recommended, continue watching, language based, etc.
   VideoGridWidget({this.fetchVideoDetails});
   @override
@@ -15,6 +12,17 @@ class VideoGridWidget extends StatefulWidget {
 class _VideoGridWidgetState extends State<VideoGridWidget> {
   bool isLoading = true;
   List<DocumentSnapshot> documents = [];
+  List<String> temp = [
+    'assets/movieOne.jpg',
+    'assets/movieThree.jpg',
+    'assets/movieTwo.jpg',
+    'assets/movieOne.jpg',
+    'assets/movieThree.jpg',
+    'assets/movieTwo.jpg',
+    'assets/movieTwo.jpg',
+    'assets/movieOne.jpg',
+    'assets/movieThree.jpg',
+  ];
 
   Future<void> getDetails() async {
     documents = await widget.fetchVideoDetails();
@@ -33,7 +41,7 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
       getDetails().whenComplete(
           () => updateDetails()); // Call this after layout is complete
     } else {
-      documents.length = 7;
+      documents.length = 9;
     }
   }
 
@@ -46,9 +54,9 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
       height: screenHeight * 0.4,
       child: GridView.count(
         // Creates a 2 row scrollable listview
-        crossAxisCount: 2,
-        scrollDirection: Axis.horizontal,
-        childAspectRatio: 1.2,
+        crossAxisCount: 3,
+        scrollDirection: Axis.vertical,
+        childAspectRatio: 0.8,
         children: List.generate(documents.length, (index) {
           if (widget.fetchVideoDetails != null) {
             videoUrl = documents[index].data()['videoUrl'] ?? '';
@@ -56,13 +64,13 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
           }
           return InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Test(
-                            videoUrl: videoUrl,
-                            thumbnailUrl: thumbnailUrl,
-                          )));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => Test(
+              //               videoUrl: videoUrl,
+              //               thumbnailUrl: thumbnailUrl,
+              //             )));
             },
             child: Container(
               // margin: EdgeInsets.all(5),
@@ -73,7 +81,6 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
                     child: Container(
                       margin: EdgeInsets.all(5),
                       height: screenWidth * 0.37,
-                      alignment: Alignment.center,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           color: Colors.pink),
@@ -86,7 +93,7 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
                                 height: screenWidth * 0.54,
                               )
                             : Image.asset(
-                                'assets/movieTwo.jpg',
+                                temp[index],
                                 fit: BoxFit.cover,
                                 height: screenWidth * 0.37,
                                 width: screenWidth * 0.3,

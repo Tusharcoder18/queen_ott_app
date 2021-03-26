@@ -1,11 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
-import 'package:queen_ott_app/widgets/home_video_display_list_widget.dart';
+import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 
 class HomeScreenWidget extends StatelessWidget {
@@ -25,7 +24,8 @@ class HomeScreenWidget extends StatelessWidget {
     String _name = _user.displayName ?? 'User';
     _name = _name.split(" ")[0];
 
-    return SingleChildScrollView(
+    return DefaultTabController(
+      length: 3,
       child: Container(
         width: screenWidth,
         child: Column(
@@ -42,50 +42,35 @@ class HomeScreenWidget extends StatelessWidget {
               height: screenHeight * 0.2,
               width: screenWidth,
               color: Colors.pink,
-              child: Image.asset(
-                'assets/moviePoster.jpg',
-                fit: BoxFit.cover,
-              ),
+              child: ImageCarousel(),
             ),
             SizedBox(
-              height: screenHeight * 0.022,
-            ),
-            Container(
-              height: 20,
-              width: screenWidth,
-              child: Text(
-                'Continue Watching',
-                style: _textStyle,
+              height: screenHeight * 0.06,
+              child: AppBar(
+                bottom: TabBar(
+                  tabs: [
+                    Tab(
+                      text: 'Conrinue Watching',
+                    ),
+                    Tab(
+                      text: 'Recommeded',
+                    ),
+                    Tab(
+                      text: 'Language',
+                    ),
+                  ],
+                ),
               ),
             ),
-            ContinueWatchingWidget(screenWidth: screenWidth),
-            Container(
-              height: 20,
-              width: screenWidth,
-              child: Text(
-                'Recommended Shows',
-                style: _textStyle,
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ContinueWatchingWidget(screenWidth: screenWidth),
+                  RecommendedShowWidget(screenWidth: screenWidth),
+                  LanguageShowsWidget(screenWidth: screenWidth),
+                ],
               ),
             ),
-            RecommendedShowWidget(screenWidth: screenWidth),
-            Container(
-              height: 20,
-              width: screenWidth,
-              child: Text(
-                'Watch shows in you Language',
-                style: _textStyle,
-              ),
-            ),
-            LanguageShowsWidget(screenWidth: screenWidth),
-            // Container(
-            //   height: 20,
-            //   width: screenWidth,
-            //   child: Text(
-            //     'Award Winning Shows',
-            //     style: _textStyle,
-            //   ),
-            // ),
-            // AwardWinningShowsWidget(screenWidth: screenWidth),
           ],
         ),
       ),
@@ -168,74 +153,41 @@ class LanguageShowsWidget extends StatelessWidget {
     fontWeight: FontWeight.w400,
   );
 
+  final List<String> languages = [
+    'Hindi',
+    'English',
+    'Punjabi',
+    'Telugu',
+    'Bengali',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          height: 150,
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.green, Colors.lightBlueAccent]),
-                  ),
-                  child: Center(
-                      child: Text(
-                    'Hindi',
-                    style: _textStyle,
-                  )),
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: ListView.builder(
+          itemCount: languages.length,
+          scrollDirection: Axis.vertical,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: screenWidth * 0.3,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Colors.green, Colors.lightBlueAccent]),
                 ),
+                child: Center(
+                    child: Text(
+                  languages[index],
+                  style: _textStyle,
+                )),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.green, Colors.lightBlueAccent]),
-                  ),
-                  child: Center(
-                      child: Text(
-                    'English',
-                    style: _textStyle,
-                  )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 150,
-                  width: 150,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.green, Colors.lightBlueAccent]),
-                  ),
-                  child: Center(
-                      child: Text(
-                    'Punjabi',
-                    style: _textStyle,
-                  )),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 }
@@ -266,7 +218,9 @@ class ContinueWatchingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: HomeVideoListWidget(),
+      child: VideoGridWidget(
+        fetchVideoDetails: Provider.of<UploadService>(context).getCurrentUrls,
+      ),
     );
   }
 }
