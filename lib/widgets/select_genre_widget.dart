@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:queen_ott_app/services/upload_service.dart';
 
 class SelectGenreWidget extends StatefulWidget {
   const SelectGenreWidget({
@@ -112,6 +114,7 @@ class _SelectGenreWidgetState extends State<SelectGenreWidget> {
 
 class CheckBoxListValue extends StatefulWidget {
   CheckBoxListValue({this.itemName, this.temp});
+
   final Function temp;
   final String itemName;
 
@@ -120,22 +123,30 @@ class CheckBoxListValue extends StatefulWidget {
 }
 
 class _CheckBoxListValueState extends State<CheckBoxListValue> {
-  bool _checked = false;
 
   @override
   Widget build(BuildContext context) {
+    bool _checked = Provider.of<UploadService>(context, listen: false).isGenreInList(genreName: widget.itemName);
     return CheckboxListTile(
       title: Text(widget.itemName),
-      value: _checked,
+      value: Provider.of<UploadService>(context, listen: false)
+          .isGenreInList(genreName: widget.itemName),
       onChanged: (bool value) {
         setState(() {
           if (!_checked) {
-            _checked = true;
+            Provider.of<UploadService>(context, listen: false)
+                .addGenreToList(genreName: widget.itemName);
+             _checked =  Provider.of<UploadService>(context, listen: false)
+                .isGenreInList(genreName: widget.itemName);
+           // _checked = true;
             // genre = widget.itemName;
             widget.temp(widget.itemName);
             print(widget.itemName);
           } else {
-            _checked = false;
+            Provider.of<UploadService>(context, listen: false)
+                .removeGenreFromList(genreName: widget.itemName);
+            _checked = Provider.of<UploadService>(context, listen: false)
+                .isGenreInList(genreName: widget.itemName);
             // genre = "";
             widget.temp("");
           }

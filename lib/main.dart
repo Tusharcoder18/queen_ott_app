@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
@@ -32,7 +33,10 @@ class MyApp extends StatelessWidget {
               context.read<AuthenticationService>().authStateChanges,
         ),
         Provider<UploadService>(
-          create: (_) => UploadService(FirebaseFirestore.instance),
+          create: (_) => UploadService(),
+        ),
+        ChangeNotifierProvider<AddSeriesServices>(
+          create: (_) => AddSeriesServices(FirebaseFirestore.instance),
         )
       ],
       child: MaterialApp(

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/content_creator_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/widgets/add_description_widget.dart';
-import 'package:queen_ott_app/widgets/add_playlist_widget.dart';
+import 'package:queen_ott_app/widgets/add_series_button.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:queen_ott_app/widgets/select_genre_widget.dart';
 import 'dart:io';
@@ -98,7 +98,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     children: [
                       titleWidget(context, screenHeight),
                       addDescriptionWidget(context, screenHeight, screenWidth),
-                      addPlaylistWidget(context, screenHeight),
+                      AddSeriesButton(),
                       // This would be a drop down list
                       SelectGenreWidget(
                         screenHeight: screenHeight,
@@ -119,23 +119,6 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10),
-                        child: ElevatedButton(
-                          child: Text("Temp next Page for player"),
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(builder: (context) => Test()),
-                                (Route<dynamic> route) => false);
-
-                            /*
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => Test()));
-                          */
-                          },
-                        ),
-                      )
                     ],
                   ),
                 ),

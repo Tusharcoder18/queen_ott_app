@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/screens/user_home_screen.dart';
+import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/screens/intermediate_screen.dart';
 import 'package:queen_ott_app/screens/sign_up_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/services/upload_service.dart';
 import '../widgets/custom_button.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -149,6 +151,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   _formKey.currentState.save();
                   print(_emailPhone);
                   print(_password);
+                  Provider.of<UploadService>(context, listen: false).getEmailID(
+                      emailId: _emailPhone
+                  );
+                  Provider.of<AddSeriesServices>(context, listen: false).getEmailId(
+                      email: _emailPhone
+                  );
                   context.read<AuthenticationService>().signIn(
                         email: _emailPhone,
                         password: _password,
