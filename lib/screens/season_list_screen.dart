@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
@@ -9,16 +10,16 @@ class SeasonListScreen extends StatefulWidget {
 }
 
 class _SeasonListScreenState extends State<SeasonListScreen> {
-  List<Widget> _seasonList = [];
+
+  List<Widget> _seasonList =[];
 
   void initialiseLIst() {
-    _seasonList = <Widget>[
-      SeasonListInfo(
-        indexNumber: 1,
-        episodeNumber: context.read<AddSeriesServices>().returnEpisodeNumber(),
-      )
-    ];
-    setState(() {});
+    _seasonList = <Widget>[SeasonListInfo(
+      indexNumber: 1,
+      episodeNumber: context.read<AddSeriesServices>().returnEpisodeNumber(),
+    )];
+    setState(() {
+    });
   }
 
   @override
@@ -58,9 +59,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
                   _seasonList.add(
                     SeasonListInfo(
                       textInfo: "Season " + (_seasonList.length + 1).toString(),
-                      episodeNumber: context
-                          .read<AddSeriesServices>()
-                          .returnEpisodeNumber(),
+                      episodeNumber: context.read<AddSeriesServices>().returnEpisodeNumber(),
                       indexNumber: _seasonList.length + 1,
                     ),
                   );
@@ -101,9 +100,11 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
   }
 }
 
+
+
+
 class SeasonListInfo extends StatefulWidget {
-  SeasonListInfo(
-      {this.textInfo = "Season 1", this.indexNumber, this.episodeNumber});
+  SeasonListInfo({this.textInfo = "Season 1", this.indexNumber, this.episodeNumber});
 
   final String textInfo;
   final int indexNumber;
@@ -122,6 +123,18 @@ class _SeasonListInfoState extends State<SeasonListInfo> {
     _seasonEpisodeList = await context.read<AddSeriesServices>().getEpisodeInfo(
         indexNumber: widget.indexNumber, episodeNumber: widget.episodeNumber);
     setState(() {});
+
+  List<dynamic> _seasonEpisodeList = <dynamic>[];
+  bool _checked = false;
+
+  Future<void> setSeasonList() async{
+    print("This function is called");
+    _seasonEpisodeList =  await context.read<AddSeriesServices>().getEpisodeInfo(
+        indexNumber: widget.indexNumber,
+        episodeNumber: widget.episodeNumber
+    );
+    setState(() {
+    });
   }
 
   @override

@@ -14,25 +14,25 @@ class UploadService extends ChangeNotifier {
   bool isLoading = false;
   List<DocumentSnapshot> documents = [];
 
+
   /// Function to get email address of the current user
   var email;
-  void getEmailID({String emailId}) {
+  void getEmailID({String emailId}){
     email = emailId;
     email = email.split("@");
   }
 
-  String returnEmailID() {
+  String returnEmailID(){
     return email[0];
   }
-
   /// End of functions to get email address
   // DocumentReference videoInfo =
   // FirebaseFirestore.instance.collection("VideoInfo").doc(email[0].toString());
-  CollectionReference videoInfo =
-      FirebaseFirestore.instance.collection("VideoInfo");
+  CollectionReference tempVideoInfo = FirebaseFirestore.instance.collection("VideoInfo");
   final Reference videoRef = FirebaseStorage.instance.ref().child("videos");
   final Reference thumbnailRef =
-      FirebaseStorage.instance.ref().child("thumbnails");
+  FirebaseStorage.instance.ref().child("thumbnails");
+
 
   /// This list is made to take in all the possible genre that the user has chosen
   List<String> genreList = [];
@@ -144,11 +144,12 @@ class UploadService extends ChangeNotifier {
     formatter = DateFormat('HH-mm-ss');
     String time = formatter.format(now);
 
-    videoInfo
-        .add({
+    FirebaseFirestore.instance.collection("VideoInfo").doc(email[0])
+        .set({
+          'email': email[0],
           'uploaderID': uid,
           'title': _videoTitle ?? '',
-          'decription': _videoDescription ?? '',
+          'description': _videoDescription ?? '',
           'genre': _videoGenre ?? '',
           'date': date,
           'time': time,
@@ -165,7 +166,22 @@ class UploadService extends ChangeNotifier {
     documents = collection.docs;
     print('Documents are:');
     return documents;
+
+
+  Future<void> getCurrentUrls() async {
+    if (vUrls.isEmpty) {
+      final collection = await tempVideoInfo.get();
+      final List<DocumentSnapshot> documents = collection.docs;
+      print('Documents are:');
+      documents.forEach((element) {
+        vUrls.add(element.data()['videoUrl']);
+        tUrls.add(element.data()['thumbnailUrl']);
+        print(element.data()['videoUrl']);
+        print(element.data()['thumbnailUrl']);
+      });
+    }
   }
+
 
   /*
   This is to get the information of the
@@ -243,10 +259,12 @@ class UploadService extends ChangeNotifier {
   }
 
   /// If the genre is present in the list then return true else return false
-  bool isGenreInList({String genreName}) {
-    if (genreList.length == 0) return false;
-    for (int i = 0; i < genreList.length; i++) {
-      if (genreList[i] == genreName) return true;
+  bool isGenreInList({String genreName}){
+    if(genreList.length == 0)
+      return false;
+    for( int i = 0; i<genreList.length ; i++){
+      if(genreList[i] == genreName)
+        return true;
     }
     return false;
   }

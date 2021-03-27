@@ -45,7 +45,6 @@ dependencies:
   pull_to_refresh: ^1.6.4
   shared_preferences: ^2.0.5
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
