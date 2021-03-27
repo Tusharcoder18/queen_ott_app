@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/screens/test.dart';
 
 class VideoGridWidget extends StatefulWidget {
   final Function
@@ -11,6 +12,8 @@ class VideoGridWidget extends StatefulWidget {
 
 class _VideoGridWidgetState extends State<VideoGridWidget> {
   bool isLoading = true;
+  String videoUrl;
+  String thumbnailUrl;
   List<DocumentSnapshot> documents = [];
   List<String> temp = [
     'assets/movieOne.jpg',
@@ -49,7 +52,6 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    String videoUrl, thumbnailUrl;
     return Container(
       height: screenHeight * 0.4,
       child: GridView.count(
@@ -62,15 +64,18 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
             videoUrl = documents[index].data()['videoUrl'] ?? '';
             thumbnailUrl = documents[index].data()['thumbnailUrl'] ?? '';
           }
-          return InkWell(
+          return GestureDetector(
             onTap: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (context) => Test(
-              //               videoUrl: videoUrl,
-              //               thumbnailUrl: thumbnailUrl,
-              //             )));
+              print('Video Details:');
+              print(videoUrl);
+              print(thumbnailUrl);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Test(
+                            videoUrl: documents[index].data()['videoUrl'] ?? '',
+                            thumbnailUrl: thumbnailUrl,
+                          )));
             },
             child: Container(
               // margin: EdgeInsets.all(5),

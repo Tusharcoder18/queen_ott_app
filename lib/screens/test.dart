@@ -21,8 +21,7 @@ class _TestState extends State<Test> {
   void initState() {
     super.initState();
     _chewieController = ChewieController(
-        videoPlayerController: VideoPlayerController.network(
-            widget.videoUrl), //'assets/nature.mp4')'assets/nature.mp4'),
+        videoPlayerController: VideoPlayerController.network(widget.videoUrl),
         aspectRatio: 19.9 / 9,
         autoInitialize: false,
         autoPlay: true,
@@ -42,7 +41,7 @@ class _TestState extends State<Test> {
           );
         });
     _controller =
-        VideoPlayerController.asset(widget.videoUrl) //'assets/nature.mp4')
+        VideoPlayerController.network(widget.videoUrl) //'assets/nature.mp4')
           ..initialize().then((_) {
             setState(() {});
           });

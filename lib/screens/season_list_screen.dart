@@ -5,12 +5,12 @@ import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:provider/provider.dart';
 
 class SeasonListScreen extends StatefulWidget {
-
   @override
   _SeasonListScreenState createState() => _SeasonListScreenState();
 }
 
 class _SeasonListScreenState extends State<SeasonListScreen> {
+
   List<Widget> _seasonList =[];
 
   void initialiseLIst() {
@@ -102,6 +102,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
 
 
 
+
 class SeasonListInfo extends StatefulWidget {
   SeasonListInfo({this.textInfo = "Season 1", this.indexNumber, this.episodeNumber});
 
@@ -114,6 +115,14 @@ class SeasonListInfo extends StatefulWidget {
 }
 
 class _SeasonListInfoState extends State<SeasonListInfo> {
+  List<dynamic> _seasonEpisodeList = <dynamic>[];
+  bool _checked = false;
+
+  Future<void> setSeasonList() async {
+    print("This function is called");
+    _seasonEpisodeList = await context.read<AddSeriesServices>().getEpisodeInfo(
+        indexNumber: widget.indexNumber, episodeNumber: widget.episodeNumber);
+    setState(() {});
 
   List<dynamic> _seasonEpisodeList = <dynamic>[];
   bool _checked = false;

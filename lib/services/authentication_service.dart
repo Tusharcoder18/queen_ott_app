@@ -131,4 +131,9 @@ class AuthenticationService {
   String returnCurrentEmailId(){
     return _firebaseAuth.currentUser.email;
   }
+
+  /// This would return the current user email Id
+  String returnCurrentEmailId() {
+    return _firebaseAuth.currentUser.email;
+  }
 }

@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/pages/menu_page.dart';
-import 'package:queen_ott_app/pages/settings_page.dart';
-import 'package:queen_ott_app/pages/trending_screen_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -52,6 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            SizedBox(
+              width: 20,
+              child: Icon(FontAwesomeIcons.bell),
+            ),
             Text(
               'QUEEN',
               style: TextStyle(
@@ -59,6 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 letterSpacing: 2.0,
                 fontFamily: 'Roboto',
                 fontSize: 25.0,
+              ),
+            ),
+            MaterialButton(
+              onPressed: () {},
+              color: Colors.red,
+              child: Text(
+                'Subscribe',
+                style: TextStyle(color: Colors.white, fontSize: 15),
               ),
             ),
             Container(

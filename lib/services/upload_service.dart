@@ -9,8 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 
 class UploadService extends ChangeNotifier {
-
-
   String videoUrl;
   String thumbnailUrl;
   bool isLoading = false;
@@ -260,7 +258,6 @@ class UploadService extends ChangeNotifier {
     notifyListeners();
   }
 
-
   /// If the genre is present in the list then return true else return false
   bool isGenreInList({String genreName}){
     if(genreList.length == 0)
@@ -271,5 +268,4 @@ class UploadService extends ChangeNotifier {
     }
     return false;
   }
-
 }
