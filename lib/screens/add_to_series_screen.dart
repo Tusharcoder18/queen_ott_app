@@ -11,6 +11,8 @@ class AddToSeriesScreen extends StatefulWidget {
 
 class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
 
+
+  /// This contains info of the list that is there
   Widget _listInformation({String inputText, int indexNumber}) {
     return Container(
       padding: EdgeInsets.only(left: 10),
@@ -62,6 +64,35 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
   }
 
 
+  /// This dialog box would pop up if the entered series is not unique
+  Future<void> _showMyDialogIfNotUnique() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('The series Already Exists'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Enter a unique series to continue'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   /// This is for the pop up window
   Future<void> _showMyDialog() async {
     String textFieldValue;
@@ -101,11 +132,16 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                 Provider.of<AddSeriesServices>(context, listen: false)
                     .addNewSeries(
                         seriesName: textFieldValue);
-                setState(() {
-                  _seriesList.add(SeriesInfoContainer(inputText: textFieldValue, notifyParent: refresh,));
-                  _seriesNameList.add(textFieldValue);
-                });
-                Navigator.of(context).pop();
+                if(_seriesNameList.indexOf(textFieldValue) < 0){
+                  setState(() {
+                    _seriesList.add(SeriesInfoContainer(inputText: textFieldValue, notifyParent: refresh,));
+                    _seriesNameList.add(textFieldValue);
+                  });
+                  Navigator.of(context).pop();
+                } else {
+                  _showMyDialogIfNotUnique();
+                }
+
               },
             ),
           ],
@@ -265,3 +301,5 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
     );
   }
 }
+
+

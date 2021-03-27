@@ -50,10 +50,10 @@ class HomeScreenWidget extends StatelessWidget {
                 bottom: TabBar(
                   tabs: [
                     Tab(
-                      text: 'Conrinue Watching',
+                      text: 'Continue Watching',
                     ),
                     Tab(
-                      text: 'Recommeded',
+                      text: 'Recommended',
                     ),
                     Tab(
                       text: 'Language',

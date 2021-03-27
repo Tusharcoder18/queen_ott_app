@@ -126,14 +126,10 @@ class AuthenticationService {
     signOut();
     signOutGoogle();
     signOutFacebook();
-
-  /// This would return the current user email Id
-  String returnCurrentEmailId(){
-    return _firebaseAuth.currentUser.email;
   }
 
   /// This would return the current user email Id
-  String returnCurrentEmailId() {
+  String returnCurrentEmailId(){
     return _firebaseAuth.currentUser.email;
   }
 }

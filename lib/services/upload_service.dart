@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
-
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 
@@ -13,6 +12,8 @@ class UploadService extends ChangeNotifier {
   String thumbnailUrl;
   bool isLoading = false;
   List<DocumentSnapshot> documents = [];
+  final List<String> vUrls = [];
+  final List<String> tUrls = [];
 
 
   /// Function to get email address of the current user
@@ -161,13 +162,19 @@ class UploadService extends ChangeNotifier {
   }
 
   // ignore: missing_return
+  /*
+   */
+
   Future<List<DocumentSnapshot>> getCurrentUrls() async {
-    final collection = await videoInfo.get();
+    final collection = await tempVideoInfo.get();
     documents = collection.docs;
     print('Documents are:');
     return documents;
+  }
 
 
+
+  /*
   Future<void> getCurrentUrls() async {
     if (vUrls.isEmpty) {
       final collection = await tempVideoInfo.get();
@@ -181,6 +188,8 @@ class UploadService extends ChangeNotifier {
       });
     }
   }
+
+   */
 
 
   /*
