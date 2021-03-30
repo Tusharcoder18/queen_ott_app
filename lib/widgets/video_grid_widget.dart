@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/screens/season_details_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
 
 class VideoGridWidget extends StatefulWidget {
@@ -71,11 +72,12 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
               print(thumbnailUrl);
               Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => Test(
-                            videoUrl: documents[index].data()['videoUrl'] ?? '',
-                            thumbnailUrl: thumbnailUrl,
-                          )));
+                  MaterialPageRoute(builder: (context) => SeasonDetailScreen()
+                      // Test(
+                      //       videoUrl: documents[index].data()['videoUrl'] ?? '',
+                      //       thumbnailUrl: thumbnailUrl,
+                      //     )
+                      ));
             },
             child: Container(
               // margin: EdgeInsets.all(5),
