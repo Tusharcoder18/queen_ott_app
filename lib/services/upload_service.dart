@@ -168,17 +168,13 @@ class UploadService extends ChangeNotifier {
       }
     });
 
-
-    print("\n\n\n\n\n\n\ JUST CHECKINGGGGGG \n\n\n\n\n\n");
-    print(_currentSeries);
-    print(_currentSeason);
-    print(_isChecked);
-    FirebaseFirestore.instance.collection("Series").doc(email).collection(
-        "Series name").doc(returnCurrentSeries()).collection("Episodes").doc("Episode${returnCurrentSeason()}").update({
-      "Episode" : FieldValue.arrayUnion([getUid])
-    });
-
-    if (returnCheckedValue()) {}
+    /// This is used to upload to series
+    if (returnCheckedValue()) {
+      FirebaseFirestore.instance.collection("Series").doc(email).collection(
+          "Series name").doc(returnCurrentSeries()).collection("Episodes").doc("Episode${returnCurrentSeason()}").update({
+        "Episode" : FieldValue.arrayUnion([getUid])
+      });
+    }
   }
 
   /// To get the information of current chosen Series, Season and the current checked Episode
