@@ -39,10 +39,9 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
           GestureDetector(
             onTap: () async{
               print("Index number = $indexNumber");
-              context.read<AddSeriesServices>().getEpisodeNumber(
-                  episodeNumber: indexNumber
-              );
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen()));
+              context.read<AddSeriesServices>().getEpisodeInfo(
+                seriesName: inputText
+              ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen())));
             },
             child: Container(
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -129,10 +128,10 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
             TextButton(
               child: Text('Add'),
               onPressed: () {
-                Provider.of<AddSeriesServices>(context, listen: false)
-                    .addNewSeries(
-                        seriesName: textFieldValue);
                 if(_seriesNameList.indexOf(textFieldValue) < 0){
+                  Provider.of<AddSeriesServices>(context, listen: false)
+                      .addNewSeries(
+                      seriesName: textFieldValue);
                   setState(() {
                     _seriesList.add(SeriesInfoContainer(inputText: textFieldValue, notifyParent: refresh,));
                     _seriesNameList.add(textFieldValue);
@@ -277,7 +276,7 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
           GestureDetector(
             onTap: () async{
               print("Index number = ${widget.indexNumber}");
-              context.read<AddSeriesServices>().getEpisodeNumber(
+               context.read<AddSeriesServices>().getEpisodeNumber(
                 episodeNumber: widget.indexNumber
               );
               Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen()));

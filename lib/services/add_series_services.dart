@@ -27,14 +27,9 @@ class AddSeriesServices extends ChangeNotifier {
           .doc(_email)
           .collection("Series name")
           .doc(seriesName)
-          .set({"seriesName": seriesName}).then((value) {
-        print("Added the value");
-        _firebaseFirestore
-            .collection("Series")
-            .doc(_email)
-            .collection("Series name").doc(seriesName).collection("Episodes").doc("episode1").set({
-          "episodeName": [],
-        });
+          .set({
+        "seriesName": seriesName,
+        "Episodes": [],
       });
     } catch (e) {
       print(e);
@@ -86,29 +81,52 @@ class AddSeriesServices extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<dynamic> _episodeList;
+
+  void justMakeEpisodeListNull() {
+    _episodeList = [];
+  }
+
   /// To get information about the episodes of given series
-  Future<List<dynamic>> getEpisodeInfo(
-      {int episodeNumber, int indexNumber}) async {
-    print("Episode number : $episodeNumber ");
-    print("index Number : $indexNumber");
+  Future<void> getEpisodeInfo({String seriesName}) async {
+    justMakeEpisodeListNull();
+    print("SeriesName : $seriesName");
     try {
-      var temp = await _firebaseFirestore
+      var document = _firebaseFirestore
           .collection("Series")
           .doc(_email)
           .collection("Series name")
-          .doc("Series $episodeNumber")
-          .collection("Episodes")
-          .doc("episode$indexNumber")
-          .get();
-      List<dynamic> _episodeList = temp.data()["episodeName"];
+          .doc(seriesName)
+          .snapshots();
+      document.forEach((element) {
+        _episodeList = element.data()["Episodes"];
+      });
       print("Series is :");
-      print(_episodeList);
-      return _episodeList;
     } catch (e) {
       print(e);
       print("could not form a list, COULD NOT READ FROM THE DATABASE");
-      return [];
     }
+  }
+
+  ///
+  dynamic returnEpisodeList() {
+    return _episodeList;
+  }
+
+  /// This is only for testing purposes
+  /// This is to get the path of the current video location
+  /// trying to set a particular video location for each video
+  Future<void> testing() async {
+    String pathTemp;
+    final temp = await _firebaseFirestore.collection("VideoInfo").get();
+    final List<DocumentSnapshot> documents = temp.docs;
+    documents.forEach((element) {
+      if (element.data()["genre"] == "Animation") {
+        pathTemp = element.data().hashCode.toString();
+        print(element.id);
+      }
+    });
+    print("PATH === $pathTemp");
   }
 
   /// To return the length of current series
@@ -129,6 +147,7 @@ class AddSeriesServices extends ChangeNotifier {
   }
 
   /// End of to get the current series number
+
 
 /*
   TO add new season for the given series

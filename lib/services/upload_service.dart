@@ -15,16 +15,17 @@ class UploadService extends ChangeNotifier {
   final List<String> vUrls = [];
   final List<String> tUrls = [];
 
+  String getUid; // This would get the uid of the uploaded video
+
 
   /// Function to get email address of the current user
   var email;
   void getEmailID({String emailId}){
     email = emailId;
-    email = email.split("@");
   }
 
   String returnEmailID(){
-    return email[0];
+    return email;
   }
   /// End of functions to get email address
   // DocumentReference videoInfo =
@@ -70,14 +71,6 @@ class UploadService extends ChangeNotifier {
                       ),
                     ],
                   ),
-                  // actions: <Widget>[
-                  //   TextButton(
-                  //     child: Text('Cancel'),
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //   ),
-                  // ],
                 );
               });
         } else {
@@ -138,16 +131,16 @@ class UploadService extends ChangeNotifier {
     }
   }
 
-  void uploadVideoInfo(String uid) {
+  Future<void> uploadVideoInfo(String uid) async{
     DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     String date = formatter.format(now);
     formatter = DateFormat('HH-mm-ss');
     String time = formatter.format(now);
 
-    FirebaseFirestore.instance.collection("VideoInfo").doc(email[0])
-        .set({
-          'email': email[0],
+    FirebaseFirestore.instance.collection("VideoInfo")
+        .add({
+          'email': email,
           'uploaderID': uid,
           'title': _videoTitle ?? '',
           'description': _videoDescription ?? '',
@@ -159,7 +152,73 @@ class UploadService extends ChangeNotifier {
         })
         .then((value) => print("Data added to firebase!"))
         .catchError((error) => print("Failed to add user: $error"));
+
+    final collection = await FirebaseFirestore.instance.collection("VideoInfo").get();
+    final List<DocumentSnapshot> documents = collection.docs;
+
+    documents.forEach((element) {
+      if(videoUrl == element.data()["videoUrl"]){
+        getUid = element.id.toString();
+        print("UID ===== $getUid");
+      }
+    });
+
+
+    print("\n\n\n\n\n\n\ JUST CHECKINGGGGGG \n\n\n\n\n\n");
+    print(_currentSeries);
+    print(_currentSeason);
+    print(_isChecked);
+    FirebaseFirestore.instance.collection("Series").doc(email).collection("Series name").doc("Series 2").update({
+      "Episodes"[0] : FieldValue.arrayUnion([{{"Episode1": getUid}}]) //{"Episode1": getUid}
+    }).then((value) => print("Series Added"));
+
+    if(returnCheckedValue()){
+    }
   }
+
+  /// To get the information of current chosen Series, Season and the current checked Episode
+  String _currentSeries = "";
+  int _currentSeason = -1;
+  bool _isChecked = false;
+
+  void getCurrentSeries({String currentSeries}) {
+    _currentSeries = currentSeries;
+    print(_currentSeries);
+  }
+
+  void getCurrentSeason({int index}) {
+    _currentSeason = index;
+    print(_currentSeason);
+  }
+
+  void getStatusOfChecked({bool status}) {
+    _isChecked = status;
+    print(_isChecked);
+  }
+
+  String returnCurrentSeries() {
+    return _currentSeries;
+  }
+
+  int returnCurrentSeason() {
+    return _currentSeason;
+  }
+
+  bool returnCheckedValue() {
+    return _isChecked;
+  }
+
+  /// End of all the functions to get the current situation of chosen Series, Season and the current checked Episode
+
+
+
+  /// It returns the uid of the current uploaded video
+
+  String returnUID() {
+    return getUid;
+  }
+
+  /// End of returning uid of the current uploaded video
 
   // ignore: missing_return
   /*
