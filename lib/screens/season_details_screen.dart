@@ -12,7 +12,7 @@ class SeasonDetailScreen extends StatelessWidget {
 
   Widget _appBar() {
     return SliverAppBar(
-      expandedHeight: 570,
+      expandedHeight: 600,
       floating: true,
       title: Text('Show name'),
       flexibleSpace: FlexibleSpaceBar(
