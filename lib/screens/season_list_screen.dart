@@ -16,8 +16,9 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
 
   /// This function would add new season to the list
   void _addNewSeason() {
-    Map<String, dynamic> _addNewMap = <String, dynamic>{};
-    _episodeList.add(_addNewMap);
+    List<dynamic> _addNewList = [];
+    _episodeList.add(_addNewList);
+    context.read<AddSeriesServices>().addNewSeason(length: _episodeList.length);
     print(_episodeList);
     _addIsChecked();
     setState(() {
@@ -43,8 +44,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
 
   /// Just return the length of the no. of episodes in the given season
   int _returnEpisodeListLength({int index}) {
-    Map<String, dynamic> _mapList = _episodeList[index];
-    return _mapList.length;
+    return _episodeList[index].length;
   }
 
   @override

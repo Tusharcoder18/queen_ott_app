@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/screens/season_list_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
+import 'package:queen_ott_app/services/upload_service.dart';
 
 class AddToSeriesScreen extends StatefulWidget {
   @override
@@ -39,6 +40,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
           GestureDetector(
             onTap: () async{
               print("Index number = $indexNumber");
+              context.read<UploadService>().getCurrentSeries(currentSeries: inputText);
               context.read<AddSeriesServices>().getEpisodeInfo(
                 seriesName: inputText
               ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen())));
