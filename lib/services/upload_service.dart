@@ -142,38 +142,68 @@ class UploadService extends ChangeNotifier {
     formatter = DateFormat('HH-mm-ss');
     String time = formatter.format(now);
 
-    FirebaseFirestore.instance.collection("VideoInfo")
-        .add({
-      'email': email,
-      'uploaderID': uid,
-      'title': _videoTitle ?? '',
-      'description': _videoDescription ?? '',
-      'genre': _videoGenre ?? '',
-      'date': date,
-      'time': time,
-      'videoUrl': videoUrl,
-      'thumbnailUrl': thumbnailUrl,
-    })
-        .then((value) => print("Data added to firebase!"))
-        .catchError((error) => print("Failed to add user: $error"));
+    /// making if else condition for if else condition
+    /// if returnCheckedValue() == true then that means it needs to
+    /// be added to the series else in normal video it should be added
+    if(returnCheckedValue()){
+      FirebaseFirestore.instance.collection("SeriesVideoInfo")
+          .add({
+        'email': email,
+        'uploaderID': uid,
+        'title': _videoTitle ?? '',
+        'description': _videoDescription ?? '',
+        'genre': _videoGenre ?? '',
+        'date': date,
+        'time': time,
+        'videoUrl': videoUrl,
+        'thumbnailUrl': thumbnailUrl,
+      })
+          .then((value) => print("Data added to firebase!"))
+          .catchError((error) => print("Failed to add user: $error"));
 
-    final collection = await FirebaseFirestore.instance.collection("VideoInfo")
-        .get();
-    final List<DocumentSnapshot> documents = collection.docs;
+      final collection = await FirebaseFirestore.instance.collection("SeriesVideoInfo")
+          .get();
+      final List<DocumentSnapshot> documents = collection.docs;
 
-    documents.forEach((element) {
-      if (videoUrl == element.data()["videoUrl"]) {
-        getUid = element.id.toString();
-        print("UID ===== $getUid");
-      }
-    });
+      documents.forEach((element) {
+        if (videoUrl == element.data()["videoUrl"]) {
+          getUid = element.id.toString();
+          print("UID ===== $getUid");
+        }
+      });
 
-    /// This is used to upload to series
-    if (returnCheckedValue()) {
       FirebaseFirestore.instance.collection("Series").doc(email).collection(
           "Series name").doc(returnCurrentSeries()).collection("Episodes").doc("Episode${returnCurrentSeason()}").update({
         "Episode" : FieldValue.arrayUnion([getUid])
       });
+    } else {
+
+      FirebaseFirestore.instance.collection("VideoInfo")
+          .add({
+        'email': email,
+        'uploaderID': uid,
+        'title': _videoTitle ?? '',
+        'description': _videoDescription ?? '',
+        'genre': _videoGenre ?? '',
+        'date': date,
+        'time': time,
+        'videoUrl': videoUrl,
+        'thumbnailUrl': thumbnailUrl,
+      })
+          .then((value) => print("Data added to firebase!"))
+          .catchError((error) => print("Failed to add user: $error"));
+
+      final collection = await FirebaseFirestore.instance.collection("VideoInfo")
+          .get();
+      final List<DocumentSnapshot> documents = collection.docs;
+
+      documents.forEach((element) {
+        if (videoUrl == element.data()["videoUrl"]) {
+          getUid = element.id.toString();
+          print("UID ===== $getUid");
+        }
+      });
+
     }
   }
 
