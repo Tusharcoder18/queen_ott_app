@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
-
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 
@@ -13,26 +12,32 @@ class UploadService extends ChangeNotifier {
   String thumbnailUrl;
   bool isLoading = false;
   List<DocumentSnapshot> documents = [];
+  final List<String> vUrls = [];
+  final List<String> tUrls = [];
+
+  String getUid; // This would get the uid of the uploaded video
+
 
   /// Function to get email address of the current user
   var email;
+
   void getEmailID({String emailId}) {
     email = emailId;
-    email = email.split("@");
   }
 
   String returnEmailID() {
-    return email[0];
+    return email;
   }
 
   /// End of functions to get email address
   // DocumentReference videoInfo =
   // FirebaseFirestore.instance.collection("VideoInfo").doc(email[0].toString());
-  CollectionReference videoInfo =
-      FirebaseFirestore.instance.collection("VideoInfo");
+  CollectionReference tempVideoInfo = FirebaseFirestore.instance.collection(
+      "VideoInfo");
   final Reference videoRef = FirebaseStorage.instance.ref().child("videos");
   final Reference thumbnailRef =
-      FirebaseStorage.instance.ref().child("thumbnails");
+  FirebaseStorage.instance.ref().child("thumbnails");
+
 
   /// This list is made to take in all the possible genre that the user has chosen
   List<String> genreList = [];
@@ -69,14 +74,6 @@ class UploadService extends ChangeNotifier {
                       ),
                     ],
                   ),
-                  // actions: <Widget>[
-                  //   TextButton(
-                  //     child: Text('Cancel'),
-                  //     onPressed: () {
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //   ),
-                  // ],
                 );
               });
         } else {
@@ -100,7 +97,8 @@ class UploadService extends ChangeNotifier {
   Future<List<String>> uploadVideo(BuildContext context,
       {File video, File thumbnail}) async {
     try {
-      final uid = Provider.of<AuthenticationService>(context, listen: false)
+      final uid = Provider
+          .of<AuthenticationService>(context, listen: false)
           .currentUser
           .uid;
       String name = uid + _videoTitle ?? '';
@@ -137,35 +135,121 @@ class UploadService extends ChangeNotifier {
     }
   }
 
-  void uploadVideoInfo(String uid) {
+  Future<void> uploadVideoInfo(String uid) async {
     DateTime now = DateTime.now();
     DateFormat formatter = DateFormat('yyyy-MM-dd');
     String date = formatter.format(now);
     formatter = DateFormat('HH-mm-ss');
     String time = formatter.format(now);
 
-    videoInfo
+    FirebaseFirestore.instance.collection("VideoInfo")
         .add({
-          'uploaderID': uid,
-          'title': _videoTitle ?? '',
-          'decription': _videoDescription ?? '',
-          'genre': _videoGenre ?? '',
-          'date': date,
-          'time': time,
-          'videoUrl': videoUrl,
-          'thumbnailUrl': thumbnailUrl,
-        })
+      'email': email,
+      'uploaderID': uid,
+      'title': _videoTitle ?? '',
+      'description': _videoDescription ?? '',
+      'genre': _videoGenre ?? '',
+      'date': date,
+      'time': time,
+      'videoUrl': videoUrl,
+      'thumbnailUrl': thumbnailUrl,
+    })
         .then((value) => print("Data added to firebase!"))
         .catchError((error) => print("Failed to add user: $error"));
+
+    final collection = await FirebaseFirestore.instance.collection("VideoInfo")
+        .get();
+    final List<DocumentSnapshot> documents = collection.docs;
+
+    documents.forEach((element) {
+      if (videoUrl == element.data()["videoUrl"]) {
+        getUid = element.id.toString();
+        print("UID ===== $getUid");
+      }
+    });
+
+    /// This is used to upload to series
+    if (returnCheckedValue()) {
+      FirebaseFirestore.instance.collection("Series").doc(email).collection(
+          "Series name").doc(returnCurrentSeries()).collection("Episodes").doc("Episode${returnCurrentSeason()}").update({
+        "Episode" : FieldValue.arrayUnion([getUid])
+      });
+    }
   }
 
+  /// To get the information of current chosen Series, Season and the current checked Episode
+  String _currentSeries = "";
+  int _currentSeason = -1;
+  bool _isChecked = false;
+
+  void getCurrentSeries({String currentSeries}) {
+    _currentSeries = currentSeries;
+    print(_currentSeries);
+  }
+
+  void getCurrentSeason({int index}) {
+    _currentSeason = index;
+    print(_currentSeason);
+  }
+
+  void getStatusOfChecked({bool status}) {
+    _isChecked = status;
+    print(_isChecked);
+    print(returnCurrentSeason().toString() + '  ' + returnCurrentSeries().toString());
+  }
+
+  String returnCurrentSeries() {
+    return _currentSeries;
+  }
+
+  int returnCurrentSeason() {
+    return (_currentSeason+1);
+  }
+
+  bool returnCheckedValue() {
+    return _isChecked;
+  }
+
+  /// End of all the functions to get the current situation of chosen Series, Season and the current checked Episode
+
+
+  /// It returns the uid of the current uploaded video
+
+  String returnUID() {
+    return getUid;
+  }
+
+  /// End of returning uid of the current uploaded video
+
   // ignore: missing_return
+  /*
+   */
+
   Future<List<DocumentSnapshot>> getCurrentUrls() async {
-    final collection = await videoInfo.get();
+    final collection = await tempVideoInfo.get();
     documents = collection.docs;
     print('Documents are:');
     return documents;
   }
+
+
+  /*
+  Future<void> getCurrentUrls() async {
+    if (vUrls.isEmpty) {
+      final collection = await tempVideoInfo.get();
+      final List<DocumentSnapshot> documents = collection.docs;
+      print('Documents are:');
+      documents.forEach((element) {
+        vUrls.add(element.data()['videoUrl']);
+        tUrls.add(element.data()['thumbnailUrl']);
+        print(element.data()['videoUrl']);
+        print(element.data()['thumbnailUrl']);
+      });
+    }
+  }
+
+   */
+
 
   /*
   This is to get the information of the
@@ -244,9 +328,11 @@ class UploadService extends ChangeNotifier {
 
   /// If the genre is present in the list then return true else return false
   bool isGenreInList({String genreName}) {
-    if (genreList.length == 0) return false;
+    if (genreList.length == 0)
+      return false;
     for (int i = 0; i < genreList.length; i++) {
-      if (genreList[i] == genreName) return true;
+      if (genreList[i] == genreName)
+        return true;
     }
     return false;
   }

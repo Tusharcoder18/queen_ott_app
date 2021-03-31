@@ -27,14 +27,17 @@ class AddSeriesServices extends ChangeNotifier {
           .doc(_email)
           .collection("Series name")
           .doc(seriesName)
-          .set({"seriesName": seriesName}).then((value) {
-        print("Added the value");
+          .set({
+        "seriesName": seriesName,
+      }).then((value) {
         _firebaseFirestore
             .collection("Series")
             .doc(_email)
-            .collection("Series name").doc(seriesName).collection("Episodes").doc("episode1").set({
-          "episodeName": [],
-        });
+            .collection("Series name")
+            .doc(seriesName)
+            .collection("Episodes")
+            .doc("Episode1")
+            .set({"Episode": []});
       });
     } catch (e) {
       print(e);
@@ -86,29 +89,53 @@ class AddSeriesServices extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<dynamic> _episodeList;
+  String _currentSeries = "";
+
+  void justMakeEpisodeListNull() {
+    _episodeList = [];
+  }
+
   /// To get information about the episodes of given series
-  Future<List<dynamic>> getEpisodeInfo(
-      {int episodeNumber, int indexNumber}) async {
-    print("Episode number : $episodeNumber ");
-    print("index Number : $indexNumber");
+  Future<void> getEpisodeInfo({String seriesName}) async {
+    justMakeEpisodeListNull();
+    print("SeriesName : $seriesName");
+    _currentSeries = seriesName;
     try {
-      var temp = await _firebaseFirestore
+      var collection = await _firebaseFirestore
           .collection("Series")
           .doc(_email)
           .collection("Series name")
-          .doc("Series $episodeNumber")
+          .doc(seriesName)
           .collection("Episodes")
-          .doc("episode$indexNumber")
           .get();
-      List<dynamic> _episodeList = temp.data()["episodeName"];
-      print("Series is :");
-      print(_episodeList);
-      return _episodeList;
+
+      final List<DocumentSnapshot> documents = collection.docs;
+
+      documents.forEach((element) {
+        _episodeList.add(element.data()["Episode"]);
+      });
     } catch (e) {
       print(e);
       print("could not form a list, COULD NOT READ FROM THE DATABASE");
-      return [];
     }
+  }
+
+  /// Returns list of episodes in a given series
+  dynamic returnEpisodeList() {
+    return _episodeList;
+  }
+
+  /// To add new season in a given series
+  void addNewSeason({int length}) {
+    _firebaseFirestore
+        .collection("Series")
+        .doc(_email)
+        .collection("Series name")
+        .doc(_currentSeries)
+        .collection("Episodes")
+        .doc("Episode$length")
+        .set({"Episode": []}).then((value) => print("Added new season"));
   }
 
   /// To return the length of current series

@@ -121,6 +121,7 @@ class AuthenticationService {
     print("Facebook User Signed Out");
   }
 
+
   Future<void> signOutFromAll() async {
     signOut();
     signOutGoogle();
@@ -128,7 +129,7 @@ class AuthenticationService {
   }
 
   /// This would return the current user email Id
-  String returnCurrentEmailId() {
+  String returnCurrentEmailId(){
     return _firebaseAuth.currentUser.email;
   }
 }
