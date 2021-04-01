@@ -29,13 +29,12 @@ class _ImageCarouselState extends State<ImageCarousel> {
           duration: Duration(milliseconds: 350),
           curve: Curves.easeIn,
         );
-      });
-    } catch (e) {
+      }
+    });
+        }catch (e) {
       print('Exception:$e');
     }
       }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

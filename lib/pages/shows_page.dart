@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
+import 'package:provider/provider.dart';
 
 class ShowsPage extends StatefulWidget {
   @override
@@ -23,6 +25,23 @@ class _ShowsPageState extends State<ShowsPage> {
     'assets/movieThree.jpg',
   ];
 
+  List<String> _seriesThumbnail = [];
+
+  Future<void> fetchSeries() async{
+    await context.read<SeriesFetchingService>().fetchSeriesList();
+    _seriesThumbnail = context.read<SeriesFetchingService>().returnSeriesThumbnail();
+    print(_seriesThumbnail);
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSeries();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -40,7 +59,7 @@ class _ShowsPageState extends State<ShowsPage> {
     return ListView.builder(
         physics: ScrollPhysics(),
         scrollDirection: Axis.vertical,
-        itemCount: banners.length,
+        itemCount: _seriesThumbnail.length,
         itemBuilder: (context, index) {
           return Container(
             child: Column(
@@ -58,10 +77,13 @@ class _ShowsPageState extends State<ShowsPage> {
                   physics: NeverScrollableScrollPhysics(),
                   count: 6,
                 ),
-                BannerWidget(
-                  banners[index],
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: BannerWidget(
+                    _seriesThumbnail[index],
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                  ),
                 ),
               ],
             ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
+import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
 import 'package:queen_ott_app/screens/splash_screen.dart';
@@ -37,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<AddSeriesServices>(
           create: (_) => AddSeriesServices(FirebaseFirestore.instance),
+        ),
+        ChangeNotifierProvider<SeriesFetchingService>(
+          create: (_) =>SeriesFetchingService(FirebaseFirestore.instance),
         )
       ],
       child: MaterialApp(
