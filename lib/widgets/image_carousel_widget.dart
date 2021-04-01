@@ -16,12 +16,14 @@ class _ImageCarouselState extends State<ImageCarousel> {
   void initState() {
     super.initState();
     try {
-      Timer.periodic(Duration(seconds: 3), (Timer timer) {
-        if (_currentPage < 2) {
-          _currentPage++;
-        } else {
-          _currentPage = 0;
-        }
+      
+    Timer.periodic(Duration(seconds: 3), (Timer timer) {
+      if (_currentPage < 2) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      if(_pageController.hasClients){
         _pageController.animateToPage(
           _currentPage,
           duration: Duration(milliseconds: 350),
@@ -31,6 +33,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
     } catch (e) {
       print('Exception:$e');
     }
+      }
+    });
   }
 
   @override
