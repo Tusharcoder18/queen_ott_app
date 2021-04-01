@@ -175,6 +175,26 @@ class UploadService extends ChangeNotifier {
       FirebaseFirestore.instance.collection("Series").doc(email).collection(
           "Series name").doc(returnCurrentSeries()).collection("Episodes").doc("Episode${returnCurrentSeason()}").update({
         "Episode" : FieldValue.arrayUnion([getUid])
+      }).then((value) async{
+        final collection = await FirebaseFirestore.instance.collection("Series").doc(email).collection("Series name").doc(returnCurrentSeries()).get();
+        final String _consumerID = collection.data()["ConsumerID"].toString();
+
+        final consumerInstance =  FirebaseFirestore.instance.collection("ConsumerSeries");
+        print(consumerInstance);
+
+        if(returnCurrentSeason() == 1){
+          await consumerInstance.doc(_consumerID).update({
+            "thumbnail" : thumbnailUrl,
+          });
+          consumerInstance.doc(_consumerID).collection("Seasons").doc("Season ${returnCurrentSeason()}").update({
+            "Episodes" : FieldValue.arrayUnion([getUid]),
+          });
+        } else{
+          consumerInstance.doc(_consumerID).collection("Seasons").doc("Season ${returnCurrentSeason()}").update({
+            "Episodes" : FieldValue.arrayUnion([getUid]),
+          });
+        }
+
       });
     } else {
 
@@ -251,36 +271,12 @@ class UploadService extends ChangeNotifier {
 
   /// End of returning uid of the current uploaded video
 
-  // ignore: missing_return
-  /*
-   */
-
   Future<List<DocumentSnapshot>> getCurrentUrls() async {
     final collection = await tempVideoInfo.get();
     documents = collection.docs;
     print('Documents are:');
     return documents;
   }
-
-
-  /*
-  Future<void> getCurrentUrls() async {
-    if (vUrls.isEmpty) {
-      final collection = await tempVideoInfo.get();
-      final List<DocumentSnapshot> documents = collection.docs;
-      print('Documents are:');
-      documents.forEach((element) {
-        vUrls.add(element.data()['videoUrl']);
-        tUrls.add(element.data()['thumbnailUrl']);
-        print(element.data()['videoUrl']);
-        print(element.data()['thumbnailUrl']);
-      });
-    }
-  }
-
-   */
-
-
   /*
   This is to get the information of the
   Video Title

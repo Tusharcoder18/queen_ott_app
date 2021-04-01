@@ -69,6 +69,13 @@ class AddSeriesServices extends ChangeNotifier {
             .update({
           "ConsumerID": _consumerId,
         });
+      }).then((value) {
+        _firebaseFirestore
+            .collection("ConsumerSeries")
+            .doc(_consumerId)
+            .collection("Seasons")
+            .doc("Season 1")
+            .set({"Episodes": []});
       });
     } catch (e) {
       print(e);
@@ -159,6 +166,11 @@ class AddSeriesServices extends ChangeNotifier {
 
       final List<DocumentSnapshot> documents = collection.docs;
 
+      /// I am accessing the document as well as the data inside it
+      /// the list will be formed as such [[ytjdfd, afafsd, ], [adfas, adfsa]]
+      /// where the first "[" denotes the document list
+      /// and second "[" denotes the array of episodes present in each document
+      /// where ytjdfd and siilar things are the document id of respective videos
       documents.forEach((element) {
         _episodeList.add(element.data()["Episode"]);
       });
