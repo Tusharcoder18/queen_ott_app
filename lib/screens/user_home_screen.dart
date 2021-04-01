@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/pages/menu_page.dart';
+import 'package:queen_ott_app/pages/movies_page.dart';
+import 'package:queen_ott_app/pages/shows_page.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,14 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   List<Widget> _widgetOptions = <Widget>[
     HomeScreenWidget(),
-    Text(
-      'Index 2: Shows',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Movies',
-      style: optionStyle,
-    ),
+    ShowsPage(),
+    MoviesPage(),
     Text(
       'Index 4: Upcoming',
       style: optionStyle,

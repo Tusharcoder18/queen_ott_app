@@ -35,10 +35,12 @@ class SeasonDetailScreen extends StatelessWidget {
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: FractionalOffset.topCenter,
-                    end: FractionalOffset.bottomCenter,
-                    stops: [0.1, 0.6, 1.0],
-                    colors: [Colors.black54, Colors.transparent, Colors.black],
+                    // begin: FractionalOffset.topCenter,
+                    // end: FractionalOffset.bottomCenter,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    // stops: [0.1, 0.6, 1.0],
+                    colors: [Colors.transparent, Colors.black],
                   ),
                 ),
                 child: Container(
@@ -122,6 +124,9 @@ class SeasonDetailScreen extends StatelessWidget {
                         style: TextStyle(
                             fontSize: screenHeight * 0.019,
                             color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Row(
                         children: [

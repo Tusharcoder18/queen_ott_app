@@ -15,18 +15,22 @@ class _ImageCarouselState extends State<ImageCarousel> {
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < 2) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      _pageController.animateToPage(
-        _currentPage,
-        duration: Duration(milliseconds: 350),
-        curve: Curves.easeIn,
-      );
-    });
+    try {
+      Timer.periodic(Duration(seconds: 3), (Timer timer) {
+        if (_currentPage < 2) {
+          _currentPage++;
+        } else {
+          _currentPage = 0;
+        }
+        _pageController.animateToPage(
+          _currentPage,
+          duration: Duration(milliseconds: 350),
+          curve: Curves.easeIn,
+        );
+      });
+    } catch (e) {
+      print('Exception:$e');
+    }
   }
 
   @override
