@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
+import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
+
+final TextStyle _textStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 20,
+);
 
 class HomeScreenWidget extends StatelessWidget {
   // This is to give font style to the different headings
   // on the screen
-  final TextStyle _textStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 15,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +67,14 @@ class HomeScreenWidget extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  ContinueWatchingWidget(screenWidth: screenWidth),
-                  RecommendedShowWidget(screenWidth: screenWidth),
+                  ContinueWatchingWidget(
+                    screenWidth: screenWidth,
+                    screenHeight: screenHeight,
+                  ),
+                  RecommendedShowWidget(
+                    screenWidth: screenWidth,
+                    screenHeight: screenHeight,
+                  ),
                   LanguageShowsWidget(screenWidth: screenWidth),
                 ],
               ),
@@ -196,13 +204,49 @@ class LanguageShowsWidget extends StatelessWidget {
 class RecommendedShowWidget extends StatelessWidget {
   const RecommendedShowWidget({
     @required this.screenWidth,
+    @required this.screenHeight,
   });
 
   final double screenWidth;
+  final double screenHeight;
 
   @override
   Widget build(BuildContext context) {
-    return VideoGridWidget();
+    List<String> banners = [
+      'assets/movieTwo.jpg',
+      'assets/moviePoster.jpg',
+      'assets/movieOne.jpg',
+    ];
+    return ListView.builder(
+        physics: ScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Queen Originals',
+                    style: _textStyle,
+                  ),
+                ),
+                VideoGridWidget(
+                  physics: NeverScrollableScrollPhysics(),
+                  count: 6,
+                ),
+                BannerWidget(
+                  banners[index],
+                  screenHeight: screenHeight,
+                  screenWidth: screenWidth,
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
 
@@ -210,15 +254,18 @@ class RecommendedShowWidget extends StatelessWidget {
 class ContinueWatchingWidget extends StatelessWidget {
   const ContinueWatchingWidget({
     @required this.screenWidth,
+    @required this.screenHeight,
   });
 
   final double screenWidth;
+  final double screenHeight;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
       child: VideoGridWidget(
+        physics: ScrollPhysics(),
         fetchVideoDetails: Provider.of<UploadService>(context).getCurrentUrls,
       ),
     );

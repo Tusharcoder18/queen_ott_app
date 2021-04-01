@@ -6,7 +6,9 @@ import 'package:queen_ott_app/screens/test.dart';
 class VideoGridWidget extends StatefulWidget {
   final Function
       fetchVideoDetails; // We can use this to fetch future video types such as recommended, continue watching, language based, etc.
-  VideoGridWidget({this.fetchVideoDetails});
+  final int count;
+  final ScrollPhysics physics;
+  VideoGridWidget({this.fetchVideoDetails, this.count, this.physics});
   @override
   _VideoGridWidgetState createState() => _VideoGridWidgetState();
 }
@@ -45,7 +47,7 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
       getDetails().whenComplete(
           () => updateDetails()); // Call this after layout is complete
     } else {
-      documents.length = 9;
+      documents.length = widget.count;
     }
   }
 
@@ -54,11 +56,12 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: screenHeight * 0.4,
+      height: screenHeight * 0.42,
       child: GridView.count(
         // Creates a 2 row scrollable listview
         crossAxisCount: 3,
-        scrollDirection: Axis.vertical,
+        physics: widget.physics,
+        // scrollDirection: Axis.vertical,
         childAspectRatio: 0.8,
         children: List.generate(documents.length, (index) {
           if (widget.fetchVideoDetails != null) {

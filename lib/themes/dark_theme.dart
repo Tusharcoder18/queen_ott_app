@@ -11,6 +11,6 @@ get darkTheme => ThemeData(
       labelStyle: TextStyle(color: Colors.white),
     ),
     brightness: Brightness.dark,
-    canvasColor: Colors.black,
+    canvasColor: Colors.black45,
     accentColor: Colors.red,
     accentIconTheme: IconThemeData(color: Colors.white));

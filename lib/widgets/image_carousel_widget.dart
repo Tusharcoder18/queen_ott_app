@@ -15,6 +15,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
   @override
   void initState() {
     super.initState();
+    try {
+      
     Timer.periodic(Duration(seconds: 3), (Timer timer) {
       if (_currentPage < 2) {
         _currentPage++;
@@ -27,6 +29,10 @@ class _ImageCarouselState extends State<ImageCarousel> {
           duration: Duration(milliseconds: 350),
           curve: Curves.easeIn,
         );
+      });
+    } catch (e) {
+      print('Exception:$e');
+    }
       }
     });
   }
