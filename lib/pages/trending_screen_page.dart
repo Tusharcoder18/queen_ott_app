@@ -17,10 +17,7 @@ class TrendingScreenWidget extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Text(
                 'Trending shows',
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 20.0,
-                ),
+                style: Theme.of(context).textTheme.headline1,
               ),
             ),
           ),

@@ -52,7 +52,10 @@ class _UploadScreenState extends State<UploadScreen> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Add details'),
+                Text(
+                  'Add details',
+                  style: Theme.of(context).textTheme.headline1,
+                ),
                 UploadButtonWidget(),
               ],
             ),
@@ -151,12 +154,7 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
         child: Center(
           child: Text(
             'UPLOAD',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.headline1,
           ),
         ),
       ),
@@ -208,8 +206,6 @@ Widget titleWidget(BuildContext context, double screenHeight) {
             Provider.of<UploadService>(context, listen: false)
                 .getVideoTitle(value);
           },
-        )
-        //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
-        ),
+        )),
   );
 }

@@ -2,27 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 
-class ShowsPage extends StatefulWidget {
+class MoviesPage extends StatefulWidget {
   @override
-  _ShowsPageState createState() => _ShowsPageState();
+  _MoviesPageState createState() => _MoviesPageState();
 }
 
-class _ShowsPageState extends State<ShowsPage> {
-  List<String> imageList = [
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-  ];
-
+class _MoviesPageState extends State<MoviesPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -33,9 +18,9 @@ class _ShowsPageState extends State<ShowsPage> {
       'assets/movieOne.jpg',
     ];
     List<String> titles = [
-      'Popular Shows',
-      'Top Rated Shows',
-      'Premium Shows',
+      'Upcoming Shows',
+      'Upcoming Movies',
+      'Upcoming Series',
     ];
     return ListView.builder(
         physics: ScrollPhysics(),

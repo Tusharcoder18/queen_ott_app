@@ -50,12 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
       children: [
         Text(
           "QUEEN",
-          style: TextStyle(
-            color: Colors.white,
-            letterSpacing: 2.0,
-            fontFamily: 'Roboto',
-            fontSize: 30.0,
-          ),
+          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
         ),
         Container(
           height: 70,
@@ -165,8 +160,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Sign in',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text(
+                      'Sign in',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ],
                 ),
                 textColor: Colors.white,
@@ -207,16 +204,17 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                 height: 10,
               ),
-              Text("Need Help?"),
+              Text(
+                "Need Help?",
+                style: Theme.of(context).textTheme.headline2,
+              ),
               SizedBox(
                 height: 15,
               ),
               GestureDetector(
                 child: Text(
                   "New to Queen? Sign up now.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
                 onTap: () {
                   Navigator.push(context,

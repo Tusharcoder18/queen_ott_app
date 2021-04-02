@@ -15,7 +15,10 @@ class _AddDescriptionScreenState extends State<AddDescriptionScreen> {
         .length;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Description'),
+        title: Text(
+          'Add Description',
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: Column(
         children: [
@@ -74,7 +77,7 @@ class _AddDescriptionScreenState extends State<AddDescriptionScreen> {
                       children: [
                         Text(
                           "$descriptionLength/500",
-                          style: TextStyle(fontSize: 20.0),
+                          style: Theme.of(context).textTheme.headline2,
                         ),
                       ],
                     ),
@@ -92,7 +95,10 @@ class _AddDescriptionScreenState extends State<AddDescriptionScreen> {
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text("Next"),
+                          child: Text(
+                            "Next",
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
                           color: Colors.blue,
                         )
                       ],

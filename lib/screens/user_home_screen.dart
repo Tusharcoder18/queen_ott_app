@@ -14,15 +14,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white);
   List<Widget> _widgetOptions = <Widget>[
     HomeScreenWidget(),
     ShowsPage(),
     MoviesPage(),
     Text(
       'Index 4: Upcoming',
-      style: optionStyle,
     ),
     MenuPage(
       isCreator: false,
@@ -52,19 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text(
               'QUEEN',
-              style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 2.0,
-                fontFamily: 'Roboto',
-                fontSize: 25.0,
-              ),
+              style:
+                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
             ),
             MaterialButton(
               onPressed: () {},
               color: Colors.red,
               child: Text(
                 'Subscribe',
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: Theme.of(context).textTheme.headline1,
               ),
             ),
             Container(

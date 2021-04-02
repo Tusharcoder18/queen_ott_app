@@ -46,10 +46,7 @@ class _SelectGenreWidgetState extends State<SelectGenreWidget> {
               children: [
                 Text(
                   'Select Genre',
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    color: Colors.white38,
-                  ),
+                  style: Theme.of(context).textTheme.headline1,
                 ),
                 GestureDetector(
                   child: Icon(
@@ -123,12 +120,15 @@ class CheckBoxListValue extends StatefulWidget {
 }
 
 class _CheckBoxListValueState extends State<CheckBoxListValue> {
-
   @override
   Widget build(BuildContext context) {
-    bool _checked = Provider.of<UploadService>(context, listen: false).isGenreInList(genreName: widget.itemName);
+    bool _checked = Provider.of<UploadService>(context, listen: false)
+        .isGenreInList(genreName: widget.itemName);
     return CheckboxListTile(
-      title: Text(widget.itemName),
+      title: Text(
+        widget.itemName,
+        style: Theme.of(context).textTheme.headline1,
+      ),
       value: Provider.of<UploadService>(context, listen: false)
           .isGenreInList(genreName: widget.itemName),
       onChanged: (bool value) {
@@ -136,9 +136,9 @@ class _CheckBoxListValueState extends State<CheckBoxListValue> {
           if (!_checked) {
             Provider.of<UploadService>(context, listen: false)
                 .addGenreToList(genreName: widget.itemName);
-             _checked =  Provider.of<UploadService>(context, listen: false)
+            _checked = Provider.of<UploadService>(context, listen: false)
                 .isGenreInList(genreName: widget.itemName);
-           // _checked = true;
+            // _checked = true;
             // genre = widget.itemName;
             widget.temp(widget.itemName);
             print(widget.itemName);

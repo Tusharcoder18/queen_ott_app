@@ -8,11 +8,6 @@ import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 
-final TextStyle _textStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 20,
-);
-
 class HomeScreenWidget extends StatelessWidget {
   // This is to give font style to the different headings
   // on the screen
@@ -37,7 +32,10 @@ class HomeScreenWidget extends StatelessWidget {
               height: screenHeight * 0.05,
               child: Text(
                 'Welcome $_name',
-                style: TextStyle(fontSize: screenHeight * 0.03),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    .copyWith(fontSize: 30),
               ),
             ),
             Container(
@@ -231,7 +229,7 @@ class RecommendedShowWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Queen Originals',
-                    style: _textStyle,
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
                 VideoGridWidget(

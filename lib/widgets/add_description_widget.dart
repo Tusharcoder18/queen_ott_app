@@ -35,10 +35,7 @@ Widget addDescriptionWidget(
                   ? Provider.of<UploadService>(context, listen: false)
                       .returnVideoDescription()
                   : 'Add Description',
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Colors.white38,
-              ),
+              style: Theme.of(context).textTheme.headline1,
             ),
             SizedBox(
               width: screenWidth * 0.35,

@@ -10,11 +10,6 @@ import '../screens/upload_screen.dart';
 
 // This is for the upload video section for content creator
 class CreatorScreenWidget extends StatelessWidget {
-  final TextStyle _textStyle = TextStyle(
-    color: Colors.white,
-    fontSize: 20.0,
-  );
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -48,7 +43,7 @@ class CreatorScreenWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 10),
             child: Text(
               'Uploads',
-              style: _textStyle,
+              style: Theme.of(context).textTheme.headline1,
             ),
           ),
           SizedBox(
@@ -148,10 +143,9 @@ class _UserUploadsState extends State<UserUploads> {
                                       Text(
                                         title ?? '',
                                         textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline1,
                                       ),
                                     ],
                                   ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +25,10 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
     initialiseLIst();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seasons'),
+        title: Text(
+          'Seasons',
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -84,10 +86,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
                     Container(
                       child: Text(
                         'Add new season',
-                        style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                        ),
+                        style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
                   ],
@@ -139,7 +138,10 @@ class _SeasonListInfoState extends State<SeasonListInfo> {
       child: Column(
         children: [
           CheckboxListTile(
-            title: Text(widget.textInfo),
+            title: Text(
+              widget.textInfo,
+              style: Theme.of(context).textTheme.headline1,
+            ),
             value: _checked,
             onChanged: (bool value) {
               setState(() {
@@ -177,7 +179,10 @@ class SeasonEpisodeNameWidget extends StatelessWidget {
       height: 30,
       width: MediaQuery.of(context).size.height,
       child: Center(
-        child: Text(episodeName),
+        child: Text(
+          episodeName,
+          style: Theme.of(context).textTheme.headline1,
+        ),
       ),
     );
   }

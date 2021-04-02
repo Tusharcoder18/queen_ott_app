@@ -52,12 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       children: [
         Text(
           "QUEEN",
-          style: TextStyle(
-            color: Colors.white,
-            letterSpacing: 2.0,
-            fontFamily: 'Roboto',
-            fontSize: 30.0,
-          ),
+          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
         ),
         Container(
           height: 70,
@@ -178,12 +173,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 onPressed: () {
                   if (_password == _confirmPassword) {
                     print("password Confirmed");
-                    Provider.of<UploadService>(context, listen: false).getEmailID(
-                        emailId: _emailPhone
-                    );
-                    Provider.of<AddSeriesServices>(context, listen: false).getEmailId(
-                        email: _emailPhone
-                    );
+                    Provider.of<UploadService>(context, listen: false)
+                        .getEmailID(emailId: _emailPhone);
+                    Provider.of<AddSeriesServices>(context, listen: false)
+                        .getEmailId(email: _emailPhone);
                     print(context.read<AuthenticationService>().signUp(
                           email: _emailPhone,
                           password: _password,
@@ -205,8 +198,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text('Sign up',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                    Text(
+                      'Sign up',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ],
                 ),
                 textColor: Colors.white,
@@ -226,7 +221,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Icon(FontAwesomeIcons.google),
                     SizedBox(width: 10),
                     Text('Sign-up using Google',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                        style: Theme.of(context).textTheme.headline1),
                   ],
                 ),
                 textColor: Colors.white,
@@ -246,7 +241,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Icon(FontAwesomeIcons.facebook),
                     SizedBox(width: 10),
                     Text('Sign-up using Facebook',
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                        style: Theme.of(context).textTheme.headline1),
                   ],
                 ),
                 textColor: Colors.white,
@@ -266,7 +261,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Icon(FontAwesomeIcons.apple),
                     SizedBox(width: 10),
                     Text('Sign-up using Apple',
-                        style: TextStyle(color: Colors.black, fontSize: 16)),
+                        style: Theme.of(context).textTheme.headline1),
                   ],
                 ),
                 textColor: Colors.black,
@@ -274,16 +269,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 height: 10,
               ),
-              Text("Need Help?"),
+              Text(
+                "Need Help?",
+                style: Theme.of(context).textTheme.headline2,
+              ),
               SizedBox(
                 height: 15,
               ),
               GestureDetector(
                 child: Text(
                   "Already a user? Sign in now.",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
                 onTap: () {
                   Navigator.push(context,

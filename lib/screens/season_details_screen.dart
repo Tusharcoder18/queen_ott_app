@@ -9,14 +9,15 @@ class SeasonDetailScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _appBar(screenHeight, screenWidth),
-          _episodesList(screenHeight, screenWidth)
+          _appBar(context, screenHeight, screenWidth),
+          _episodesList(context, screenHeight, screenWidth)
         ],
       ),
     );
   }
 
-  Widget _appBar(double screenHeight, double screenWidth) {
+  Widget _appBar(
+      BuildContext context, double screenHeight, double screenWidth) {
     return SliverAppBar(
       expandedHeight: screenHeight * 0.65,
       backgroundColor: Colors.black,
@@ -55,9 +56,10 @@ class SeasonDetailScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Show Name',
-                        style: TextStyle(
-                            fontSize: screenHeight * 0.035,
-                            color: Colors.white),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1
+                            .copyWith(fontSize: 20),
                       ),
                       SizedBox(
                         width: 5,
@@ -77,7 +79,7 @@ class SeasonDetailScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(18)),
                               child: Text(
                                 'Action',
-                                style: TextStyle(fontSize: 12),
+                                style: Theme.of(context).textTheme.headline2,
                               ),
                               color: Colors.blueGrey,
                             ),
@@ -94,7 +96,7 @@ class SeasonDetailScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(18)),
                               child: Text(
                                 'Drama',
-                                style: TextStyle(fontSize: 12),
+                                style: Theme.of(context).textTheme.headline2,
                               ),
                               color: Colors.blueGrey,
                             ),
@@ -111,7 +113,7 @@ class SeasonDetailScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(18)),
                               child: Text(
                                 'Sci-fi',
-                                style: TextStyle(fontSize: 12),
+                                style: Theme.of(context).textTheme.headline2,
                               ),
                               color: Colors.blueGrey,
                             ),
@@ -121,9 +123,7 @@ class SeasonDetailScreen extends StatelessWidget {
                       SizedBox(height: screenHeight * 0.01),
                       Text(
                         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book...',
-                        style: TextStyle(
-                            fontSize: screenHeight * 0.019,
-                            color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(
                         height: 10,
@@ -139,10 +139,7 @@ class SeasonDetailScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   'Watch List',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: screenWidth * 0.03,
-                                      fontWeight: FontWeight.w300),
+                                  style: Theme.of(context).textTheme.headline2,
                                 ),
                               ],
                             ),
@@ -164,10 +161,7 @@ class SeasonDetailScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   'Like',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: screenWidth * 0.03,
-                                      fontWeight: FontWeight.w300),
+                                  style: Theme.of(context).textTheme.headline2,
                                 ),
                               ],
                             ),
@@ -185,10 +179,7 @@ class SeasonDetailScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   'Share',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: screenWidth * 0.03,
-                                      fontWeight: FontWeight.w300),
+                                  style: Theme.of(context).textTheme.headline2,
                                 ),
                               ],
                             ),
@@ -207,7 +198,8 @@ class SeasonDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _episodesList(double screenHeight, double screenWidth) {
+  Widget _episodesList(
+      BuildContext context, double screenHeight, double screenWidth) {
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
         ListView.builder(
@@ -229,9 +221,12 @@ class SeasonDetailScreen extends StatelessWidget {
                       index == 0
                           ? Text(
                               'Episodes',
-                              style: TextStyle(fontSize: screenHeight * 0.03),
+                              style: Theme.of(context).textTheme.headline1,
                             )
-                          : Text('Episode $index')
+                          : Text(
+                              'Episode $index',
+                              style: Theme.of(context).textTheme.headline1,
+                            )
                     ],
                   ),
                 ),

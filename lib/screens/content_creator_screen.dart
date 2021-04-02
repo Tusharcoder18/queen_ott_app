@@ -9,17 +9,13 @@ class ContentCreatorScreen extends StatefulWidget {
 
 class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Analytics',
-      style: optionStyle,
     ),
     CreatorScreenWidget(),
     Text(
       'Index 2: Monetization',
-      style: optionStyle,
     ),
     // TestPage(),
     SettingsPage(
@@ -43,12 +39,8 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
           children: [
             Text(
               'QUEEN',
-              style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 2.0,
-                fontFamily: 'Roboto',
-                fontSize: 25.0,
-              ),
+              style:
+                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
             ),
             Container(
               height: 50,
