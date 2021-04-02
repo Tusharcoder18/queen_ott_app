@@ -25,20 +25,20 @@ Widget addDescriptionWidget(
               color: Colors.white38,
               size: 20.0,
             ),
-            SizedBox(
-              width: 20,
-            ),
-            Text(
-              Provider.of<UploadService>(context, listen: false)
-                          .returnVideoDescription() !=
-                      ''
-                  ? Provider.of<UploadService>(context, listen: false)
-                      .returnVideoDescription()
-                  : 'Add Description',
-              style: Theme.of(context).textTheme.headline1,
-            ),
-            SizedBox(
-              width: screenWidth * 0.35,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              child: Text(
+                Provider.of<UploadService>(context, listen: false)
+                            .returnVideoDescription() !=
+                        ''
+                    ? Provider.of<UploadService>(context, listen: false)
+                        .returnVideoDescription()
+                    : 'Add Description',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.white38,
+                ),
+              ),
             ),
             Icon(
               Icons.arrow_forward_ios_outlined,

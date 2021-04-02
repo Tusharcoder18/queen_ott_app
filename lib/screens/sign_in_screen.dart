@@ -145,10 +145,12 @@ class _SignInScreenState extends State<SignInScreen> {
                   _formKey.currentState.save();
                   print(_emailPhone);
                   print(_password);
-                  Provider.of<UploadService>(context, listen: false)
-                      .getEmailID(emailId: _emailPhone);
-                  Provider.of<AddSeriesServices>(context, listen: false)
-                      .getEmailId(email: _emailPhone);
+                  Provider.of<UploadService>(context, listen: false).getEmailID(
+                      emailId: _emailPhone
+                  );
+                  Provider.of<AddSeriesServices>(context, listen: false).getEmailId(
+                      email: _emailPhone
+                  );
                   context.read<AuthenticationService>().signIn(
                         email: _emailPhone,
                         password: _password,

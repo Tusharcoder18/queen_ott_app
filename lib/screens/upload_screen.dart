@@ -28,6 +28,18 @@ class _UploadScreenState extends State<UploadScreen> {
         genre = value;
       });
 
+  void _setRefresh() {
+    context.read<UploadService>().getStatusOfChecked(status: false);
+    setState(() {
+      name = '';
+      videoFile = null;
+      videoThumbnail = null;
+      tempDir = null;
+      genre = null;
+      isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -52,9 +64,12 @@ class _UploadScreenState extends State<UploadScreen> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Add details',
-                  style: Theme.of(context).textTheme.headline1,
+                Text('Add details'),
+                InkWell(
+                  onTap: () {
+                    _setRefresh();
+                  },
+                  child: Icon(Icons.refresh),
                 ),
                 UploadButtonWidget(),
               ],
