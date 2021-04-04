@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:queen_ott_app/screens/season_details_screen.dart';
-import 'package:queen_ott_app/screens/temp_season_show_Screen.dart';
-import 'package:queen_ott_app/screens/upload_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 
