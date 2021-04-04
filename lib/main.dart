@@ -6,6 +6,7 @@ import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
+import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
 import 'package:queen_ott_app/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,7 +42,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<SeriesFetchingService>(
           create: (_) =>SeriesFetchingService(FirebaseFirestore.instance),
-        )
+        ),
+        ChangeNotifierProvider<VideoFetchingService>(
+          create: (_) =>VideoFetchingService(FirebaseFirestore.instance),
+        ),
       ],
       child: MaterialApp(
         title: 'Queen App',

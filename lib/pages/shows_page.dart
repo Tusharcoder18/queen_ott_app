@@ -57,43 +57,31 @@ class _ShowsPageState extends State<ShowsPage> {
       'Top Rated Shows',
       'Premium Shows',
     ];
-    return ShowGridViewWidget(
-      seriesThumbnailList: _seriesThumbnail,
-      seriesList: _seriesList,
+    return SingleChildScrollView(
+      child: Container(
+        width: screenWidth,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Shows you may like'),
+              SizedBox(height: 20,),
+              ShowGridViewWidget(
+                seriesThumbnailList: _seriesThumbnail,
+                seriesList: _seriesList,
+              ),
+              SizedBox(height: 20,),
+              Text('Action'),
+              SizedBox(height: 20,),
+              ShowGridViewWidget(
+                seriesThumbnailList: _seriesThumbnail,
+                seriesList: _seriesList,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
-
-// ListView.builder(
-// physics: ScrollPhysics(),
-// scrollDirection: Axis.vertical,
-// itemCount: _seriesThumbnail.length,
-// itemBuilder: (context, index) {
-// return Container(
-// child: Column(
-// mainAxisAlignment: MainAxisAlignment.start,
-// crossAxisAlignment: CrossAxisAlignment.start,
-// children: [
-// Container(
-// padding: const EdgeInsets.all(8.0),
-// child: Text(
-// titles[index],
-// style: TextStyle(fontSize: 20, color: Colors.white),
-// ),
-// ),
-// VideoGridWidget(
-// physics: NeverScrollableScrollPhysics(),
-// count: 6,
-// ),
-// Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: BannerWidget(
-// _seriesThumbnail[index],
-// screenHeight: screenHeight,
-// screenWidth: screenWidth,
-// ),
-// ),
-// ],
-// ),
-// );
-// });

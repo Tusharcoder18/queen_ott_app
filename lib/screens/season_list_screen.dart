@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
 
+/// This is for the creator side and this is used to add or delete a series
+/// would come after pressing the add to series button on upload service screen
+
 class SeasonListScreen extends StatefulWidget {
   @override
   _SeasonListScreenState createState() => _SeasonListScreenState();

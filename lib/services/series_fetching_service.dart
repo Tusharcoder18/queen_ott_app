@@ -17,7 +17,7 @@ class SeriesFetchingService extends ChangeNotifier {
   Future<void> fetchSeriesList() async {
     _seriesList = [];
     _seriesThumbnail = [];
-    final collection = await _firebaseFirestore.collection("ConsumerSeries")
+    final collection = await _firebaseFirestore.collection(consumerSeries)
         .get();
     final List<DocumentSnapshot> documents = collection.docs;
 
@@ -70,6 +70,31 @@ class SeriesFetchingService extends ChangeNotifier {
     videoUrl = collection.data()["videoUrl"];
 
     return videoUrl;
+  }
+
+  String _seriesName = "";
+  /// To fetch the given series name based on the given documentName
+  Future<String> getSeriesName({String documentName}) async{
+    _seriesName = "";
+    final document =  await _firebaseFirestore.collection(consumerSeries).doc(documentName).get();
+    _seriesName = document.data()["SeriesName"];
+
+    return _seriesName;
+  }
+  
+  /// To fetch the series description
+  /// Here the series description is just the first episode description
+  String _seriesDescription = "";
+  Future<String> getSeriesDescription({String documentName}) async{
+    _seriesDescription = "";
+    try{
+      final document = await _firebaseFirestore.collection("SeriesVideoInfo").doc(documentName).get();
+      _seriesDescription = document.data()["description"];
+    } catch(e){
+      print(e.message);
+    }
+    
+    return _seriesDescription;
   }
 
 }
