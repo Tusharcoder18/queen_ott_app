@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:queen_ott_app/screens/season_list_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
@@ -174,7 +173,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
       appBar: AppBar(
         title: Text(
           'Add to',
-          style: GoogleFonts.roboto(),
+          style: TextStyle(fontFamily: 'OpenSans'),
         ),
       ),
       body: SingleChildScrollView(
@@ -221,7 +220,8 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                       Container(
                         child: Text(
                           'Add new series',
-                          style: GoogleFonts.roboto(
+                          style: TextStyle(
+                            fontFamily: 'OpenSans',
                             fontWeight: FontWeight.bold,
                             fontSize: 20.0,
                           ),

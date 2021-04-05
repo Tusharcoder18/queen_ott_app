@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
@@ -153,7 +152,8 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
                       ),
                       Text(
                         'Add New Episode',
-                        style: GoogleFonts.roboto(
+                        style: TextStyle(
+                          fontFamily: 'OpenSans',
                             fontSize: 22.0, fontWeight: FontWeight.bold),
                       )
                     ],

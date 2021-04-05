@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/widgets/custom_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+import 'package:queen_ott_app/services/video_fetching_service.dart';
+import 'package:queen_ott_app/widgets/movie_grid_view_widget.dart';
 
 class MoviesPage extends StatefulWidget {
   @override
@@ -7,35 +9,76 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
-  List<String> imageList = [
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieThree.jpg',
-  ];
+  List<String> _videoThumbnailList = [];
+  List<dynamic> _videoList = [];
+  List<String> _videoUrlList = [];
+  List<String> _videoNameList = [];
+  List<String> _videoDescriptionList = [];
+
+  Future<void> getInformation() async{
+    await context.read<VideoFetchingService>().fetchVideoList();
+
+    _videoThumbnailList = context.read<VideoFetchingService>().returnVideoThumbnail();
+    _videoList = context.read<VideoFetchingService>().returnVideoList();
+    _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
+    _videoNameList = context.read<VideoFetchingService>().returnVideoNameList();
+    _videoDescriptionList = context.read<VideoFetchingService>().returnVideoDescriptionList();
+
+    setState(() {
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getInformation();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    List<String> banners = [
-      'assets/movieTwo.jpg',
-      'assets/moviePoster.jpg',
-      'assets/movieOne.jpg',
-    ];
-    List<String> titles = [
-      'Popular Shows',
-      'Top Rated Shows',
-      'Premium Shows',
-    ];
-    return CustomStaggeredWidget(imageList: imageList, count: imageList.length);
+    return SingleChildScrollView(
+      child: Container(
+        width: screenWidth,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Movies you may like'),
+              SizedBox(height: 20,),
+              MovieGridViewWidget(
+                videoDescriptionList: _videoDescriptionList,
+                videoList: _videoList,
+                videoNameList: _videoNameList,
+                videoThumbnailList: _videoThumbnailList,
+                videoUrlList: _videoUrlList,
+              ),
+              SizedBox(height: 20,),
+              Text('Action'),
+              SizedBox(height: 20,),
+              MovieGridViewWidget(
+                videoDescriptionList: _videoDescriptionList,
+                videoList: _videoList,
+                videoNameList: _videoNameList,
+                videoThumbnailList: _videoThumbnailList,
+                videoUrlList: _videoUrlList,
+              ),
+              SizedBox(height: 20,),
+              Text('Drama'),
+              SizedBox(height: 20,),
+              MovieGridViewWidget(
+                videoDescriptionList: _videoDescriptionList,
+                videoList: _videoList,
+                videoNameList: _videoNameList,
+                videoThumbnailList: _videoThumbnailList,
+                videoUrlList: _videoUrlList,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

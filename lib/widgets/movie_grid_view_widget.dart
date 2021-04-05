@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/screens/season_details_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:queen_ott_app/services/series_fetching_service.dart';
+import 'package:queen_ott_app/screens/test.dart';
 
-class ShowGridViewWidget extends StatelessWidget {
-  ShowGridViewWidget({this.seriesThumbnailList, this.seriesList});
+class MovieGridViewWidget extends StatelessWidget {
+  MovieGridViewWidget(
+      {this.videoDescriptionList,
+      this.videoList,
+      this.videoNameList,
+      this.videoThumbnailList,
+      this.videoUrlList});
 
-  final List<String> seriesThumbnailList;
-  final List<dynamic> seriesList;
+  final List<String> videoThumbnailList;
+  final List<dynamic> videoList;
+  final List<String> videoUrlList;
+  final List<String> videoNameList;
+  final List<String> videoDescriptionList;
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +28,15 @@ class ShowGridViewWidget extends StatelessWidget {
           childAspectRatio: 0.8,
           crossAxisSpacing: 6,
           mainAxisSpacing: 10,
-          children: List.generate(seriesThumbnailList.length,(index) {
+          children: List.generate(videoThumbnailList.length, (index) {
             return InkWell(
-              onTap: () async{
-                await context.read<SeriesFetchingService>().getSeasonAneEpisodeInfo(inputDocument: seriesList[index]);
+              onTap: () async {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SeasonDetailScreen(
-                      videoThumbnail: seriesThumbnailList[index],
-                      indexNumber: index,
-                      consumerDocument: seriesList[index].toString(),
+                    builder: (context) => Test(
+                      videoUrl: videoUrlList[index],
+                      thumbnailUrl: videoThumbnailList[index],
                     ),
                   ),
                 );
@@ -44,8 +48,8 @@ class ShowGridViewWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child: FadeInImage(
-                    placeholder: NetworkImage(seriesThumbnailList[index]),
-                    image: NetworkImage(seriesThumbnailList[index]),
+                    placeholder: NetworkImage(videoThumbnailList[index]),
+                    image: NetworkImage(videoThumbnailList[index]),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -57,5 +61,3 @@ class ShowGridViewWidget extends StatelessWidget {
     );
   }
 }
-
-
