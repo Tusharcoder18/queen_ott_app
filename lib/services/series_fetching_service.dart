@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SeriesFetchingService extends ChangeNotifier {
-
   SeriesFetchingService(this._firebaseFirestore);
 
   FirebaseFirestore _firebaseFirestore;
@@ -17,8 +16,8 @@ class SeriesFetchingService extends ChangeNotifier {
   Future<void> fetchSeriesList() async {
     _seriesList = [];
     _seriesThumbnail = [];
-    final collection = await _firebaseFirestore.collection(consumerSeries)
-        .get();
+    final collection =
+        await _firebaseFirestore.collection(consumerSeries).get();
     final List<DocumentSnapshot> documents = collection.docs;
 
     documents.forEach((element) async {
@@ -41,13 +40,16 @@ class SeriesFetchingService extends ChangeNotifier {
     return _seriesThumbnail;
   }
 
-
   List<dynamic> _seasonList = [];
+
   /// To get the number of seasons in a given series
-  Future<void> getSeasonAneEpisodeInfo({String inputDocument}) async {
+  Future<void> getSeasonAndEpisodeInfo({String inputDocument}) async {
     _seasonList = [];
-    final collection = await _firebaseFirestore.collection(consumerSeries).doc(
-        inputDocument).collection("Seasons").get();
+    final collection = await _firebaseFirestore
+        .collection(consumerSeries)
+        .doc(inputDocument)
+        .collection("Seasons")
+        .get();
     final List<DocumentSnapshot> documents = collection.docs;
 
     documents.forEach((element) {
@@ -57,15 +59,19 @@ class SeriesFetchingService extends ChangeNotifier {
     print(_seasonList);
   }
 
-  List<dynamic> returnSeasonAndEpisodeInfo(){
+  List<dynamic> returnSeasonAndEpisodeInfo() {
     return _seasonList;
   }
 
   String videoUrl = "";
+
   /// To return the video URL to the user
-  Future<String> getUrl({String videoDocument}) async{
+  Future<String> getUrl({String videoDocument}) async {
     videoUrl = "";
-    final collection = await _firebaseFirestore.collection("SeriesVideoInfo").doc(videoDocument).get();
+    final collection = await _firebaseFirestore
+        .collection("SeriesVideoInfo")
+        .doc(videoDocument)
+        .get();
 
     videoUrl = collection.data()["videoUrl"];
 
@@ -73,28 +79,34 @@ class SeriesFetchingService extends ChangeNotifier {
   }
 
   String _seriesName = "";
+
   /// To fetch the given series name based on the given documentName
-  Future<String> getSeriesName({String documentName}) async{
+  Future<String> getSeriesName({String documentName}) async {
     _seriesName = "";
-    final document =  await _firebaseFirestore.collection(consumerSeries).doc(documentName).get();
+    final document = await _firebaseFirestore
+        .collection(consumerSeries)
+        .doc(documentName)
+        .get();
     _seriesName = document.data()["SeriesName"];
 
     return _seriesName;
   }
-  
+
   /// To fetch the series description
   /// Here the series description is just the first episode description
   String _seriesDescription = "";
-  Future<String> getSeriesDescription({String documentName}) async{
+  Future<String> getSeriesDescription({String documentName}) async {
     _seriesDescription = "";
-    try{
-      final document = await _firebaseFirestore.collection("SeriesVideoInfo").doc(documentName).get();
+    try {
+      final document = await _firebaseFirestore
+          .collection("SeriesVideoInfo")
+          .doc(documentName)
+          .get();
       _seriesDescription = document.data()["description"];
-    } catch(e){
+    } catch (e) {
       print(e.message);
     }
-    
+
     return _seriesDescription;
   }
-
 }

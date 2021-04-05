@@ -22,10 +22,12 @@ class ShowGridViewWidget extends StatelessWidget {
           childAspectRatio: 0.8,
           crossAxisSpacing: 6,
           mainAxisSpacing: 10,
-          children: List.generate(seriesThumbnailList.length,(index) {
+          children: List.generate(seriesThumbnailList.length, (index) {
             return InkWell(
-              onTap: () async{
-                await context.read<SeriesFetchingService>().getSeasonAneEpisodeInfo(inputDocument: seriesList[index]);
+              onTap: () async {
+                await context
+                    .read<SeriesFetchingService>()
+                    .getSeasonAndEpisodeInfo(inputDocument: seriesList[index]);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -57,5 +59,3 @@ class ShowGridViewWidget extends StatelessWidget {
     );
   }
 }
-
-
