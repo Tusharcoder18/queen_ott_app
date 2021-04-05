@@ -6,6 +6,8 @@ import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/pages/menu_page.dart';
 import 'package:queen_ott_app/pages/movies_page.dart';
 import 'package:queen_ott_app/pages/shows_page.dart';
+import 'package:queen_ott_app/pages/upcoming_page.dart';
+import 'package:queen_ott_app/screens/subscription_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -18,9 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     HomeScreenWidget(),
     ShowsPage(),
     MoviesPage(),
-    Text(
-      'Index 4: Upcoming',
-    ),
+    UpcomingPage(),
     MenuPage(
       isCreator: false,
     ),
@@ -53,8 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
             ),
             MaterialButton(
-              onPressed: () {},
-              color: Colors.red,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubscriptionScreen()));
+              },
+              color: Colors.blue,
               child: Text(
                 'Subscribe',
                 style: Theme.of(context).textTheme.headline1,

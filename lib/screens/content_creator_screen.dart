@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/pages/analytics_page.dart';
 import 'package:queen_ott_app/pages/creator_screen_page.dart';
+import 'package:queen_ott_app/pages/monetization_page.dart';
 import 'package:queen_ott_app/pages/settings_page.dart';
 
 class ContentCreatorScreen extends StatefulWidget {
@@ -10,14 +12,9 @@ class ContentCreatorScreen extends StatefulWidget {
 class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
   int _selectedIndex = 0;
   List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Analytics',
-    ),
+    AnalyticsPage(),
     CreatorScreenWidget(),
-    Text(
-      'Index 2: Monetization',
-    ),
-    // TestPage(),
+    MonetizationPage(),
     SettingsPage(
       isCreator: true,
     ),

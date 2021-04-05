@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/screens/season_details_screen.dart';
-import 'package:queen_ott_app/screens/test.dart';
 
 class VideoGridWidget extends StatefulWidget {
   final Function
@@ -26,6 +25,11 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
     'assets/movieThree.jpg',
     'assets/movieTwo.jpg',
     'assets/movieTwo.jpg',
+    'assets/movieOne.jpg',
+    'assets/movieThree.jpg',
+    'assets/movieTwo.jpg',
+    'assets/movieOne.jpg',
+    'assets/movieThree.jpg',
     'assets/movieOne.jpg',
     'assets/movieThree.jpg',
   ];
@@ -61,7 +65,6 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
         // Creates a 2 row scrollable listview
         crossAxisCount: 3,
         physics: widget.physics,
-        // scrollDirection: Axis.vertical,
         childAspectRatio: 0.8,
         children: List.generate(documents.length, (index) {
           if (widget.fetchVideoDetails != null) {
@@ -70,17 +73,10 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
           }
           return GestureDetector(
             onTap: () {
-              print('Video Details:');
-              print(videoUrl);
-              print(thumbnailUrl);
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SeasonDetailScreen()
-                      // Test(
-                      //       videoUrl: documents[index].data()['videoUrl'] ?? '',
-                      //       thumbnailUrl: thumbnailUrl,
-                      //     )
-                      ));
+                  MaterialPageRoute(
+                      builder: (context) => SeasonDetailScreen()));
             },
             child: Container(
               // margin: EdgeInsets.all(5),
@@ -96,7 +92,7 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
                           color: Colors.pink),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: thumbnailUrl != null
+                        child: (thumbnailUrl != null && thumbnailUrl != '')
                             ? Image.network(
                                 thumbnailUrl,
                                 fit: BoxFit.cover,
