@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/pages/settings_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
+import 'package:queen_ott_app/screens/music_home_screen.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class MenuPage extends StatelessWidget {
@@ -17,7 +18,9 @@ class MenuPage extends StatelessWidget {
             child: SettingsTile(
               title: 'Music',
               leading: Icon(FontAwesomeIcons.music),
-              onPressed: (context) {},
+              onPressed: (context) {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicHomeScreen()));
+              },
             ),
           ),
           CustomSection(

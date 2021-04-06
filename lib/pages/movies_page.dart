@@ -17,6 +17,10 @@ class _MoviesPageState extends State<MoviesPage> {
 
   // Future<void> getInformation() async {
   //   await context.read<VideoFetchingService>().fetchVideoList();
+  Future<void> getInformation() async{
+    await context.read<VideoFetchingService>().fetchVideoList().then((value) async{
+      await context.read<VideoFetchingService>().fetchAllGenre();
+    });
 
   //   _videoThumbnailList =
   //       context.read<VideoFetchingService>().returnVideoThumbnail();
