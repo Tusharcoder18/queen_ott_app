@@ -9,6 +9,23 @@ class ShowsPage extends StatefulWidget {
 }
 
 class _ShowsPageState extends State<ShowsPage> {
+  // List<String> _seriesThumbnail = [];
+  // List<dynamic> _seriesList = [];
+
+  // Future<void> fetchSeries() async {
+  //   await context.read<SeriesFetchingService>().fetchSeriesList();
+  //   _seriesThumbnail =
+  //       context.read<SeriesFetchingService>().returnSeriesThumbnail();
+  //   _seriesList = context.read<SeriesFetchingService>().returnSeriesList();
+  //   setState(() {});
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchSeries();
+  // }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -37,7 +54,7 @@ class _ShowsPageState extends State<ShowsPage> {
         ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: banners.length,
+            itemCount: titles.length,
             itemBuilder: (context, index) {
               return Container(
                 child: Column(
@@ -53,7 +70,7 @@ class _ShowsPageState extends State<ShowsPage> {
                     ),
                     VideoGridWidget(
                       physics: NeverScrollableScrollPhysics(),
-                      count: 6,
+                      isMovie: false,
                     ),
                     BannerWidget(
                       banners[index],
@@ -65,6 +82,31 @@ class _ShowsPageState extends State<ShowsPage> {
               );
             }),
       ],
+      // return SingleChildScrollView(
+      //   child: Container(
+      //     width: screenWidth,
+      //     child: Padding(
+      //       padding: const EdgeInsets.all(8.0),
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         children: [
+      //           Text('Shows you may like'),
+      //           SizedBox(height: 20,),
+      //           ShowGridViewWidget(
+      //             seriesThumbnailList: _seriesThumbnail,
+      //             seriesList: _seriesList,
+      //           ),
+      //           SizedBox(height: 20,),
+      //           Text('Action'),
+      //           SizedBox(height: 20,),
+      //           ShowGridViewWidget(
+      //             seriesThumbnailList: _seriesThumbnail,
+      //             seriesList: _seriesList,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
     );
   }
 }

@@ -53,8 +53,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 Expanded(
                   child: VideoGridWidget(
-                    count: 14,
                     physics: ScrollPhysics(),
+                    isMovie: false,
                   ),
                 ),
               ],

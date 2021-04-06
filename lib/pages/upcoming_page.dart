@@ -53,7 +53,7 @@ class _MoviesPageState extends State<UpcomingPage> {
                     ),
                     VideoGridWidget(
                       physics: NeverScrollableScrollPhysics(),
-                      count: 6,
+                      isMovie: false,
                     ),
                     BannerWidget(
                       banners[index],

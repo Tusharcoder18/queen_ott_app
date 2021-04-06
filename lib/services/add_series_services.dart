@@ -21,6 +21,7 @@ class AddSeriesServices extends ChangeNotifier {
 
   /// TO add a series in the firebase
   Future<void> addNewSeries({String seriesName}) async {
+    String _consumerId = "";
     try {
       _firebaseFirestore
           .collection("Series")
@@ -29,6 +30,7 @@ class AddSeriesServices extends ChangeNotifier {
           .doc(seriesName)
           .set({
         "seriesName": seriesName,
+        "ConsumerID": "",
       }).then((value) {
         _firebaseFirestore
             .collection("Series")
@@ -38,6 +40,42 @@ class AddSeriesServices extends ChangeNotifier {
             .collection("Episodes")
             .doc("Episode1")
             .set({"Episode": []});
+      }).then((value) {
+        _firebaseFirestore.collection("ConsumerSeries").add({
+          "SeriesName": seriesName,
+          "emailID": _email,
+          "thumbnail": "",
+        });
+      }).then((value) async {
+        final collection =
+            await _firebaseFirestore.collection("ConsumerSeries").get();
+        final List<DocumentSnapshot> _document = collection.docs;
+
+        _document.forEach((element) {
+          if ((element.data()["emailID"] == _email) &&
+              (element.data()["SeriesName"] == seriesName)) {
+            print("If condition is called \n\n\n");
+            _consumerId = element.id.toString();
+            print(_consumerId);
+          }
+        });
+      }).then((value) {
+        print("updating function is called");
+        _firebaseFirestore
+            .collection("Series")
+            .doc(_email)
+            .collection("Series name")
+            .doc(seriesName)
+            .update({
+          "ConsumerID": _consumerId,
+        });
+      }).then((value) {
+        _firebaseFirestore
+            .collection("ConsumerSeries")
+            .doc(_consumerId)
+            .collection("Seasons")
+            .doc("Season 1")
+            .set({"Episodes": []});
       });
     } catch (e) {
       print(e);
@@ -79,13 +117,29 @@ class AddSeriesServices extends ChangeNotifier {
     For deleting an existing series
    */
   Future<void> deleteSeries({String inputText}) async {
-    await _firebaseFirestore
+    final collection = await _firebaseFirestore
         .collection("Series")
         .doc(_email)
         .collection("Series name")
         .doc(inputText)
-        .delete();
-    print("Deleted Successfully");
+        .get();
+    final String _consumerID = collection.data()["ConsumerID"].toString();
+
+    print(_consumerID);
+
+    await _firebaseFirestore
+        .collection("ConsumerSeries")
+        .doc(_consumerID)
+        .delete()
+        .then((value) async {
+      await _firebaseFirestore
+          .collection("Series")
+          .doc(_email)
+          .collection("Series name")
+          .doc(inputText)
+          .delete();
+      print("Deleted Successfully");
+    });
     notifyListeners();
   }
 
@@ -112,6 +166,11 @@ class AddSeriesServices extends ChangeNotifier {
 
       final List<DocumentSnapshot> documents = collection.docs;
 
+      /// I am accessing the document as well as the data inside it
+      /// the list will be formed as such [[ytjdfd, afafsd, ], [adfas, adfsa]]
+      /// where the first "[" denotes the document list
+      /// and second "[" denotes the array of episodes present in each document
+      /// where ytjdfd and siilar things are the document id of respective videos
       documents.forEach((element) {
         _episodeList.add(element.data()["Episode"]);
       });

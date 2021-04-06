@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/search_screen.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
-import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
@@ -90,68 +89,6 @@ class HomeScreenWidget extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class AwardWinningShowsWidget extends StatelessWidget {
-  const AwardWinningShowsWidget({
-    @required this.screenWidth,
-  });
-
-  final double screenWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: Container(
-        height: 120,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  color: Colors.green,
-                  child: Image.asset(
-                    'assets/movieOne.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  color: Colors.green,
-                  child: Image.asset(
-                    'assets/movieThree.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  color: Colors.green,
-                  child: Image.asset(
-                    'assets/movieTwo.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -246,7 +183,7 @@ class RecommendedShowWidget extends StatelessWidget {
                 ),
                 VideoGridWidget(
                   physics: NeverScrollableScrollPhysics(),
-                  count: 6,
+                  isMovie: false,
                 ),
                 BannerWidget(
                   banners[index],
@@ -276,7 +213,7 @@ class ContinueWatchingWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
       child: VideoGridWidget(
         physics: ScrollPhysics(),
-        fetchVideoDetails: Provider.of<UploadService>(context).getCurrentUrls,
+        isMovie: true,
       ),
     );
   }

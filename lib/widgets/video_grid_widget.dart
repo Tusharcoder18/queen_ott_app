@@ -1,57 +1,62 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/screens/season_details_screen.dart';
+import 'package:queen_ott_app/screens/test.dart';
+import 'package:queen_ott_app/services/series_fetching_service.dart';
+import 'package:queen_ott_app/services/video_fetching_service.dart';
+import 'package:provider/provider.dart';
 
 class VideoGridWidget extends StatefulWidget {
-  final Function
-      fetchVideoDetails; // We can use this to fetch future video types such as recommended, continue watching, language based, etc.
-  final int count;
+  VideoGridWidget({
+    this.isMovie,
+    this.physics,
+  });
+
+  final bool isMovie;
   final ScrollPhysics physics;
-  VideoGridWidget({this.fetchVideoDetails, this.count, this.physics});
+
   @override
   _VideoGridWidgetState createState() => _VideoGridWidgetState();
 }
 
 class _VideoGridWidgetState extends State<VideoGridWidget> {
-  bool isLoading = true;
-  String videoUrl;
-  String thumbnailUrl;
-  List<DocumentSnapshot> documents = [];
-  List<String> temp = [
-    'assets/movieOne.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieTwo.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieThree.jpg',
-    'assets/movieOne.jpg',
-    'assets/movieThree.jpg',
-  ];
+  List<String> _videoThumbnailList = [];
+  List<dynamic> _videoList = [];
+  List<String> _videoUrlList = [];
+  List<String> _videoNameList = [];
+  List<String> _videoDescriptionList = [];
+  List<String> _seriesThumbnail = [];
+  List<dynamic> _seriesList = [];
 
-  Future<void> getDetails() async {
-    documents = await widget.fetchVideoDetails();
+  Future<void> getInformation() async {
+    await context.read<VideoFetchingService>().fetchVideoList();
+
+    _videoThumbnailList =
+        context.read<VideoFetchingService>().returnVideoThumbnail();
+    _videoList = context.read<VideoFetchingService>().returnVideoList();
+    _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
+    _videoNameList = context.read<VideoFetchingService>().returnVideoNameList();
+    _videoDescriptionList =
+        context.read<VideoFetchingService>().returnVideoDescriptionList();
+
+    setState(() {});
   }
 
-  void updateDetails() {
-    setState(() {
-      isLoading = false;
-    });
+  Future<void> fetchSeries() async {
+    await context.read<SeriesFetchingService>().fetchSeriesList();
+    _seriesThumbnail =
+        context.read<SeriesFetchingService>().returnSeriesThumbnail();
+    _seriesList = context.read<SeriesFetchingService>().returnSeriesList();
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.fetchVideoDetails != null) {
-      getDetails().whenComplete(
-          () => updateDetails()); // Call this after layout is complete
-    } else {
-      documents.length = widget.count;
+    try {
+      getInformation();
+      fetchSeries();
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -66,17 +71,26 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
         crossAxisCount: 3,
         physics: widget.physics,
         childAspectRatio: 0.8,
-        children: List.generate(documents.length, (index) {
-          if (widget.fetchVideoDetails != null) {
-            videoUrl = documents[index].data()['videoUrl'] ?? '';
-            thumbnailUrl = documents[index].data()['thumbnailUrl'] ?? '';
-          }
+        children: List.generate(_videoThumbnailList.length, (index) {
           return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SeasonDetailScreen()));
+            onTap: () async {
+              await context
+                  .read<SeriesFetchingService>()
+                  .getSeasonAndEpisodeInfo(inputDocument: _seriesList[index]);
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                if (widget.isMovie) {
+                  return Test(
+                    videoUrl: _videoUrlList[index],
+                    thumbnailUrl: _videoThumbnailList[index],
+                  );
+                } else {
+                  return SeasonDetailScreen(
+                    videoThumbnail: _videoThumbnailList[index],
+                    indexNumber: index,
+                    consumerDocument: _seriesList[index].toString(),
+                  );
+                }
+              }));
             },
             child: Container(
               // margin: EdgeInsets.all(5),
@@ -92,18 +106,11 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
                           color: Colors.pink),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: (thumbnailUrl != null && thumbnailUrl != '')
-                            ? Image.network(
-                                thumbnailUrl,
-                                fit: BoxFit.cover,
-                                height: screenWidth * 0.54,
-                              )
-                            : Image.asset(
-                                temp[index],
-                                fit: BoxFit.cover,
-                                height: screenWidth * 0.37,
-                                width: screenWidth * 0.3,
-                              ),
+                        child: Image.network(
+                          _videoThumbnailList[index],
+                          fit: BoxFit.cover,
+                          height: screenWidth * 0.54,
+                        ),
                       ),
                     ),
                   ),
