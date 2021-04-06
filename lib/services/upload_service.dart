@@ -213,9 +213,6 @@ class UploadService extends ChangeNotifier {
           });
         }
       });
-    } else {
-      FirebaseFirestore.instance
-          .collection("VideoInfo")
     }
     /// If the video being uploaded does not belong to any series then
     else {
