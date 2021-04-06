@@ -66,35 +66,35 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 }
 
-class SearchScreeenFunction extends SearchDelegate<String> {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // TODO: implement buildActions
-    return [
-      IconButton(icon: Icon(Icons.close), onPressed: () {
-        query = '';
-      }),
-    ];
-  }
+// class SearchScreeenFunction extends SearchDelegate<String> {
+//   @override
+//   List<Widget> buildActions(BuildContext context) {
+//     // TODO: implement buildActions
+//     return [
+//       IconButton(icon: Icon(Icons.close), onPressed: () {
+//         query = '';
+//       }),
+//     ];
+//   }
 
-  @override
-  Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    return IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          close(context, null);
-        });
-  }
+//   @override
+//   Widget buildLeading(BuildContext context) {
+//     // TODO: implement buildLeading
+//     return IconButton(
+//         icon: Icon(Icons.arrow_back),
+//         onPressed: () {
+//           close(context, null);
+//         });
+//   }
 
-  @override
-  Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-  }
+//   @override
+//   Widget buildResults(BuildContext context) {
+//     // TODO: implement buildResults
+//   }
 
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    return 
-  }
-}
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     // TODO: implement buildSuggestions
+//     return ;
+//   }
+// }
