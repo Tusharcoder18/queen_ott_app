@@ -3,12 +3,10 @@ import 'package:queen_ott_app/screens/add_to_series_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 
-
 /// This button is present on the upload_screen.dart as button
 /// on clicking it, it should take the uploader to the new screen
 /// where it would take in all the necessary information to add the given
 /// video to the series
-
 
 class AddSeriesButton extends StatelessWidget {
   @override
@@ -16,9 +14,10 @@ class AddSeriesButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(top: 4.0),
       child: GestureDetector(
-        onTap: () async{
+        onTap: () async {
           await context.read<AddSeriesServices>().getSeriesInfo();
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddToSeriesScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddToSeriesScreen()));
         },
         child: Container(
           height: MediaQuery.of(context).size.height * 0.1,
@@ -36,10 +35,7 @@ class AddSeriesButton extends StatelessWidget {
               ),
               Text(
                 'Add to Series',
-                style: TextStyle(
-                  fontSize: 21.0,
-                  color: Colors.white38,
-                ),
+                style: Theme.of(context).textTheme.headline1,
               ),
             ],
           ),

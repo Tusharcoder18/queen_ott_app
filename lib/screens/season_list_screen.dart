@@ -15,7 +15,6 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
   List<dynamic> _episodeList = [];
   List<bool> _isChecked = [];
 
-
   /// This function would add new season to the list
   void _addNewSeason() {
     List<dynamic> _addNewList = [];
@@ -23,12 +22,11 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
     context.read<AddSeriesServices>().addNewSeason(length: _episodeList.length);
     print(_episodeList);
     _addIsChecked();
-    setState(() {
-    });
+    setState(() {});
   }
 
   /// This would add new _isChecked with a value of false
-  void _addIsChecked(){
+  void _addIsChecked() {
     _isChecked.add(false);
   }
 
@@ -36,12 +34,11 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
     _episodeList = context.read<AddSeriesServices>().returnEpisodeList();
     print(_episodeList);
     print(_episodeList.length);
-    for(int i = 0; i<_episodeList.length; i++){
+    for (int i = 0; i < _episodeList.length; i++) {
       _isChecked.add(false);
     }
     print(_isChecked);
-    setState(() {
-    });
+    setState(() {});
   }
 
   /// Just return the length of the no. of episodes in the given season
@@ -86,43 +83,63 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                      padding: const EdgeInsets.only(
+                                          top: 8.0, bottom: 8.0),
                                       child: Container(
-                                        height:  40,
+                                        height: 40,
                                         child: CheckboxListTile(
-                                          title: Text('Season ${index+1}'),
+                                          title: Text('Season ${index + 1}'),
                                           value: _isChecked[index],
-                                          onChanged: (bool value){
+                                          onChanged: (bool value) {
                                             setState(() {
-                                              if(_isChecked[index]){
+                                              if (_isChecked[index]) {
                                                 _isChecked[index] = false;
-                                                context.read<UploadService>().getCurrentSeason(index: -1);
-                                                context.read<UploadService>().getStatusOfChecked(status: false);
-                                              }
-                                              else{
+                                                context
+                                                    .read<UploadService>()
+                                                    .getCurrentSeason(
+                                                        index: -1);
+                                                context
+                                                    .read<UploadService>()
+                                                    .getStatusOfChecked(
+                                                        status: false);
+                                              } else {
                                                 _isChecked[index] = true;
-                                                context.read<UploadService>().getCurrentSeason(index: index);
-                                                context.read<UploadService>().getStatusOfChecked(status: true);
+                                                context
+                                                    .read<UploadService>()
+                                                    .getCurrentSeason(
+                                                        index: index);
+                                                context
+                                                    .read<UploadService>()
+                                                    .getStatusOfChecked(
+                                                        status: true);
                                               }
                                             });
                                           },
                                         ),
                                       ),
                                     ),
-                                    _episodeList.length == 0 ? Container() : Container(
-                                      height: _returnEpisodeListLength(index: index).toDouble()*40,
-                                      child: ListView.builder(
-                                        itemCount: _returnEpisodeListLength(
-                                            index: index),
-                                        itemBuilder: (context, index) {
-                                          return Container(
-                                            padding: EdgeInsets.only(left: 15.0),
-                                            height: 40,
-                                            child: Text("Episode ${index + 1}"),
-                                          );
-                                        },
-                                      ),
-                                    ),
+                                    _episodeList.length == 0
+                                        ? Container()
+                                        : Container(
+                                            height: _returnEpisodeListLength(
+                                                        index: index)
+                                                    .toDouble() *
+                                                40,
+                                            child: ListView.builder(
+                                              itemCount:
+                                                  _returnEpisodeListLength(
+                                                      index: index),
+                                              itemBuilder: (context, index) {
+                                                return Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 15.0),
+                                                  height: 40,
+                                                  child: Text(
+                                                      "Episode ${index + 1}"),
+                                                );
+                                              },
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),
@@ -134,7 +151,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
 
               /// This Container would contain the add new season button
               InkWell(
-                onTap: (){
+                onTap: () {
                   _addNewSeason();
                 },
                 child: Container(
@@ -152,9 +169,7 @@ class _SeasonListScreenState extends State<SeasonListScreen> {
                       ),
                       Text(
                         'Add New Episode',
-                        style: TextStyle(
-                          fontFamily: 'OpenSans',
-                            fontSize: 22.0, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline1,
                       )
                     ],
                   ),

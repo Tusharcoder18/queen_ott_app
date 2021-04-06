@@ -10,8 +10,6 @@ class AddToSeriesScreen extends StatefulWidget {
 }
 
 class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
-
-
   /// This contains info of the list that is there
   Widget _listInformation({String inputText, int indexNumber}) {
     return Container(
@@ -21,11 +19,11 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               print("Delete Service Called");
               context.read<AddSeriesServices>().deleteSeries(
-                  inputText: inputText,
-              );
+                    inputText: inputText,
+                  );
               print(_seriesNameList);
               setState(() {
                 _seriesNameList.remove(inputText);
@@ -37,12 +35,18 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
             ),
           ),
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               print("Index number = $indexNumber");
-              context.read<UploadService>().getCurrentSeries(currentSeries: inputText);
-              context.read<AddSeriesServices>().getEpisodeInfo(
-                seriesName: inputText
-              ).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen())));
+              context
+                  .read<UploadService>()
+                  .getCurrentSeries(currentSeries: inputText);
+              context
+                  .read<AddSeriesServices>()
+                  .getEpisodeInfo(seriesName: inputText)
+                  .then((value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SeasonListScreen())));
             },
             child: Container(
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -52,7 +56,10 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(inputText),
+                  Text(
+                    inputText,
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
                   Icon(Icons.chevron_right_rounded),
                 ],
               ),
@@ -62,7 +69,6 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
       ),
     );
   }
-
 
   /// This dialog box would pop up if the entered series is not unique
   Future<void> _showMyDialogIfNotUnique() async {
@@ -92,7 +98,6 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
     );
   }
 
-
   /// This is for the pop up window
   Future<void> _showMyDialog() async {
     String textFieldValue;
@@ -101,7 +106,10 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Series'),
+          title: Text(
+            'Add New Series',
+            style: Theme.of(context).textTheme.headline1,
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -127,21 +135,25 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
           actions: <Widget>[
             /// This is used to add series to the screen
             TextButton(
-              child: Text('Add'),
+              child: Text(
+                'Add',
+                style: Theme.of(context).textTheme.headline1,
+              ),
               onPressed: () {
-                if(_seriesNameList.indexOf(textFieldValue) < 0){
+                if (_seriesNameList.indexOf(textFieldValue) < 0) {
                   Provider.of<AddSeriesServices>(context, listen: false)
-                      .addNewSeries(
-                      seriesName: textFieldValue);
+                      .addNewSeries(seriesName: textFieldValue);
                   setState(() {
-                    _seriesList.add(SeriesInfoContainer(inputText: textFieldValue, notifyParent: refresh,));
+                    _seriesList.add(SeriesInfoContainer(
+                      inputText: textFieldValue,
+                      notifyParent: refresh,
+                    ));
                     _seriesNameList.add(textFieldValue);
                   });
                   Navigator.of(context).pop();
                 } else {
                   _showMyDialogIfNotUnique();
                 }
-
               },
             ),
           ],
@@ -151,8 +163,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
   }
 
   void refresh() {
-    setState(() {
-    });
+    setState(() {});
   }
 
   List<Widget> _seriesList = <Widget>[];
@@ -162,10 +173,10 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
   void initState() {
     super.initState();
     setState(() {
-      _seriesNameList = context.read<AddSeriesServices>().returnSeriesInfoList();
+      _seriesNameList =
+          context.read<AddSeriesServices>().returnSeriesInfoList();
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +184,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
       appBar: AppBar(
         title: Text(
           'Add to',
-          style: TextStyle(fontFamily: 'OpenSans'),
+          style: Theme.of(context).textTheme.headline1,
         ),
       ),
       body: SingleChildScrollView(
@@ -188,7 +199,10 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                 child: ListView.builder(
                   itemCount: _seriesNameList.length,
                   itemBuilder: (context, index) {
-                    return  _listInformation(inputText: _seriesNameList[index], indexNumber: index);//SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index, notifyParent: refresh,);
+                    return _listInformation(
+                        inputText: _seriesNameList[index],
+                        indexNumber:
+                            index); //SeriesInfoContainer(inputText: _seriesNameList[index], indexNumber: index, notifyParent: refresh,);
                   },
                 ),
               ),
@@ -220,11 +234,7 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
                       Container(
                         child: Text(
                           'Add new series',
-                          style: TextStyle(
-                            fontFamily: 'OpenSans',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20.0,
-                          ),
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
                     ],
@@ -239,15 +249,15 @@ class _AddToSeriesScreenState extends State<AddToSeriesScreen> {
   }
 }
 
-
 /// Widget which contains the bin icon, Series name and right arrow icon
 /// On clicked it would take you to the season Screen
 class SeriesInfoContainer extends StatefulWidget {
-  SeriesInfoContainer({@required this.inputText, this.indexNumber, this.notifyParent});
+  SeriesInfoContainer(
+      {@required this.inputText, this.indexNumber, this.notifyParent});
 
   final String inputText;
   final int indexNumber;
-  final Function()  notifyParent;
+  final Function() notifyParent;
 
   @override
   _SeriesInfoContainerState createState() => _SeriesInfoContainerState();
@@ -264,11 +274,11 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               print("Delete Service Called");
-              context.read<AddSeriesServices>().deleteSeries(
-                  inputText: widget.inputText
-              );
+              context
+                  .read<AddSeriesServices>()
+                  .deleteSeries(inputText: widget.inputText);
               widget.notifyParent();
             },
             child: Container(
@@ -276,12 +286,13 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
             ),
           ),
           GestureDetector(
-            onTap: () async{
+            onTap: () async {
               print("Index number = ${widget.indexNumber}");
-               context.read<AddSeriesServices>().getEpisodeNumber(
-                episodeNumber: widget.indexNumber
-              );
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>SeasonListScreen()));
+              context
+                  .read<AddSeriesServices>()
+                  .getEpisodeNumber(episodeNumber: widget.indexNumber);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SeasonListScreen()));
             },
             child: Container(
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -291,7 +302,10 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(widget.inputText),
+                  Text(
+                    widget.inputText,
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
                   Icon(Icons.chevron_right_rounded),
                 ],
               ),
@@ -302,5 +316,3 @@ class _SeriesInfoContainerState extends State<SeriesInfoContainer> {
     );
   }
 }
-
-

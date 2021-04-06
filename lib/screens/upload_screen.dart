@@ -29,7 +29,7 @@ class _UploadScreenState extends State<UploadScreen> {
         genre = value;
       });
 
-  void _setRefresh(){
+  void _setRefresh() {
     context.read<UploadService>().getStatusOfChecked(status: false);
     setState(() {
       name = '';
@@ -67,7 +67,7 @@ class _UploadScreenState extends State<UploadScreen> {
               children: [
                 Text('Add details'),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     _setRefresh();
                   },
                   child: Icon(Icons.refresh),
@@ -176,12 +176,7 @@ class _UploadButtonWidgetState extends State<UploadButtonWidget> {
         child: Center(
           child: Text(
             'UPLOAD',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.headline1,
           ),
         ),
       ),
@@ -233,8 +228,6 @@ Widget titleWidget(BuildContext context, double screenHeight) {
             Provider.of<UploadService>(context, listen: false)
                 .getVideoTitle(value);
           },
-        )
-        //Text('Crete a title', style: TextStyle(fontSize: 20.0),),
-        ),
+        )),
   );
 }

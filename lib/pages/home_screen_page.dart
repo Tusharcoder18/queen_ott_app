@@ -2,16 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/screens/search_screen.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
-import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
-
-final TextStyle _textStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 20,
-);
 
 class HomeScreenWidget extends StatelessWidget {
   // This is to give font style to the different headings
@@ -31,14 +26,28 @@ class HomeScreenWidget extends StatelessWidget {
       child: Container(
         width: screenWidth,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
-              width: double.infinity,
-              height: screenHeight * 0.05,
-              child: Text(
-                'Welcome $_name',
-                style: TextStyle(fontSize: screenHeight * 0.03),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Welcome $_name',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1
+                      .copyWith(fontSize: 20),
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchScreen()));
+                  },
+                  child: Icon(Icons.search),
+                ),
+              ],
             ),
             Container(
               height: screenHeight * 0.2,
@@ -80,68 +89,6 @@ class HomeScreenWidget extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class AwardWinningShowsWidget extends StatelessWidget {
-  const AwardWinningShowsWidget({
-    @required this.screenWidth,
-  });
-
-  final double screenWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: Container(
-        height: 120,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  color: Colors.green,
-                  child: Image.asset(
-                    'assets/movieOne.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  color: Colors.green,
-                  child: Image.asset(
-                    'assets/movieThree.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  height: 100,
-                  width: 200,
-                  color: Colors.green,
-                  child: Image.asset(
-                    'assets/movieTwo.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -231,12 +178,12 @@ class RecommendedShowWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Queen Originals',
-                    style: _textStyle,
+                    style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
                 VideoGridWidget(
                   physics: NeverScrollableScrollPhysics(),
-                  count: 6,
+                  isMovie: false,
                 ),
                 BannerWidget(
                   banners[index],
@@ -266,7 +213,7 @@ class ContinueWatchingWidget extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
       child: VideoGridWidget(
         physics: ScrollPhysics(),
-        fetchVideoDetails: Provider.of<UploadService>(context).getCurrentUrls,
+        isMovie: true,
       ),
     );
   }

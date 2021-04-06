@@ -16,25 +16,24 @@ class _ImageCarouselState extends State<ImageCarousel> {
   void initState() {
     super.initState();
     try {
-      
-    Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      if (_currentPage < 2) {
-        _currentPage++;
-      } else {
-        _currentPage = 0;
-      }
-      if(_pageController.hasClients){
-        _pageController.animateToPage(
-          _currentPage,
-          duration: Duration(milliseconds: 350),
-          curve: Curves.easeIn,
-        );
-      }
-    });
-        }catch (e) {
+      Timer.periodic(Duration(seconds: 3), (Timer timer) {
+        if (_currentPage < 2) {
+          _currentPage++;
+        } else {
+          _currentPage = 0;
+        }
+        if (_pageController.hasClients) {
+          _pageController.animateToPage(
+            _currentPage,
+            duration: Duration(milliseconds: 350),
+            curve: Curves.easeIn,
+          );
+        }
+      });
+    } catch (e) {
       print('Exception:$e');
     }
-      }
+  }
 
   @override
   Widget build(BuildContext context) {

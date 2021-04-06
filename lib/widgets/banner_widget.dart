@@ -18,7 +18,7 @@ class BannerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.pink,
-        image: DecorationImage(image: NetworkImage(image), fit: BoxFit.fill),
+        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
       ),
     );
   }

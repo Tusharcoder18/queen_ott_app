@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:provider/provider.dart';
@@ -50,14 +51,15 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          _appBar(screenHeight, screenWidth),
-          _episodesList(screenHeight, screenWidth)
+          _appBar(context, screenHeight, screenWidth),
+          _episodesList(context, screenHeight, screenWidth)
         ],
       ),
     );
   }
 
-  Widget _appBar(double screenHeight, double screenWidth) {
+  Widget _appBar(
+      BuildContext context, double screenHeight, double screenWidth) {
     return SliverAppBar(
       expandedHeight: screenHeight * 0.65,
       backgroundColor: Colors.black,
@@ -99,9 +101,10 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
                     children: [
                       Text(
                         videoName,
-                        style: TextStyle(
-                            fontSize: screenHeight * 0.035,
-                            color: Colors.white),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1
+                            .copyWith(fontSize: 20),
                       ),
                       SizedBox(
                         width: 5,
@@ -109,15 +112,125 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
                       SizedBox(
                         height: screenHeight * 0.01,
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: screenWidth * 0.17,
+                            height: screenHeight * 0.04,
+                            child: MaterialButton(
+                              onPressed: () {},
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18)),
+                              child: Text(
+                                'Action',
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          SizedBox(
+                            width: screenWidth * 0.17,
+                            height: screenHeight * 0.04,
+                            child: MaterialButton(
+                              onPressed: () {},
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18)),
+                              child: Text(
+                                'Drama',
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                              color: Colors.blueGrey,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          SizedBox(
+                            width: screenWidth * 0.17,
+                            height: screenHeight * 0.04,
+                            child: MaterialButton(
+                              onPressed: () {},
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18)),
+                              child: Text(
+                                'Sci-fi',
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                              color: Colors.blueGrey,
+                            ),
+                          )
+                        ],
+                      ),
                       SizedBox(height: screenHeight * 0.01),
                       Text(
                         seriesDescription,
-                        style: TextStyle(
-                            fontSize: screenHeight * 0.019,
-                            color: Colors.white),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(
                         height: 10,
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add,
+                                  size: screenWidth * 0.1,
+                                ),
+                                Text(
+                                  'Watch List',
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                              ],
+                            ),
+                            onPressed: () {},
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          TextButton(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(
+                                  FontAwesomeIcons.heart,
+                                  size: screenWidth * 0.08,
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text(
+                                  'Like',
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                              ],
+                            ),
+                            onPressed: () {},
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          TextButton(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.share,
+                                  size: screenWidth * 0.1,
+                                ),
+                                Text(
+                                  'Share',
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                              ],
+                            ),
+                            onPressed: () {},
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -130,7 +243,8 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
     );
   }
 
-  Widget _episodesList(double screenHeight, double screenWidth) {
+  Widget _episodesList(
+      BuildContext context, double screenHeight, double screenWidth) {
     return SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
@@ -191,59 +305,3 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
     );
   }
 }
-
-/// This row is for the genre
-/// currently commented
-//Row(
-//   mainAxisAlignment: MainAxisAlignment.start,
-//   children: [
-//     SizedBox(
-//       width: screenWidth * 0.17,
-//       height: screenHeight * 0.04,
-//       child: MaterialButton(
-//         onPressed: () {},
-//         shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(18)),
-//         child: Text(
-//           'Action',
-//           style: TextStyle(fontSize: 12),
-//         ),
-//         color: Colors.blueGrey,
-//       ),
-//     ),
-//     SizedBox(
-//       width: 5,
-//     ),
-//     SizedBox(
-//       width: screenWidth * 0.17,
-//       height: screenHeight * 0.04,
-//       child: MaterialButton(
-//         onPressed: () {},
-//         shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(18)),
-//         child: Text(
-//           'Drama',
-//           style: TextStyle(fontSize: 12),
-//         ),
-//         color: Colors.blueGrey,
-//       ),
-//     ),
-//     SizedBox(
-//       width: 5,
-//     ),
-//     SizedBox(
-//       width: screenWidth * 0.17,
-//       height: screenHeight * 0.04,
-//       child: MaterialButton(
-//         onPressed: () {},
-//         shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.circular(18)),
-//         child: Text(
-//           'Sci-fi',
-//           style: TextStyle(fontSize: 12),
-//         ),
-//         color: Colors.blueGrey,
-//       ),
-//     )
-//   ],
-// ),

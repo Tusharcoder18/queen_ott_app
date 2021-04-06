@@ -3,29 +3,12 @@ import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 
-class ShowsPage extends StatefulWidget {
+class UpcomingPage extends StatefulWidget {
   @override
-  _ShowsPageState createState() => _ShowsPageState();
+  _MoviesPageState createState() => _MoviesPageState();
 }
 
-class _ShowsPageState extends State<ShowsPage> {
-  // List<String> _seriesThumbnail = [];
-  // List<dynamic> _seriesList = [];
-
-  // Future<void> fetchSeries() async {
-  //   await context.read<SeriesFetchingService>().fetchSeriesList();
-  //   _seriesThumbnail =
-  //       context.read<SeriesFetchingService>().returnSeriesThumbnail();
-  //   _seriesList = context.read<SeriesFetchingService>().returnSeriesList();
-  //   setState(() {});
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchSeries();
-  // }
-
+class _MoviesPageState extends State<UpcomingPage> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -36,9 +19,9 @@ class _ShowsPageState extends State<ShowsPage> {
       'assets/movieOne.jpg',
     ];
     List<String> titles = [
-      'Popular Shows',
-      'Top Rated Shows',
-      'Premium Shows',
+      'Upcoming Shows',
+      'Upcoming Movies',
+      'Upcoming Series',
     ];
     return ListView(
       physics: ScrollPhysics(),
@@ -54,7 +37,7 @@ class _ShowsPageState extends State<ShowsPage> {
         ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: titles.length,
+            itemCount: banners.length,
             itemBuilder: (context, index) {
               return Container(
                 child: Column(
@@ -82,31 +65,6 @@ class _ShowsPageState extends State<ShowsPage> {
               );
             }),
       ],
-      // return SingleChildScrollView(
-      //   child: Container(
-      //     width: screenWidth,
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: Column(
-      //         crossAxisAlignment: CrossAxisAlignment.start,
-      //         children: [
-      //           Text('Shows you may like'),
-      //           SizedBox(height: 20,),
-      //           ShowGridViewWidget(
-      //             seriesThumbnailList: _seriesThumbnail,
-      //             seriesList: _seriesList,
-      //           ),
-      //           SizedBox(height: 20,),
-      //           Text('Action'),
-      //           SizedBox(height: 20,),
-      //           ShowGridViewWidget(
-      //             seriesThumbnailList: _seriesThumbnail,
-      //             seriesList: _seriesList,
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
     );
   }
 }

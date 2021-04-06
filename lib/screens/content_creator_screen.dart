@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/pages/analytics_page.dart';
 import 'package:queen_ott_app/pages/creator_screen_page.dart';
+import 'package:queen_ott_app/pages/monetization_page.dart';
 import 'package:queen_ott_app/pages/settings_page.dart';
 
 class ContentCreatorScreen extends StatefulWidget {
@@ -9,19 +11,10 @@ class ContentCreatorScreen extends StatefulWidget {
 
 class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Analytics',
-      style: optionStyle,
-    ),
+    AnalyticsPage(),
     CreatorScreenWidget(),
-    Text(
-      'Index 2: Monetization',
-      style: optionStyle,
-    ),
-    // TestPage(),
+    MonetizationPage(),
     SettingsPage(
       isCreator: true,
     ),
@@ -43,12 +36,8 @@ class _ContentCreatorScreenState extends State<ContentCreatorScreen> {
           children: [
             Text(
               'QUEEN',
-              style: TextStyle(
-                color: Colors.white,
-                letterSpacing: 2.0,
-                fontFamily: 'Roboto',
-                fontSize: 25.0,
-              ),
+              style:
+                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
             ),
             Container(
               height: 50,

@@ -17,7 +17,6 @@ class UploadService extends ChangeNotifier {
 
   String getUid; // This would get the uid of the uploaded video
 
-
   /// Function to get email address of the current user
   var email;
 
@@ -32,12 +31,11 @@ class UploadService extends ChangeNotifier {
   /// End of functions to get email address
   // DocumentReference videoInfo =
   // FirebaseFirestore.instance.collection("VideoInfo").doc(email[0].toString());
-  CollectionReference tempVideoInfo = FirebaseFirestore.instance.collection(
-      "VideoInfo");
+  CollectionReference tempVideoInfo =
+      FirebaseFirestore.instance.collection("VideoInfo");
   final Reference videoRef = FirebaseStorage.instance.ref().child("videos");
   final Reference thumbnailRef =
-  FirebaseStorage.instance.ref().child("thumbnails");
-
+      FirebaseStorage.instance.ref().child("thumbnails");
 
   /// This list is made to take in all the possible genre that the user has chosen
   List<String> genreList = [];
@@ -97,8 +95,7 @@ class UploadService extends ChangeNotifier {
   Future<List<String>> uploadVideo(BuildContext context,
       {File video, File thumbnail}) async {
     try {
-      final uid = Provider
-          .of<AuthenticationService>(context, listen: false)
+      final uid = Provider.of<AuthenticationService>(context, listen: false)
           .currentUser
           .uid;
       String name = uid + _videoTitle ?? '';
@@ -145,24 +142,25 @@ class UploadService extends ChangeNotifier {
     /// making if else condition for if else condition
     /// if returnCheckedValue() == true then that means it needs to
     /// be added to the series else in normal video it should be added
-    if(returnCheckedValue()){
-      FirebaseFirestore.instance.collection("SeriesVideoInfo")
+    if (returnCheckedValue()) {
+      FirebaseFirestore.instance
+          .collection("SeriesVideoInfo")
           .add({
-        'email': email,
-        'uploaderID': uid,
-        'title': _videoTitle ?? '',
-        'description': _videoDescription ?? '',
-        'genre': _videoGenre ?? '',
-        'date': date,
-        'time': time,
-        'videoUrl': videoUrl,
-        'thumbnailUrl': thumbnailUrl,
-      })
+            'email': email,
+            'uploaderID': uid,
+            'title': _videoTitle ?? '',
+            'description': _videoDescription ?? '',
+            'genre': _videoGenre ?? '',
+            'date': date,
+            'time': time,
+            'videoUrl': videoUrl,
+            'thumbnailUrl': thumbnailUrl,
+          })
           .then((value) => print("Data added to firebase!"))
           .catchError((error) => print("Failed to add user: $error"));
 
-      final collection = await FirebaseFirestore.instance.collection("SeriesVideoInfo")
-          .get();
+      final collection =
+          await FirebaseFirestore.instance.collection("SeriesVideoInfo").get();
       final List<DocumentSnapshot> documents = collection.docs;
 
       documents.forEach((element) {
@@ -172,50 +170,72 @@ class UploadService extends ChangeNotifier {
         }
       });
 
-      FirebaseFirestore.instance.collection("Series").doc(email).collection(
-          "Series name").doc(returnCurrentSeries()).collection("Episodes").doc("Episode${returnCurrentSeason()}").update({
-        "Episode" : FieldValue.arrayUnion([getUid])
-      }).then((value) async{
-        final collection = await FirebaseFirestore.instance.collection("Series").doc(email).collection("Series name").doc(returnCurrentSeries()).get();
+      FirebaseFirestore.instance
+          .collection("Series")
+          .doc(email)
+          .collection("Series name")
+          .doc(returnCurrentSeries())
+          .collection("Episodes")
+          .doc("Episode${returnCurrentSeason()}")
+          .update({
+        "Episode": FieldValue.arrayUnion([getUid])
+      }).then((value) async {
+        final collection = await FirebaseFirestore.instance
+            .collection("Series")
+            .doc(email)
+            .collection("Series name")
+            .doc(returnCurrentSeries())
+            .get();
         final String _consumerID = collection.data()["ConsumerID"].toString();
 
-        final consumerInstance =  FirebaseFirestore.instance.collection("ConsumerSeries");
+        final consumerInstance =
+            FirebaseFirestore.instance.collection("ConsumerSeries");
         print(consumerInstance);
 
-        if(returnCurrentSeason() == 1){
+        if (returnCurrentSeason() == 1) {
           await consumerInstance.doc(_consumerID).update({
-            "thumbnail" : thumbnailUrl,
+            "thumbnail": thumbnailUrl,
           });
-          consumerInstance.doc(_consumerID).collection("Seasons").doc("Season ${returnCurrentSeason()}").update({
-            "Episodes" : FieldValue.arrayUnion([getUid]),
+          consumerInstance
+              .doc(_consumerID)
+              .collection("Seasons")
+              .doc("Season ${returnCurrentSeason()}")
+              .update({
+            "Episodes": FieldValue.arrayUnion([getUid]),
           });
-        } else{
-          consumerInstance.doc(_consumerID).collection("Seasons").doc("Season ${returnCurrentSeason()}").update({
-            "Episodes" : FieldValue.arrayUnion([getUid]),
+        } else {
+          consumerInstance
+              .doc(_consumerID)
+              .collection("Seasons")
+              .doc("Season ${returnCurrentSeason()}")
+              .update({
+            "Episodes": FieldValue.arrayUnion([getUid]),
           });
         }
-
       });
+    } else {
+      FirebaseFirestore.instance
+          .collection("VideoInfo")
     }
     /// If the video being uploaded does not belong to any series then
     else {
       FirebaseFirestore.instance.collection("VideoInfo")
           .add({
-        'email': email,
-        'uploaderID': uid,
-        'title': _videoTitle ?? '',
-        'description': _videoDescription ?? '',
-        'genre': _videoGenre ?? '',
-        'date': date,
-        'time': time,
-        'videoUrl': videoUrl,
-        'thumbnailUrl': thumbnailUrl,
-      })
+            'email': email,
+            'uploaderID': uid,
+            'title': _videoTitle ?? '',
+            'description': _videoDescription ?? '',
+            'genre': _videoGenre ?? '',
+            'date': date,
+            'time': time,
+            'videoUrl': videoUrl,
+            'thumbnailUrl': thumbnailUrl,
+          })
           .then((value) => print("Data added to firebase!"))
           .catchError((error) => print("Failed to add user: $error"));
 
-      final collection = await FirebaseFirestore.instance.collection("VideoInfo")
-          .get();
+      final collection =
+          await FirebaseFirestore.instance.collection("VideoInfo").get();
       final List<DocumentSnapshot> documents = collection.docs;
 
       documents.forEach((element) {
@@ -287,7 +307,9 @@ class UploadService extends ChangeNotifier {
   void getStatusOfChecked({bool status}) {
     _isChecked = status;
     print(_isChecked);
-    print(returnCurrentSeason().toString() + '  ' + returnCurrentSeries().toString());
+    print(returnCurrentSeason().toString() +
+        '  ' +
+        returnCurrentSeries().toString());
   }
 
   String returnCurrentSeries() {
@@ -295,7 +317,7 @@ class UploadService extends ChangeNotifier {
   }
 
   int returnCurrentSeason() {
-    return (_currentSeason+1);
+    return (_currentSeason + 1);
   }
 
   bool returnCheckedValue() {
@@ -303,7 +325,6 @@ class UploadService extends ChangeNotifier {
   }
 
   /// End of all the functions to get the current situation of chosen Series, Season and the current checked Episode
-
 
   /// It returns the uid of the current uploaded video
 
@@ -314,10 +335,15 @@ class UploadService extends ChangeNotifier {
   /// End of returning uid of the current uploaded video
 
   Future<List<DocumentSnapshot>> getCurrentUrls() async {
-    final collection = await tempVideoInfo.get();
-    documents = collection.docs;
-    print('Documents are:');
-    return documents;
+    try {
+      final collection = await tempVideoInfo.get();
+      documents = collection.docs;
+      print('Documents are:');
+      return documents;
+    } catch (e) {
+      print('No Internet');
+      print(e);
+    }
   }
   /*
   This is to get the information of the
@@ -396,11 +422,9 @@ class UploadService extends ChangeNotifier {
 
   /// If the genre is present in the list then return true else return false
   bool isGenreInList({String genreName}) {
-    if (genreList.length == 0)
-      return false;
+    if (genreList.length == 0) return false;
     for (int i = 0; i < genreList.length; i++) {
-      if (genreList[i] == genreName)
-        return true;
+      if (genreList[i] == genreName) return true;
     }
     return false;
   }

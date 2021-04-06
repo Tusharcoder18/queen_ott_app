@@ -26,7 +26,7 @@ Widget addDescriptionWidget(
               size: 20.0,
             ),
             Container(
-              width: MediaQuery.of(context).size.width*0.7,
+              width: MediaQuery.of(context).size.width * 0.7,
               child: Text(
                 Provider.of<UploadService>(context, listen: false)
                             .returnVideoDescription() !=

@@ -25,10 +25,7 @@ class CustomButton extends StatelessWidget {
         children: <Widget>[
           icon != null ? icon : Icon(FontAwesomeIcons.sign),
           SizedBox(width: 10),
-          Text(text,
-              style: TextStyle(
-                  color: color != Colors.white ? Colors.white : Colors.black,
-                  fontSize: 16)),
+          Text(text, style: Theme.of(context).textTheme.headline1),
         ],
       ),
       textColor: color != Colors.white ? Colors.white : Colors.black,

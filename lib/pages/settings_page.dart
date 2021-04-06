@@ -54,12 +54,7 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(
           'Settings',
-          style: TextStyle(
-            color: Colors.white,
-            letterSpacing: 2.0,
-            fontFamily: 'Roboto',
-            fontSize: 25.0,
-          ),
+          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
         ),
       ),
       body: isLoading
