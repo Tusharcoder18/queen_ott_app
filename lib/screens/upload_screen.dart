@@ -138,12 +138,12 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      CustomButton(
-                        text: "Temp button to see fetching",
-                        onTap: () async {
-                          context.read<SeriesFetchingService>().fetchSeriesList();
-                        },
-                      ),
+                      // CustomButton(
+                      //   text: "Temp button to see fetching",
+                      //   onTap: () async {
+                      //     context.read<SeriesFetchingService>().fetchSeriesList();
+                      //   },
+                      // ),
                     ],
                   ),
                 ),

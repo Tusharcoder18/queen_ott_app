@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/models/season.dart';
+import 'package:queen_ott_app/models/series.dart';
+import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:provider/provider.dart';
 
 class SeasonDetailScreen extends StatefulWidget {
   SeasonDetailScreen(
-      {this.videoThumbnail, this.indexNumber, this.consumerDocument});
+    this.series,
+    // {this.videoThumbnail, this.indexNumber, this.consumerDocument}
+  );
 
-  final String videoThumbnail;
-  final int indexNumber;
-  final String consumerDocument;
+  final Series series;
+  // final String videoThumbnail;
+  // final int indexNumber;
+  // final String consumerDocument;
 
   /// this is the series document
 
@@ -19,29 +25,33 @@ class SeasonDetailScreen extends StatefulWidget {
 }
 
 class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
-  List<dynamic> _seasonList = [];
-  String videoName = "";
-  String seriesDescription = "";
+  Series _series;
+  // List<dynamic> _seasonList = [];
+  // String videoName = "";
+  // String seriesDescription = "";
+  // List<Series> _seriesList = [];
 
-  Future<void> getSeasonList() async {
-    _seasonList =
-        context.read<SeriesFetchingService>().returnSeasonAndEpisodeInfo();
-    print(_seasonList);
-    final name = await context
-        .read<SeriesFetchingService>()
-        .getSeriesName(documentName: widget.consumerDocument.toString());
-    videoName = name.toString();
-    final getSeriesDescription = await context
-        .read<SeriesFetchingService>()
-        .getSeriesDescription(documentName: _seasonList[0][0].toString());
-    seriesDescription = getSeriesDescription.toString();
-    setState(() {});
-  }
+  // Future<void> getSeasonList() async {
+  //   _seasonList =
+  //       context.read<SeriesFetchingService>().returnSeasonAndEpisodeInfo();
+  // print(_seasonList);
+  // final name = await context
+  //     .read<SeriesFetchingService>()
+  //     .getSeriesName(documentName: widget.consumerDocument.toString());
+  // videoName = name.toString();
+  // final getSeriesDescription = await context
+  //     .read<SeriesFetchingService>()
+  //     .getSeriesDescription(documentName: _seasonList[0][0].toString());
+  // seriesDescription = getSeriesDescription.toString();
+
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     super.initState();
-    getSeasonList();
+    // getSeasonList();
+    _series = widget.series;
   }
 
   @override
@@ -70,22 +80,16 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Hero(
-                tag: 'imageHero${widget.indexNumber}',
-                child: FadeInImage(
-                  placeholder: NetworkImage(widget.videoThumbnail),
-                  image: NetworkImage(widget.videoThumbnail),
-                  fit: BoxFit.cover,
-                ),
+              FadeInImage(
+                placeholder: NetworkImage(_series.getSeriesThumbnail()),
+                image: NetworkImage(_series.getSeriesThumbnail()),
+                fit: BoxFit.cover,
               ),
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    // begin: FractionalOffset.topCenter,
-                    // end: FractionalOffset.bottomCenter,
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    // stops: [0.1, 0.6, 1.0],
                     colors: [Colors.transparent, Colors.black],
                   ),
                 ),
@@ -100,7 +104,7 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        videoName,
+                        _series.getSeriesTitle(),
                         style: Theme.of(context)
                             .textTheme
                             .headline1
@@ -167,7 +171,7 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
                       ),
                       SizedBox(height: screenHeight * 0.01),
                       Text(
-                        seriesDescription,
+                        _series.getSeriesDescription(),
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       SizedBox(
@@ -245,6 +249,7 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
 
   Widget _episodesList(
       BuildContext context, double screenHeight, double screenWidth) {
+    List<Season> _seasons = _series.getSeriesSeasons();
     return SliverList(
       delegate: SliverChildListDelegate(
         <Widget>[
@@ -252,35 +257,34 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
             height: 200,
             width: screenWidth,
             child: ListView.builder(
-              itemCount: _seasonList.length,
+              itemCount: _seasons.length,
               itemBuilder: (context, index) {
+                List<Video> _episodes = _seasons[index].getSeasonEpisodes();
                 return Container(
                   height: 200,
                   width: 300,
                   color: Colors.black,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Season ${index + 1}'),
+                      Text('Season ${_seasons[index].getSeasonNumber()}'),
                       Container(
-                        height: _seasonList[index].length.toDouble() * 40,
+                        height: 100,
                         child: ListView.builder(
-                          itemCount: _seasonList[index].length,
+                          itemCount: _episodes.length,
                           itemBuilder: (context, eIndex) {
                             return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: InkWell(
                                 onTap: () async {
-                                  final videoUrl = await context
-                                      .read<SeriesFetchingService>()
-                                      .getUrl(
-                                          videoDocument: _seasonList[index]
-                                                  [eIndex]
-                                              .toString());
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => Test(
-                                        videoUrl: videoUrl.toString(),
+                                        videoUrl:
+                                            _episodes[index].getVideoUrl(),
+                                        thumbnailUrl: _episodes[index]
+                                            .getVideoThumbnail(),
                                       ),
                                     ),
                                   );

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/models/series.dart';
+import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
+import 'package:queen_ott_app/widgets/series_grid_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
+import 'package:provider/provider.dart';
 
 class ShowsPage extends StatefulWidget {
   @override
@@ -9,6 +13,7 @@ class ShowsPage extends StatefulWidget {
 }
 
 class _ShowsPageState extends State<ShowsPage> {
+  List<Series> _seriesList;
   // List<String> _seriesThumbnail = [];
   // List<dynamic> _seriesList = [];
 
@@ -25,6 +30,18 @@ class _ShowsPageState extends State<ShowsPage> {
   //   super.initState();
   //   fetchSeries();
   // }
+
+  @override
+  void initState() {
+    super.initState();
+
+    context
+        .read<SeriesFetchingService>()
+        .fetchSeriesList(context)
+        .whenComplete(() {
+      _seriesList = context.read<SeriesFetchingService>().getSeriesList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,9 +85,8 @@ class _ShowsPageState extends State<ShowsPage> {
                         style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
-                    VideoGridWidget(
+                    SeriesGridWidget(
                       physics: NeverScrollableScrollPhysics(),
-                      isMovie: false,
                     ),
                     BannerWidget(
                       banners[index],
@@ -82,31 +98,6 @@ class _ShowsPageState extends State<ShowsPage> {
               );
             }),
       ],
-      // return SingleChildScrollView(
-      //   child: Container(
-      //     width: screenWidth,
-      //     child: Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: Column(
-      //         crossAxisAlignment: CrossAxisAlignment.start,
-      //         children: [
-      //           Text('Shows you may like'),
-      //           SizedBox(height: 20,),
-      //           ShowGridViewWidget(
-      //             seriesThumbnailList: _seriesThumbnail,
-      //             seriesList: _seriesList,
-      //           ),
-      //           SizedBox(height: 20,),
-      //           Text('Action'),
-      //           SizedBox(height: 20,),
-      //           ShowGridViewWidget(
-      //             seriesThumbnailList: _seriesThumbnail,
-      //             seriesList: _seriesList,
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
     );
   }
 }

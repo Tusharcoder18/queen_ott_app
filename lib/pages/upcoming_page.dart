@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/models/series.dart';
+import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
+import 'package:queen_ott_app/widgets/series_grid_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
+import 'package:provider/provider.dart';
 
 class UpcomingPage extends StatefulWidget {
   @override
@@ -9,6 +13,20 @@ class UpcomingPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<UpcomingPage> {
+  List<Series> _seriesList;
+
+  @override
+  void initState() {
+    super.initState();
+
+    context
+        .read<SeriesFetchingService>()
+        .fetchSeriesList(context)
+        .whenComplete(() {
+      _seriesList = context.read<SeriesFetchingService>().getSeriesList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -51,9 +69,8 @@ class _MoviesPageState extends State<UpcomingPage> {
                         style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
-                    VideoGridWidget(
+                    SeriesGridWidget(
                       physics: NeverScrollableScrollPhysics(),
-                      isMovie: false,
                     ),
                     BannerWidget(
                       banners[index],
