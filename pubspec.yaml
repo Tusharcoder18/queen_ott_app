@@ -42,7 +42,7 @@ dependencies:
   settings_ui: ^0.6.0
   pull_to_refresh: ^1.6.4
   shared_preferences: ^2.0.5
-  flutter_staggered_grid_view: ^0.3.4
+  razorpay_flutter: ^1.2.0
 
 
 dev_dependencies:

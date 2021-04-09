@@ -38,7 +38,6 @@ class SeriesFetchingService extends ChangeNotifier {
       final seriesDescription = 'Temporary description';
       final seriesThumbnail = element.data()["thumbnail"];
       final seriesGenre = ['Action', 'Animation'];
-      await context.read<VideoFetchingService>().fetchVideoList();
       final episodes = context.read<VideoFetchingService>().getVideos();
       final seriesSeasons = [Season(1, episodes)];
 
