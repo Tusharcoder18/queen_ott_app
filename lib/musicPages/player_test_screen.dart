@@ -1,9 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:async/async.dart';
-import 'dart:io';
-import 'package:flutter/services.dart';
 import 'package:audio_manager/audio_manager.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 
 class MyAppAudio extends StatefulWidget {
   @override
@@ -12,6 +8,7 @@ class MyAppAudio extends StatefulWidget {
 
 class _MyAppAudioState extends State<MyAppAudio> {
   String _platformVersion = 'Unknown';
+  AudioManager _audioManagerInstance = AudioManager.instance;
   bool isPlaying = false;
   Duration _duration;
   Duration _position;
@@ -19,19 +16,22 @@ class _MyAppAudioState extends State<MyAppAudio> {
   double _sliderVolume;
   String _error;
   num curIndex = 0;
+  int _currentIndex = 0;
   PlayMode playMode = AudioManager.instance.playMode;
 
   final list = [
     {
       "title": "Assets",
       "desc": "assets playback",
-      "url": "https://firebasestorage.googleapis.com/v0/b/queenapp-81e7b.appspot.com/o/music%2FmusicOne.mp3?alt=media&token=93280c4a-c4f8-4934-a76b-1669823d3c09",
+      "url":
+          "https://firebasestorage.googleapis.com/v0/b/queenapp-81e7b.appspot.com/o/music%2FmusicOne.mp3?alt=media&token=93280c4a-c4f8-4934-a76b-1669823d3c09",
       "coverUrl": "assets/movieOne.jpg"
     },
     {
       "title": "network",
       "desc": "network resouce playback",
-      "url": "https://firebasestorage.googleapis.com/v0/b/queenapp-81e7b.appspot.com/o/music%2FmusicTwo.mp3?alt=media&token=bcd8c6b7-c7a8-4c3f-b839-4699f01a7a70",
+      "url":
+          "https://firebasestorage.googleapis.com/v0/b/queenapp-81e7b.appspot.com/o/music%2FmusicTwo.mp3?alt=media&token=bcd8c6b7-c7a8-4c3f-b839-4699f01a7a70",
       "coverUrl": "https://homepages.cae.wisc.edu/~ece533/images/airplane.png"
     }
   ];
@@ -40,50 +40,71 @@ class _MyAppAudioState extends State<MyAppAudio> {
   void initState() {
     super.initState();
 
-    initPlatformState();
-    setupAudio();
-    loadFile();
+    //initPlatformState();
+    //setupAudio();
+    //loadFile();
+    onScreenSetUpAudio();
   }
 
   @override
   void dispose() {
-    // 释放所有资源
     AudioManager.instance.release();
     super.dispose();
+    _audioManagerInstance.release();
   }
 
-  void setupAudio() {
+  ///increment the list by on number
+  void nextAudio() {
+    _currentIndex += 1;
+    setState(() {});
+  }
+
+  void previousAudio() {
+    _currentIndex -= 1;
+    setState(() {});
+  }
+
+  Future<void> onScreenSetUpAudio() async {
     List<AudioInfo> _list = [];
-    list.forEach((item) => _list.add(AudioInfo(item["url"],
-        title: item["title"], desc: item["desc"], coverUrl: item["coverUrl"])));
+    list.forEach(
+      (element) {
+        _list.add(
+          AudioInfo(
+            element["url"],
+            title: element["title"],
+            desc: element["desc"],
+            coverUrl: element["coverUrl"],
+          ),
+        );
+      },
+    );
+    _audioManagerInstance.audioList = _list;
+    _audioManagerInstance.intercepter = true;
+    _audioManagerInstance.play(auto: true);
 
-    AudioManager.instance.audioList = _list;
-    AudioManager.instance.intercepter = true;
-    AudioManager.instance.play(auto: false);
-
-    AudioManager.instance.onEvents((events, args) {
+    _audioManagerInstance.onEvents((events, args) {
       print("$events, $args");
       switch (events) {
         case AudioManagerEvents.start:
           print(
-              "start load data callback, curIndex is ${AudioManager.instance.curIndex}");
-          _position = AudioManager.instance.position;
-          _duration = AudioManager.instance.duration;
+              "start load data callback, curIndex is ${_audioManagerInstance.curIndex}");
+          _position = _audioManagerInstance.position;
+          _duration = _audioManagerInstance.duration;
           _slider = 0;
           setState(() {});
           break;
         case AudioManagerEvents.ready:
           print("ready to play");
           _error = null;
-          _sliderVolume = AudioManager.instance.volume;
-          _position = AudioManager.instance.position;
-          _duration = AudioManager.instance.duration;
+          _sliderVolume = _audioManagerInstance.volume;
+          _position = _audioManagerInstance.position;
+          _duration = _audioManagerInstance.duration;
           setState(() {});
           // if you need to seek times, must after AudioManagerEvents.ready event invoked
           // AudioManager.instance.seekTo(Duration(seconds: 10));
           break;
         case AudioManagerEvents.seekComplete:
-          _position = AudioManager.instance.position;
+          _position = _audioManagerInstance.position;
           _slider = _position.inMilliseconds / _duration.inMilliseconds;
           setState(() {});
           print("seek event is completed. position is [$args]/ms");
@@ -92,24 +113,24 @@ class _MyAppAudioState extends State<MyAppAudio> {
           print("buffering $args");
           break;
         case AudioManagerEvents.playstatus:
-          isPlaying = AudioManager.instance.isPlaying;
+          isPlaying = _audioManagerInstance.isPlaying;
           setState(() {});
           break;
         case AudioManagerEvents.timeupdate:
-          _position = AudioManager.instance.position;
+          _position = _audioManagerInstance.position;
           _slider = _position.inMilliseconds / _duration.inMilliseconds;
           setState(() {});
-          AudioManager.instance.updateLrc(args["position"].toString());
+          _audioManagerInstance.updateLrc(args["position"].toString());
           break;
         case AudioManagerEvents.error:
           _error = args;
           setState(() {});
           break;
         case AudioManagerEvents.ended:
-          AudioManager.instance.next();
+          _audioManagerInstance.next();
           break;
         case AudioManagerEvents.volumeChange:
-          _sliderVolume = AudioManager.instance.volume;
+          _sliderVolume = _audioManagerInstance.volume;
           setState(() {});
           break;
         default:
@@ -118,50 +139,13 @@ class _MyAppAudioState extends State<MyAppAudio> {
     });
   }
 
-  void loadFile() async {
-    // read bundle file to local path
-    final audioFile = await rootBundle.load("assets/aLIEz.m4a");
-    final audio = audioFile.buffer.asUint8List();
-
-    final appDocDir = await getApplicationDocumentsDirectory();
-    print(appDocDir);
-
-    final file = File("${appDocDir.path}/aLIEz.m4a");
-    file.writeAsBytesSync(audio);
-
-    AudioInfo info = AudioInfo("file://${file.path}",
-        title: "file", desc: "local file", coverUrl: "assets/aLIEz.jpg");
-
-    list.add(info.toJson());
-    AudioManager.instance.audioList.add(info);
-    setState(() {});
-  }
-
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    try {
-      platformVersion = await AudioManager.instance.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin audio player'),
-        ),
         body: Center(
           child: Column(
             children: <Widget>[
-              Text('Running on: $_platformVersion\n'),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: volumeFrame(),
@@ -173,7 +157,10 @@ class _MyAppAudioState extends State<MyAppAudio> {
                         title: Text(list[index]["title"],
                             style: TextStyle(fontSize: 18)),
                         subtitle: Text(list[index]["desc"]),
-                        onTap: () => AudioManager.instance.play(index: index),
+                        onTap: () {
+                          _currentIndex = index;
+                          _audioManagerInstance.play(index: index);
+                        },
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) =>
@@ -183,7 +170,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
               Center(
                   child: Text(_error != null
                       ? _error
-                      : "${AudioManager.instance.info.title} lrc text: ${_formatDuration(_position)}")),
+                      : "${_audioManagerInstance.info.title} lrc text: ${_formatDuration(_position)}")),
               bottomPanel()
             ],
           ),
@@ -206,19 +193,29 @@ class _MyAppAudioState extends State<MyAppAudio> {
             IconButton(
                 icon: getPlayModeIcon(playMode),
                 onPressed: () {
-                  playMode = AudioManager.instance.nextMode();
+                  playMode = _audioManagerInstance.nextMode();
                   setState(() {});
                 }),
             IconButton(
                 iconSize: 36,
                 icon: Icon(
                   Icons.skip_previous,
-                  color: Colors.black,
+                  color: _currentIndex > 0 ? Colors.black : Colors.black12,
                 ),
-                onPressed: () => AudioManager.instance.previous()),
+                onPressed: () {
+                  if (_currentIndex > 0) {
+                    previousAudio();
+                    _audioManagerInstance.play(index: _currentIndex);
+                  }
+                }),
             IconButton(
               onPressed: () async {
-                bool playing = await AudioManager.instance.playOrPause();
+                bool playing = _audioManagerInstance.isPlaying;
+                if (playing == true) {
+                  _audioManagerInstance.toPause();
+                } else {
+                  _audioManagerInstance.play(index: _currentIndex);
+                }
                 print("await -- $playing");
               },
               padding: const EdgeInsets.all(0.0),
@@ -232,15 +229,22 @@ class _MyAppAudioState extends State<MyAppAudio> {
                 iconSize: 36,
                 icon: Icon(
                   Icons.skip_next,
-                  color: Colors.black,
+                  color: _currentIndex + 1 < list.length
+                      ? Colors.black
+                      : Colors.black12,
                 ),
-                onPressed: () => AudioManager.instance.next()),
+                onPressed: () async {
+                  if (_currentIndex + 1 < list.length) {
+                    nextAudio();
+                    _audioManagerInstance.play(index: _currentIndex);
+                  }
+                }),
             IconButton(
                 icon: Icon(
                   Icons.stop,
                   color: Colors.black,
                 ),
-                onPressed: () => AudioManager.instance.stop()),
+                onPressed: () => _audioManagerInstance.stop()),
           ],
         ),
       ),
@@ -305,8 +309,8 @@ class _MyAppAudioState extends State<MyAppAudio> {
                     if (_duration != null) {
                       Duration msec = Duration(
                           milliseconds:
-                          (_duration.inMilliseconds * value).round());
-                      AudioManager.instance.seekTo(msec);
+                              (_duration.inMilliseconds * value).round());
+                      _audioManagerInstance.seekTo(msec);
                     }
                   },
                 )),
@@ -339,7 +343,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
             color: Colors.black,
           ),
           onPressed: () {
-            AudioManager.instance.setVolume(0);
+            _audioManagerInstance.setVolume(0);
           }),
       Expanded(
           child: Padding(
@@ -349,10 +353,90 @@ class _MyAppAudioState extends State<MyAppAudio> {
                 onChanged: (value) {
                   setState(() {
                     _sliderVolume = value;
-                    AudioManager.instance.setVolume(value, showVolume: true);
+                    _audioManagerInstance.setVolume(value, showVolume: true);
                   });
                 },
               )))
     ]);
   }
 }
+
+// Future<void> setupAudio() async {
+//   List<AudioInfo> _list = [];
+//   list.forEach((item) => _list.add(AudioInfo(item["url"],
+//       title: item["title"], desc: item["desc"], coverUrl: item["coverUrl"])));
+//
+//   AudioManager.instance.audioList = _list;
+//   AudioManager.instance.intercepter = true;
+//   AudioManager.instance.play(auto: false);
+//
+//   AudioManager.instance.onEvents((events, args) {
+//     print("$events, $args");
+//     switch (events) {
+//       case AudioManagerEvents.start:
+//         print(
+//             "start load data callback, curIndex is ${AudioManager.instance.curIndex}");
+//         _position = AudioManager.instance.position;
+//         _duration = AudioManager.instance.duration;
+//         _slider = 0;
+//         setState(() {});
+//         break;
+//       case AudioManagerEvents.ready:
+//         print("ready to play");
+//         _error = null;
+//         _sliderVolume = AudioManager.instance.volume;
+//         _position = AudioManager.instance.position;
+//         _duration = AudioManager.instance.duration;
+//         setState(() {});
+//         // if you need to seek times, must after AudioManagerEvents.ready event invoked
+//         // AudioManager.instance.seekTo(Duration(seconds: 10));
+//         break;
+//       case AudioManagerEvents.seekComplete:
+//         _position = AudioManager.instance.position;
+//         _slider = _position.inMilliseconds / _duration.inMilliseconds;
+//         setState(() {});
+//         print("seek event is completed. position is [$args]/ms");
+//         break;
+//       case AudioManagerEvents.buffering:
+//         print("buffering $args");
+//         break;
+//       case AudioManagerEvents.playstatus:
+//         isPlaying = AudioManager.instance.isPlaying;
+//         setState(() {});
+//         break;
+//       case AudioManagerEvents.timeupdate:
+//         _position = AudioManager.instance.position;
+//         _slider = _position.inMilliseconds / _duration.inMilliseconds;
+//         setState(() {});
+//         AudioManager.instance.updateLrc(args["position"].toString());
+//         break;
+//       case AudioManagerEvents.error:
+//         _error = args;
+//         setState(() {});
+//         break;
+//       case AudioManagerEvents.ended:
+//         AudioManager.instance.next();
+//         break;
+//       case AudioManagerEvents.volumeChange:
+//         _sliderVolume = AudioManager.instance.volume;
+//         setState(() {});
+//         break;
+//       default:
+//         break;
+//     }
+//   });
+// }
+
+// Future<void> initPlatformState() async {
+//   String platformVersion;
+//   try {
+//     platformVersion = await AudioManager.instance.platformVersion;
+//   } on PlatformException {
+//     platformVersion = 'Failed to get platform version.';
+//   }
+//   if (!mounted) return;
+//
+//   setState(() {
+//     _platformVersion = platformVersion;
+//   });
+// }

@@ -46,6 +46,7 @@ dependencies:
   audio_service: ^0.17.0
   just_audio: ^0.7.3
   audio_manager: ^0.7.3
+  chewie_audio: ^1.2.0
 
 
 dev_dependencies:

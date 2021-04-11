@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'player_test_screen.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,13 +32,27 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 50,),
-              MusicHorizontalScrollWidget(headingText: 'Trending Playlist',),
-              SizedBox(height: 50,),
-              MusicHorizontalScrollWidget(headingText: 'Featured This week',),
-              SizedBox(height: 50,),
-              MusicHorizontalScrollWidget(headingText: 'New Arrival',),
-              SizedBox(height: 50,),
+              SizedBox(
+                height: 50,
+              ),
+              MusicHorizontalScrollWidget(
+                headingText: 'Trending Playlist',
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              MusicHorizontalScrollWidget(
+                headingText: 'Featured This week',
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              MusicHorizontalScrollWidget(
+                headingText: 'New Arrival',
+              ),
+              SizedBox(
+                height: 50,
+              ),
             ],
           ),
         ),
@@ -46,11 +62,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 class MusicHorizontalScrollWidget extends StatelessWidget {
-
   MusicHorizontalScrollWidget({@required this.headingText});
 
   final String headingText;
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,30 +79,44 @@ class MusicHorizontalScrollWidget extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  height: 150,
-                  width: 150,
-                  child: Image.asset('assets/musicImage1.jpg'),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyAppAudio()));
+                  },
+                  child: Container(
+                    height: 150,
+                    width: 150,
+                    child: Image.asset('assets/musicImage1.jpg'),
+                  ),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   height: 150,
                   width: 150,
                   child: Image.asset('assets/musicImage2.jpg'),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   height: 150,
                   width: 150,
                   child: Image.asset('assets/musicImage3.jpg'),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
                 Container(
                   height: 150,
                   width: 150,
                   child: Image.asset('assets/musicImage4.jpg'),
                 ),
-                SizedBox(width: 10,),
+                SizedBox(
+                  width: 10,
+                ),
               ],
             ),
           ),
