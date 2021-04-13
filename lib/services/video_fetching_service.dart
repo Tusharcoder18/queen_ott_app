@@ -15,6 +15,43 @@ class VideoFetchingService extends ChangeNotifier {
   // List<String> _videoDescriptionList = [];
   List<Video> _videos = [];
 
+  // List<List<String>> _genreList = [];
+  // List<String> _genreCollectionList = [
+  //   "VideoActionCollection",
+  //   "VideoAnimationCollection",
+  //   "VideoCrimeCollection",
+  //   "VideoComedyCollection",
+  //   "VideoDramaCollection",
+  //   "VideoFantasyCollection",
+  //   "VideoHistoricalCollection",
+  //   "VideoHorrorCollection",
+  //   "VideoRomanceCollection"
+  // ];
+  //
+  // /// The list contains all the list for all the genre
+
+  /// This is the list for all the genre
+  List<String> _actionList = [];
+  List<String> _animationList = [];
+  List<String> _crimeList = [];
+  List<String> _comedyList = [];
+  List<String> _dramaList = [];
+  List<String> _fantasyList = [];
+  List<String> _historicalList = [];
+  List<String> _horrorList = [];
+  List<String> _romanceList = [];
+
+  /// The variables are for the collection fetching
+  String _videoActionCollection = "VideoActionCollection";
+  String _videoAnimationCollection = "VideoAnimationCollection";
+  String _videoCrimeCollection = "VideoCrimeCollection";
+  String _videoComedyCollection = "VideoComedyCollection";
+  String _videoDramaCollection = "VideoDramaCollection";
+  String _videoFantasyCollection = "VideoFantasyCollection";
+  String _videoHistoricalCollection = "VideoHistoricalCollection";
+  String _videoHorrorCollection = "VideoHorrorCollection";
+  String _videoRomanceCollection = "VideoRomanceCollection";
+
   /// To fetch all the videos that are there in the database
   Future<void> fetchVideoList() async {
     // _videoList = [];

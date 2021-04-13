@@ -213,9 +213,10 @@ class UploadService extends ChangeNotifier {
           });
         }
       });
-    } else {
-      FirebaseFirestore.instance
-          .collection("VideoInfo")
+    }
+    /// If the video being uploaded does not belong to any series then
+    else {
+      FirebaseFirestore.instance.collection("VideoInfo")
           .add({
             'email': email,
             'uploaderID': uid,
@@ -238,6 +239,48 @@ class UploadService extends ChangeNotifier {
         if (videoUrl == element.data()["videoUrl"]) {
           getUid = element.id.toString();
           print("UID ===== $getUid");
+        }
+      });
+
+      String videoActionCollection = "VideoActionCollection";
+      String videoAnimationCollection = "VideoAnimationCollection";
+      String videoCrimeCollection = "VideoCrimeCollection";
+      String videoComedyCollection = "VideoComedyCollection";
+      String videoDramaCollection = "VideoDramaCollection";
+      String videoFantasyCollection = "VideoFantasyCollection";
+      String videoHistoricalCollection = "VideoHistoricalCollection";
+      String videoHorrorCollection = "VideoHorrorCollection";
+      String videoRomanceCollection = "VideoRomanceCollection";
+
+      FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+      void addVideoToGenreDatabase({String collectionName}){
+        _firebaseFirestore.collection(collectionName).add({
+          "videoRef" : getUid,
+        });
+      }
+
+
+      genreList.forEach((element) {
+        switch(element){
+          case "Action": addVideoToGenreDatabase(collectionName: videoActionCollection);
+          break;
+          case "Animation": addVideoToGenreDatabase(collectionName: videoAnimationCollection);
+          break;
+          case "Crime": addVideoToGenreDatabase(collectionName: videoCrimeCollection);
+          break;
+          case "Comedy": addVideoToGenreDatabase(collectionName: videoComedyCollection);
+          break;
+          case "Drama": addVideoToGenreDatabase(collectionName: videoDramaCollection);
+          break;
+          case "Fantasy": addVideoToGenreDatabase(collectionName: videoFantasyCollection);
+          break;
+          case "Historical": addVideoToGenreDatabase(collectionName: videoHistoricalCollection);
+          break;
+          case "Horror": addVideoToGenreDatabase(collectionName: videoHorrorCollection);
+          break;
+          case "Romance": addVideoToGenreDatabase(collectionName: videoRomanceCollection);
+          break;
         }
       });
     }

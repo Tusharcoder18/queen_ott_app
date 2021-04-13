@@ -4,6 +4,8 @@ import 'package:queen_ott_app/pages/settings_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../screens/music_home_screen.dart';
+
 class MenuPage extends StatelessWidget {
   final bool isCreator;
   MenuPage({this.isCreator});
@@ -17,7 +19,14 @@ class MenuPage extends StatelessWidget {
             child: SettingsTile(
               title: 'Music',
               leading: Icon(FontAwesomeIcons.music),
-              onPressed: (context) {},
+              onPressed: (context) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MusicHomeScreen(),
+                  ),
+                );
+              },
             ),
           ),
           CustomSection(
