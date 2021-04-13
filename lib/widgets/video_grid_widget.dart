@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/screens/season_details_screen.dart';
+import 'package:queen_ott_app/models/series.dart';
+import 'package:queen_ott_app/models/video.dart';
+import 'package:queen_ott_app/screens/series_details_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
@@ -7,56 +9,98 @@ import 'package:provider/provider.dart';
 
 class VideoGridWidget extends StatefulWidget {
   VideoGridWidget({
-    this.isMovie,
+    this.isVideo,
+    this.isSeries,
     this.physics,
+    this.videos,
+    this.series,
+    // this.isSearchGrid,
+    // this.videoThumbnailList,
+    // this.videoUrlList,
+    // this.seriesList,
+    // this.seriesThumbnailList,
   });
 
-  final bool isMovie;
+  final List<Video> videos;
+  final List<Series> series;
+  final bool isVideo;
+  final bool isSeries;
   final ScrollPhysics physics;
+  // This is temporary to show results for search functionality
+  // final bool isSearchGrid;
+  // final List<String> videoThumbnailList;
+  // final List<String> videoUrlList;
+  // final List<dynamic> seriesList;
+  // final List<String> seriesThumbnailList;
 
   @override
   _VideoGridWidgetState createState() => _VideoGridWidgetState();
 }
 
 class _VideoGridWidgetState extends State<VideoGridWidget> {
-  List<String> _videoThumbnailList = [];
-  List<dynamic> _videoList = [];
-  List<String> _videoUrlList = [];
-  List<String> _videoNameList = [];
-  List<String> _videoDescriptionList = [];
-  List<String> _seriesThumbnail = [];
-  List<dynamic> _seriesList = [];
+  List gridContents = [];
+  // List<String> _videoThumbnailList = [];
+  // List<dynamic> _videoList = [];
+  // List<String> _videoUrlList = [];
+  // List<String> _videoNameList = [];
+  // List<String> _videoDescriptionList = [];
+  // List<String> _seriesThumbnailList = [];
+  // List<dynamic> _seriesList = [];
 
-  Future<void> getInformation() async {
-    await context.read<VideoFetchingService>().fetchVideoList();
+  // Future<void> fetchVideos() async {
+  //   await context.read<VideoFetchingService>().fetchVideoList();
 
-    _videoThumbnailList =
-        context.read<VideoFetchingService>().returnVideoThumbnail();
-    _videoList = context.read<VideoFetchingService>().returnVideoList();
-    _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
-    _videoNameList = context.read<VideoFetchingService>().returnVideoNameList();
-    _videoDescriptionList =
-        context.read<VideoFetchingService>().returnVideoDescriptionList();
+  //   _videoThumbnailList =
+  //       context.read<VideoFetchingService>().returnVideoThumbnail();
+  //   _videoList = context.read<VideoFetchingService>().returnVideoList();
+  //   _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
+  //   _videoNameList = context.read<VideoFetchingService>().returnVideoNameList();
+  //   _videoDescriptionList =
+  //       context.read<VideoFetchingService>().returnVideoDescriptionList();
 
-    setState(() {});
-  }
+  //   setState(() {});
+  // }
 
-  Future<void> fetchSeries() async {
-    await context.read<SeriesFetchingService>().fetchSeriesList();
-    _seriesThumbnail =
-        context.read<SeriesFetchingService>().returnSeriesThumbnail();
-    _seriesList = context.read<SeriesFetchingService>().returnSeriesList();
-    setState(() {});
-  }
+  // Future<void> fetchSeries() async {
+  //   await context.read<SeriesFetchingService>().fetchSeriesList();
+  //   _seriesThumbnailList =
+  //       context.read<SeriesFetchingService>().returnSeriesThumbnail();
+  //   _seriesList = context.read<SeriesFetchingService>().returnSeriesList();
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     super.initState();
-    try {
-      getInformation();
-      fetchSeries();
-    } catch (e) {
-      print(e);
+    // try {
+    //   if (widget.isSearchGrid == null || widget.isSearchGrid == false) {
+    //     fetchVideos();
+    //     fetchSeries();
+    //   } else {
+    //     _videoThumbnailList = widget.videoThumbnailList;
+    //     _videoUrlList = widget.videoUrlList;
+    //     _seriesList = widget.seriesList;
+    //     _seriesThumbnailList = widget.seriesThumbnailList;
+    //     print(_videoThumbnailList);
+    //     print(_videoUrlList);
+    //   }
+    // } catch (e) {
+    //   print(e);
+    // }
+    // gridContents = widget.videos;
+    // gridContents.forEach((element) {
+    //   print(element.getVideoTitle());
+    // });
+    if (widget.isVideo) {
+      print('video');
+      gridContents = <Video>[];
+      gridContents = widget.videos;
+      print(gridContents.length);
+    } else if (widget.isSeries) {
+      print('series');
+      gridContents = <Series>[];
+      gridContents = widget.series;
+      print(gridContents.length);
     }
   }
 
@@ -71,29 +115,25 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
         crossAxisCount: 3,
         physics: widget.physics,
         childAspectRatio: 0.8,
-        children: List.generate(_videoThumbnailList.length, (index) {
+        children: List.generate(gridContents.length, (index) {
           return GestureDetector(
             onTap: () async {
-              await context
-                  .read<SeriesFetchingService>()
-                  .getSeasonAndEpisodeInfo(inputDocument: _seriesList[index]);
+              // if (!widget.isMovie)
+              //   await context
+              //       .read<SeriesFetchingService>()
+              //       .getSeasonAndEpisodeInfo(inputDocument: _seriesList[index]);
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                if (widget.isMovie) {
+                if (widget.isVideo) {
                   return Test(
-                    videoUrl: _videoUrlList[index],
-                    thumbnailUrl: _videoThumbnailList[index],
+                    videoUrl: gridContents[index].getVideoUrl(),
+                    thumbnailUrl: gridContents[index].getVideoThumbnail(),
                   );
-                } else {
-                  return SeasonDetailScreen(
-                    videoThumbnail: _videoThumbnailList[index],
-                    indexNumber: index,
-                    consumerDocument: _seriesList[index].toString(),
-                  );
+                } else if (widget.isSeries) {
+                  return SeasonDetailScreen(gridContents[index]);
                 }
               }));
             },
             child: Container(
-              // margin: EdgeInsets.all(5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -107,7 +147,9 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: Image.network(
-                          _videoThumbnailList[index],
+                          widget.isVideo
+                              ? gridContents[index].getVideoThumbnail()
+                              : gridContents[index].getSeriesThumbnail(),
                           fit: BoxFit.cover,
                           height: screenWidth * 0.54,
                         ),

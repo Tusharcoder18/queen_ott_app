@@ -1,11 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/models/series.dart';
+import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/screens/search_screen.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
+import 'package:queen_ott_app/services/series_fetching_service.dart';
+import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
+import 'package:queen_ott_app/widgets/movie_grid_widget.dart';
+import 'package:queen_ott_app/widgets/series_grid_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 
 class HomeScreenWidget extends StatelessWidget {
@@ -38,15 +45,13 @@ class HomeScreenWidget extends StatelessWidget {
                       .headline1
                       .copyWith(fontSize: 20),
                 ),
-                MaterialButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SearchScreen()));
-                  },
-                  child: Icon(Icons.search),
-                ),
+                IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      showSearch(
+                          context: context,
+                          delegate: SearchScreeenDelegate(context));
+                    }),
               ],
             ),
             Container(
@@ -148,7 +153,7 @@ class LanguageShowsWidget extends StatelessWidget {
 }
 
 // This Widget contains all the shows to be displayed under recommended shows
-class RecommendedShowWidget extends StatelessWidget {
+class RecommendedShowWidget extends StatefulWidget {
   const RecommendedShowWidget({
     @required this.screenWidth,
     @required this.screenHeight,
@@ -156,6 +161,26 @@ class RecommendedShowWidget extends StatelessWidget {
 
   final double screenWidth;
   final double screenHeight;
+
+  @override
+  _RecommendedShowWidgetState createState() => _RecommendedShowWidgetState();
+}
+
+class _RecommendedShowWidgetState extends State<RecommendedShowWidget> {
+  List<Series> _seriesList;
+
+  @override
+  void initState() {
+    super.initState();
+    // context
+    //     .read<SeriesFetchingService>()
+    //     .fetchSeriesList(context)
+    //     .whenComplete(() {
+    //   setState(() {
+    //     _seriesList = context.read<SeriesFetchingService>().getSeriesList();
+    //   });
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,14 +206,13 @@ class RecommendedShowWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline1,
                   ),
                 ),
-                VideoGridWidget(
+                SeriesGridWidget(
                   physics: NeverScrollableScrollPhysics(),
-                  isMovie: false,
                 ),
                 BannerWidget(
                   banners[index],
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
+                  screenHeight: widget.screenHeight,
+                  screenWidth: widget.screenWidth,
                 ),
               ],
             ),
@@ -198,7 +222,7 @@ class RecommendedShowWidget extends StatelessWidget {
 }
 
 // This widget contains all the shows which the user was previously watching
-class ContinueWatchingWidget extends StatelessWidget {
+class ContinueWatchingWidget extends StatefulWidget {
   const ContinueWatchingWidget({
     @required this.screenWidth,
     @required this.screenHeight,
@@ -208,12 +232,38 @@ class ContinueWatchingWidget extends StatelessWidget {
   final double screenHeight;
 
   @override
+  _ContinueWatchingWidgetState createState() => _ContinueWatchingWidgetState();
+}
+
+class _ContinueWatchingWidgetState extends State<ContinueWatchingWidget> {
+  List<Video> _videos;
+
+  Future<List<Video>> getData(BuildContext context) async {
+    await context.read<VideoFetchingService>().fetchVideoList();
+    _videos = context.read<VideoFetchingService>().getVideos();
+    return _videos;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // context.read<VideoFetchingService>().fetchVideoList();
+    // .whenComplete(() {
+    // setState(() {
+    //   _videos = context.read<VideoFetchingService>().getVideos();
+    // });
+    // });
+    // getData(context).whenComplete(() {
+    //   setState(() {});
+    // });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 12.0),
-      child: VideoGridWidget(
+      child: MovieGridWidget(
         physics: ScrollPhysics(),
-        isMovie: true,
       ),
     );
   }

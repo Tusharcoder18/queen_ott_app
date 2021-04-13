@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   @override
@@ -8,9 +9,81 @@ class SubscriptionScreen extends StatefulWidget {
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   int _selectPlan = 0;
+  int _amount = 49;
   bool _terms = false;
   List<String> _plans = ['Monthly', 'Quaterly', 'Half Yearly', 'Yearly'];
   List<int> _prices = [49, 120, 150, 250];
+  String _key = 'rzp_test_E9FL3va4DIckGC';
+  Razorpay _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    _razorpay = Razorpay(); // Create Razorpay instance
+
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear(); // Removes all listeners
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    print('Success');
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(title: Center(child: Text('Payment Successful')));
+        });
+    print(response.orderId);
+    print(response.paymentId);
+    print(response.signature);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print('Failure');
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(title: Center(child: Text('Payment Failed')));
+        });
+    print(response.message);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    print('External Wallet');
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+              title: Center(child: Text('Payment Successful(Wallet)')));
+        });
+    print(response.walletName);
+  }
+
+  void openCheckout() {
+    var options = {
+      'key': _key,
+      'amount': _amount * 100,
+      'name': 'Queen OTT',
+      'description': 'Subscription to Queen OTT services',
+      ''
+          'prefill': {'contact': '8888888888', 'email': 'test@gmail.com'}
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +150,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               child: CustomButton(
                 text: 'Continue',
                 color: Colors.blue,
-                onTap: () {},
+                onTap: () {
+                  openCheckout();
+                },
                 icon: Icon(Icons.check_circle),
               ),
             ),
@@ -96,12 +171,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         setState(() {
           if (text == 'Monthly') {
             _selectPlan = 0;
+            _amount = 49;
           } else if (text == 'Quaterly') {
             _selectPlan = 1;
+            _amount = 120;
           } else if (text == 'Half Yearly') {
             _selectPlan = 2;
+            _amount = 150;
           } else if (text == 'Yearly') {
             _selectPlan = 3;
+            _amount = 250;
           }
           print(_selectPlan);
         });

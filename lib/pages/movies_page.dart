@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/models/video.dart';
+import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
+import 'package:queen_ott_app/widgets/movie_grid_widget.dart';
 import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +14,7 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
+  List<Video> _videos;
   // List<String> _videoThumbnailList = [];
   // List<dynamic> _videoList = [];
   // List<String> _videoUrlList = [];
@@ -42,6 +46,15 @@ class _MoviesPageState extends State<MoviesPage> {
   //   super.initState();
   //   getInformation();
   // }
+
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<VideoFetchingService>().fetchVideoList().whenComplete(() {
+      _videos = context.read<VideoFetchingService>().getVideos();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +98,7 @@ class _MoviesPageState extends State<MoviesPage> {
                         style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
-                    VideoGridWidget(
-                      isMovie: true,
+                    MovieGridWidget(
                       physics: NeverScrollableScrollPhysics(),
                     ),
                     BannerWidget(
@@ -100,47 +112,5 @@ class _MoviesPageState extends State<MoviesPage> {
             }),
       ],
     );
-    // return SingleChildScrollView(
-    //   child: Container(
-    //     width: screenWidth,
-    //     child: Padding(
-    //       padding: const EdgeInsets.all(8.0),
-    //       child: Column(
-    //         crossAxisAlignment: CrossAxisAlignment.start,
-    //         children: [
-    //           Text('Movies you may like'),
-    //           SizedBox(height: 20,),
-    //           MovieGridViewWidget(
-    //             videoDescriptionList: _videoDescriptionList,
-    //             videoList: _videoList,
-    //             videoNameList: _videoNameList,
-    //             videoThumbnailList: _videoThumbnailList,
-    //             videoUrlList: _videoUrlList,
-    //           ),
-    //           SizedBox(height: 20,),
-    //           Text('Action'),
-    //           SizedBox(height: 20,),
-    //           MovieGridViewWidget(
-    //             videoDescriptionList: _videoDescriptionList,
-    //             videoList: _videoList,
-    //             videoNameList: _videoNameList,
-    //             videoThumbnailList: _videoThumbnailList,
-    //             videoUrlList: _videoUrlList,
-    //           ),
-    //           SizedBox(height: 20,),
-    //           Text('Drama'),
-    //           SizedBox(height: 20,),
-    //           MovieGridViewWidget(
-    //             videoDescriptionList: _videoDescriptionList,
-    //             videoList: _videoList,
-    //             videoNameList: _videoNameList,
-    //             videoThumbnailList: _videoThumbnailList,
-    //             videoUrlList: _videoUrlList,
-    //           ),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 }

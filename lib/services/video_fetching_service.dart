@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/models/video.dart';
 
 class VideoFetchingService extends ChangeNotifier {
   VideoFetchingService(this._firebaseFirestore);
@@ -7,11 +8,12 @@ class VideoFetchingService extends ChangeNotifier {
   FirebaseFirestore _firebaseFirestore;
 
   final String videoInfo = "VideoInfo";
-  List<dynamic> _videoList = [];
-  List<String> _videoThumbnail = [];
-  List<String> _videoUrlList = [];
-  List<String> _videoNameList = [];
-  List<String> _videoDescriptionList = [];
+  // List<dynamic> _videoList = [];
+  // List<String> _videoThumbnail = [];
+  // List<String> _videoUrlList = [];
+  // List<String> _videoNameList = [];
+  // List<String> _videoDescriptionList = [];
+  List<Video> _videos = [];
 
   // List<List<String>> _genreList = [];
   // List<String> _genreCollectionList = [
@@ -52,113 +54,73 @@ class VideoFetchingService extends ChangeNotifier {
 
   /// To fetch all the videos that are there in the database
   Future<void> fetchVideoList() async {
-    _videoList = [];
-    _videoThumbnail = [];
-    _videoUrlList = [];
-    _videoNameList = [];
-    _videoDescriptionList = [];
+    // _videoList = [];
+    // _videoThumbnail = [];
+    // _videoUrlList = [];
+    // _videoNameList = [];
+    // _videoDescriptionList = [];
+    _videos = [];
     final collection = await _firebaseFirestore.collection(videoInfo).get();
     final List<DocumentSnapshot> documents = collection.docs;
 
     documents.forEach((element) {
-      _videoList.add(element.id.toString());
-      _videoThumbnail.add(element.data()["thumbnailUrl"]);
-      _videoUrlList.add(element.data()["videoUrl"]);
-      _videoNameList.add(element.data()["title"]);
-      _videoDescriptionList.add(element.data()["description"]);
+      // _videoList.add(element.id.toString());
+      // _videoThumbnail.add(element.data()["thumbnailUrl"]);
+      // _videoUrlList.add(element.data()["videoUrl"]);
+      // _videoNameList.add(element.data()["title"]);
+      // _videoDescriptionList.add(element.data()["description"]);
+      final videoTitle = element.data()["title"];
+      final videoDescription = element.data()["description"];
+      final thumbnailUrl = element.data()["thumbnailUrl"];
+      final videoUrl = element.data()["videoUrl"];
+
+      Video video = Video(videoTitle, videoDescription, thumbnailUrl, videoUrl);
+      _videos.add(video);
     });
   }
 
-  List<dynamic> returnVideoList() {
-    return _videoList;
+  Future<void> fetchVideoListSubset(List<String> titles) async {
+    // _videoThumbnail = [];
+    // _videoUrlList = [];
+    _videos = [];
+    final collection = await _firebaseFirestore.collection(videoInfo).get();
+    final List<DocumentSnapshot> documents = collection.docs;
+
+    documents.forEach((element) {
+      if (titles.contains(element.data()['title'])) {
+        final videoTitle = element.data()["title"];
+        final videoDescription = element.data()["description"];
+        final thumbnailUrl = element.data()["thumbnailUrl"];
+        final videoUrl = element.data()["videoUrl"];
+
+        Video video =
+            Video(videoTitle, videoDescription, thumbnailUrl, videoUrl);
+        _videos.add(video);
+      }
+    });
   }
 
-  List<String> returnVideoThumbnail() {
-    return _videoThumbnail;
+  List<Video> getVideos() {
+    return _videos;
   }
 
-  List<String> returnVideoUrlList() {
-    return _videoUrlList;
-  }
-
-  List<String> returnVideoNameList() {
-    return _videoNameList;
-  }
-
-  List<String> returnVideoDescriptionList() {
-    return _videoDescriptionList;
-  }
-
-  /// To fetch the genreFrom the database
-  // Future<void> fetchGenreList() async{
-  //   int i = 0;
-  //   _genreList = [];
-  //   List<String> _documentList = [];
-  //   _genreCollectionList.forEach((element) async{
-  //     print("Genre collection is called $element");
-  //     _documentList = [];
-  //     final collection = await _firebaseFirestore.collection(element).get();
-  //     final List<DocumentSnapshot> documents = collection.docs;
-  //     documents.forEach((elementSub) {
-  //       print("This document is called");
-  //       _documentList.add(elementSub.data()["videoRef"]);
-  //     });
-  //     _genreList.add(_documentList);
-  //   });
-  //   print(_genreList);
+  // List<dynamic> returnVideoList() {
+  //   return _videoList;
   // }
 
+  // List<String> returnVideoThumbnail() {
+  //   return _videoThumbnail;
+  // }
 
-  Future<List<String>> fetchGivenGenreList({ String collectionName}) async{
-    List<String> fetchList = [];
-    final collection = await _firebaseFirestore.collection(collectionName).get();
-    final List<DocumentSnapshot> documents = collection.docs;
+  // List<String> returnVideoUrlList() {
+  //   return _videoUrlList;
+  // }
 
-    documents.forEach((element) {
-      fetchList.add(element.data()["videoRef"]);
-    });
+  // List<String> returnVideoNameList() {
+  //   return _videoNameList;
+  // }
 
-    return fetchList;
-  }
-
-  Future<void> fetchAllGenre() async{
-    _actionList = await fetchGivenGenreList(collectionName: _videoActionCollection);
-    _animationList = await fetchGivenGenreList(collectionName: _videoAnimationCollection);
-    _crimeList = await fetchGivenGenreList(collectionName: _videoCrimeCollection);
-    _comedyList = await fetchGivenGenreList(collectionName: _videoComedyCollection);
-    _dramaList = await fetchGivenGenreList(collectionName: _videoDramaCollection);
-    _fantasyList = await fetchGivenGenreList(collectionName: _videoFantasyCollection);
-    _historicalList = await fetchGivenGenreList(collectionName: _videoHistoricalCollection);
-    _horrorList = await fetchGivenGenreList(collectionName: _videoHorrorCollection);
-    _romanceList = await fetchGivenGenreList(collectionName: _videoRomanceCollection);
-    print(_actionList);
-    print(_animationList);
-    print(_romanceList);
-    print(_horrorList);
-    print(_comedyList);
-  }
-
-
-  Future<void> fetchActionGenre() async{
-    _actionList = [];
-    final collection = await _firebaseFirestore.collection(_videoActionCollection).get();
-    final List<DocumentSnapshot> documents = collection.docs;
-
-    documents.forEach((element) {
-      _actionList.add(element.data()["videoRef"]);
-    });
-    print(_actionList);
-    await fetchAnimationGenre();
-  }
-
-  Future<void> fetchAnimationGenre() async{
-    _animationList = [];
-    final collection = await _firebaseFirestore.collection(_videoAnimationCollection).get();
-    final List<DocumentSnapshot> documents = collection.docs;
-
-    documents.forEach((element) {
-      _animationList.add(element.data()["videoRef"]);
-    });
-    print(_animationList);
-  }
+  // List<String> returnVideoDescriptionList() {
+  //   return _videoDescriptionList;
+  // }
 }

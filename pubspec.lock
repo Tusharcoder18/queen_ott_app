@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+  eventify:
+    dependency: transitive
+    description:
+      name: eventify
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   fake_async:
     dependency: transitive
     description:
@@ -258,13 +265,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  flutter_staggered_grid_view:
+  flutter_svg:
     dependency: "direct main"
     description:
-      name: flutter_staggered_grid_view
+      name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4"
+    version: "0.21.0+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -408,6 +415,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  path_drawing:
+    dependency: transitive
+    description:
+      name: path_drawing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   path_provider:
     dependency: "direct main"
     description:
@@ -485,13 +506,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  pull_to_refresh:
-    dependency: "direct main"
-    description:
-      name: pull_to_refresh
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.6.4"
   quiver:
     dependency: transitive
     description:
@@ -499,13 +513,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"
-  rxdart:
-    dependency: transitive
+  razorpay_flutter:
+    dependency: "direct main"
     description:
-      name: rxdart
+      name: razorpay_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.26.0"
+    version: "1.2.5"
   settings_ui:
     dependency: "direct main"
     description:
