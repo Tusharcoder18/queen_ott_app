@@ -32,9 +32,6 @@ class _SeriesGridWidgetState extends State<SeriesGridWidget> {
       setState(() {
         gridContents = context.read<SeriesFetchingService>().getSeriesList();
         isLoading = false;
-        gridContents.forEach((element) {
-          print(element.getSeriesTitle());
-        });
       });
     });
   }

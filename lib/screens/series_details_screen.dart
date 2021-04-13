@@ -4,19 +4,13 @@ import 'package:queen_ott_app/models/season.dart';
 import 'package:queen_ott_app/models/series.dart';
 import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/screens/test.dart';
-import 'package:queen_ott_app/services/series_fetching_service.dart';
-import 'package:provider/provider.dart';
 
 class SeasonDetailScreen extends StatefulWidget {
   SeasonDetailScreen(
     this.series,
-    // {this.videoThumbnail, this.indexNumber, this.consumerDocument}
   );
 
   final Series series;
-  // final String videoThumbnail;
-  // final int indexNumber;
-  // final String consumerDocument;
 
   /// this is the series document
 
@@ -26,31 +20,10 @@ class SeasonDetailScreen extends StatefulWidget {
 
 class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
   Series _series;
-  // List<dynamic> _seasonList = [];
-  // String videoName = "";
-  // String seriesDescription = "";
-  // List<Series> _seriesList = [];
-
-  // Future<void> getSeasonList() async {
-  //   _seasonList =
-  //       context.read<SeriesFetchingService>().returnSeasonAndEpisodeInfo();
-  // print(_seasonList);
-  // final name = await context
-  //     .read<SeriesFetchingService>()
-  //     .getSeriesName(documentName: widget.consumerDocument.toString());
-  // videoName = name.toString();
-  // final getSeriesDescription = await context
-  //     .read<SeriesFetchingService>()
-  //     .getSeriesDescription(documentName: _seasonList[0][0].toString());
-  // seriesDescription = getSeriesDescription.toString();
-
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
     super.initState();
-    // getSeasonList();
     _series = widget.series;
   }
 
@@ -60,6 +33,8 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: CustomScrollView(
+        scrollDirection: Axis.vertical,
+        physics: ScrollPhysics(),
         slivers: [
           _appBar(context, screenHeight, screenWidth),
           _episodesList(context, screenHeight, screenWidth)
@@ -73,9 +48,8 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
     return SliverAppBar(
       expandedHeight: screenHeight * 0.65,
       backgroundColor: Colors.black,
-      floating: true,
       flexibleSpace: FlexibleSpaceBar(
-        // collapseMode: CollapseMode.pin,
+        collapseMode: CollapseMode.parallax,
         background: Container(
           child: Stack(
             fit: StackFit.expand,
@@ -257,6 +231,7 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
             height: 200,
             width: screenWidth,
             child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
               itemCount: _seasons.length,
               itemBuilder: (context, index) {
                 List<Video> _episodes = _seasons[index].getSeasonEpisodes();
@@ -268,34 +243,36 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Season ${_seasons[index].getSeasonNumber()}'),
-                      Container(
-                        height: 100,
-                        child: ListView.builder(
-                          itemCount: _episodes.length,
-                          itemBuilder: (context, eIndex) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Test(
-                                        videoUrl:
-                                            _episodes[index].getVideoUrl(),
-                                        thumbnailUrl: _episodes[index]
-                                            .getVideoThumbnail(),
+                      Expanded(
+                        child: Container(
+                          child: ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: _episodes.length,
+                            itemBuilder: (context, eIndex) {
+                              final _episode = _episodes[eIndex];
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Test(
+                                          videoUrl: _episode.getVideoUrl(),
+                                          thumbnailUrl:
+                                              _episode.getVideoThumbnail(),
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  height: 20,
-                                  child: Text('Episode${eIndex + 1}'),
+                                    );
+                                  },
+                                  child: Container(
+                                    height: 20,
+                                    child: Text(_episode.getVideoTitle()),
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       )
                     ],
