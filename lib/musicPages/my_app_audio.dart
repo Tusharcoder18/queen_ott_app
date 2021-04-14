@@ -1,13 +1,20 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
 
 class MyAppAudio extends StatefulWidget {
+  MyAppAudio({this.musicList, this.currentIndex});
+
+  final List<List<String>> musicList;
+  final int currentIndex;
+
   @override
   _MyAppAudioState createState() => _MyAppAudioState();
 }
 
 class _MyAppAudioState extends State<MyAppAudio> {
   String _platformVersion = 'Unknown';
+  final assetsAudioPlayer = AssetsAudioPlayer();
   AudioManager _audioManagerInstance = AudioManager.instance;
   bool isPlaying = false;
   Duration _duration;
@@ -19,26 +26,24 @@ class _MyAppAudioState extends State<MyAppAudio> {
   int _currentIndex = 0;
   PlayMode playMode = AudioManager.instance.playMode;
 
-  final list = [
-    {
-      "title": "Assets",
-      "desc": "assets playback",
-      "url":
-          "https://firebasestorage.googleapis.com/v0/b/queenapp-81e7b.appspot.com/o/music%2FmusicOne.mp3?alt=media&token=93280c4a-c4f8-4934-a76b-1669823d3c09",
-      "coverUrl": "assets/musicImage3.jpg"
-    },
-    {
-      "title": "network",
-      "desc": "network resouce playback",
-      "url":
-          "https://firebasestorage.googleapis.com/v0/b/queenapp-81e7b.appspot.com/o/music%2FmusicTwo.mp3?alt=media&token=bcd8c6b7-c7a8-4c3f-b839-4699f01a7a70",
-      "coverUrl": "assets/musicImage4.jpg"
-    }
-  ];
+  final list = [];
+
+  void makeList() {
+    widget.musicList.forEach((element) {
+      list.add({
+        "title": element[0],
+        "url": element[2],
+        "desc": "",
+        "coverUrl": element[1]
+      });
+    });
+    _currentIndex = widget.currentIndex;
+  }
 
   @override
   void initState() {
     super.initState();
+    makeList();
     onScreenSetUpAudio();
   }
 
@@ -76,7 +81,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
     );
     _audioManagerInstance.audioList = _list;
     _audioManagerInstance.intercepter = true;
-    _audioManagerInstance.play(auto: true);
+    _audioManagerInstance.play(auto: false, index: _currentIndex);
 
     _audioManagerInstance.onEvents((events, args) {
       print("$events, $args");
@@ -149,28 +154,11 @@ class _MyAppAudioState extends State<MyAppAudio> {
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: volumeFrame(),
                     ),
-                    // Expanded(
-                    //   child: ListView.separated(
-                    //       itemBuilder: (context, index) {
-                    //         return ListTile(
-                    //           title: Text(list[index]["title"],
-                    //               style: TextStyle(fontSize: 18)),
-                    //           subtitle: Text(list[index]["desc"]),
-                    //           onTap: () {
-                    //             _currentIndex = index;
-                    //             _audioManagerInstance.play(index: index);
-                    //           },
-                    //         );
-                    //       },
-                    //       separatorBuilder: (BuildContext context, int index) =>
-                    //           Divider(),
-                    //       itemCount: list.length),
-                    // ),
                     Center(
                       child: Container(
                         height: 300,
                         width: 300,
-                        child: Image.asset(list[_currentIndex]["coverUrl"]),
+                        child: Image.network(list[_currentIndex]["coverUrl"]),
                       ),
                     ),
                     Column(
@@ -210,7 +198,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
                 iconSize: 36,
                 icon: Icon(
                   Icons.skip_previous,
-                  color: _currentIndex > 0 ? Colors.white70 : Colors.white38,
+                  color: _currentIndex > 0 ? Colors.white : Colors.white38,
                 ),
                 onPressed: () {
                   if (_currentIndex > 0) {
@@ -227,6 +215,20 @@ class _MyAppAudioState extends State<MyAppAudio> {
                   _audioManagerInstance.play(index: _currentIndex);
                 }
                 print("await -- $playing");
+
+                // assetsAudioPlayer.open(
+                //   Audio.network(
+                //     list[_currentIndex]["url"],
+                //     metas: Metas(
+                //       title: 'Random Title',
+                //       artist: 'Random Artist',
+                //       album: "Random Album",
+                //       image:
+                //           MetasImage.network(list[_currentIndex]["coverUrl"]),
+                //     ),
+                //   ),
+                //   showNotification: true,
+                // );
               },
               padding: const EdgeInsets.all(0.0),
               icon: Icon(
@@ -363,6 +365,8 @@ class _MyAppAudioState extends State<MyAppAudio> {
           child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 0),
               child: Slider(
+                activeColor: Colors.white,
+                inactiveColor: Colors.grey,
                 value: _sliderVolume ?? 0,
                 onChanged: (value) {
                   setState(() {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/musicPages/home_page.dart';
-import 'package:queen_ott_app/musicPages/library_page.dart';
 import 'package:queen_ott_app/musicPages/search_page.dart';
 
 /// This is the home screen for the music
@@ -13,10 +12,10 @@ class MusicHomeScreen extends StatefulWidget {
 class _MusicHomeScreenState extends State<MusicHomeScreen> {
   int _selectedIndex = 0;
 
-  List<Widget> _widgetOption = <Widget> [
+  List<Widget> _widgetOption = <Widget>[
     HomePage(),
     SearchPage(),
-    LibraryPage(),
+    //LibraryPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -42,10 +41,10 @@ class _MusicHomeScreenState extends State<MusicHomeScreen> {
               icon: Icon(Icons.search),
               label: 'search',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.audiotrack_rounded),
-              label: 'Library',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.audiotrack_rounded),
+            //   label: 'Library',
+            // ),
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/movie_grid_widget.dart';
-import 'package:queen_ott_app/widgets/video_grid_widget.dart';
-import 'package:queen_ott_app/services/video_fetching_service.dart';
-import 'package:provider/provider.dart';
 
 class MoviesPage extends StatefulWidget {
   @override
@@ -24,10 +22,7 @@ class _MoviesPageState extends State<MoviesPage> {
   // Future<void> getInformation() async {
   //   await context.read<VideoFetchingService>().fetchVideoList();
   Future<void> getInformation() async {
-    await context.read<VideoFetchingService>().fetchVideoList().then((
-        value) async {
-      await context.read<VideoFetchingService>().fetchAllGenre();
-    });
+    await context.read<VideoFetchingService>().fetchVideoList();
   }
 
   //   _videoThumbnailList =
