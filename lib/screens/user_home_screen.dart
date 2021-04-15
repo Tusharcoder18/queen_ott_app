@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,10 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 20,
               child: Icon(FontAwesomeIcons.bell),
             ),
-            Text(
-              'QUEEN',
-              style:
-                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+            // Text(
+            //   'QUEEN',
+            //   style:
+            //       Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+            // ),
+            Container(
+              height: 50,
+              child: Image.asset(
+                'assets/logo2.png',
+                fit: BoxFit.fill,
+              ),
             ),
             MaterialButton(
               onPressed: () {
@@ -99,10 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Subscribe',
                 style: Theme.of(context).textTheme.headline1,
               ),
-            ),
-            Container(
-              height: 50,
-              child: Image.asset('assets/logo.png'),
             ),
           ],
         ),

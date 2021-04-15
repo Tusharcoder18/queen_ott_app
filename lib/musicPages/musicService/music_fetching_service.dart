@@ -16,7 +16,7 @@ class MusicFetchingService extends ChangeNotifier {
   Future<List<List<String>>> getMusicInfo({String collectionName}) async {
     _musicList = [];
     _musicThisWeekList = [];
-    _musicNewArrivalList =[];
+    _musicNewArrivalList = [];
     List<String> infoList = [];
     try {
       final collection =
@@ -27,10 +27,10 @@ class MusicFetchingService extends ChangeNotifier {
         infoList.add(element.data()["name"]); // gets the name of the
         infoList.add(element.data()["image"]);
         infoList.add(element.data()["file"]);
-        if(element.data()["new"] == true){
+        if (element.data()["new"] == true) {
           _musicNewArrivalList.add(infoList);
         }
-        if(element.data()["thisWeek"] == true){
+        if (element.data()["thisWeek"] == true) {
           _musicThisWeekList.add(infoList);
         }
         _musicList.add(infoList);
@@ -44,11 +44,15 @@ class MusicFetchingService extends ChangeNotifier {
     return _musicList;
   }
 
-  List<List<String>> returnNewArrivalList () {
+  List<List<String>> returnNewArrivalList() {
     return _musicNewArrivalList;
   }
 
   List<List<String>> returnThisWeekList() {
     return _musicThisWeekList;
+  }
+
+  List<List<String>> returnMusicList() {
+    return _musicList;
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -7,6 +9,23 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  List<List<String>> musicList = [];
+  List<String> musicNameList = [];
+
+  void fetchList() {
+    musicList = context.read<MusicFetchingService>().returnMusicList();
+    musicList.forEach((element) {
+      musicNameList.add(element[0]);
+    });
+    print(musicNameList);
+  }
+
+  @override
+  void initState() {
+    fetchList();
+    super.initState();
+  }
+
   final double sizedBoxHeight = 20.0;
 
   @override
@@ -25,37 +44,36 @@ class _SearchPageState extends State<SearchPage> {
             ),
 
             /// This is for the search textbox
-            Text(
-              'Search',
-              style: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 28.0),
+            Padding(
+              padding: const EdgeInsets.only(right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Search',
+                    style: TextStyle(
+                        fontFamily: 'OpenSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.0),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.search,
+                      size: 32,
+                    ),
+                    onPressed: () {
+                      showSearch(
+                        context: context,
+                        delegate: DataSearch(
+                            musicList: musicList, musicNameList: musicNameList),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: sizedBoxHeight,
-            ),
-
-            /// For the search bar
-            Container(
-              padding: EdgeInsets.only(left: 10),
-              height: 50,
-              width: screenWidth * 0.92,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              child: Center(
-                child: TextField(
-                  style: TextStyle(fontFamily: 'OpenSans', color: Colors.black),
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Search Songs',
-                      fillColor: Colors.black,
-                      focusColor: Colors.black),
-                ),
-              ),
             ),
             SizedBox(
               height: sizedBoxHeight,
@@ -150,5 +168,89 @@ class GridViewGenreWidget extends StatelessWidget {
               colors: [color1, color2]),
           borderRadius: BorderRadius.circular(5.0)),
     );
+  }
+}
+
+/// Search Functionality implementation
+class DataSearch extends SearchDelegate<String> {
+  DataSearch({@required this.musicList, @required this.musicNameList});
+
+  final List<List<String>> musicList;
+  final List<String> musicNameList;
+  int currentIndex = 0;
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // What kind of actions you want to perform in the search bar
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // leading icon on the left of the app bar
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // show some result based on the selection
+    return Center(
+      child: Container(
+        height: 100,
+        width: 100,
+        child: Card(
+          color: Colors.blue,
+          child: Center(
+            child: Text(query),
+          ),
+        ),
+      ),
+    );
+    throw UnimplementedError();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // show when someone searches for something
+
+    final suggestionList =
+        musicNameList.where((p) => p.startsWith(query)).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) => ListTile(
+        onTap: () {
+          showResults(context);
+        },
+        leading: Icon(Icons.audiotrack),
+        title: RichText(
+          text: TextSpan(
+              text: suggestionList[index].substring(0, query.length),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              children: [
+                TextSpan(
+                    text: suggestionList[index].substring(query.length),
+                    style: TextStyle(color: Colors.grey)),
+              ]),
+        ),
+      ),
+    );
+    throw UnimplementedError();
   }
 }
