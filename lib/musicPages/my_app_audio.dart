@@ -1,4 +1,3 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_manager/audio_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,7 @@ class MyAppAudio extends StatefulWidget {
 
 class _MyAppAudioState extends State<MyAppAudio> {
   String _platformVersion = 'Unknown';
-  final assetsAudioPlayer = AssetsAudioPlayer();
+  //final assetsAudioPlayer = AssetsAudioPlayer();
   AudioManager _audioManagerInstance = AudioManager.instance;
   bool isPlaying = false;
   Duration _duration;
@@ -26,7 +25,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
   int _currentIndex = 0;
   PlayMode playMode = AudioManager.instance.playMode;
 
-  final list = [];
+  List list = [];
 
   void makeList() {
     widget.musicList.forEach((element) {
@@ -45,11 +44,26 @@ class _MyAppAudioState extends State<MyAppAudio> {
     super.initState();
     makeList();
     onScreenSetUpAudio();
+
+    if (_currentIndex + 1 < list.length) {
+      _audioManagerInstance.next();
+      _audioManagerInstance.previous();
+    }
+
+    if (_currentIndex + 1 == list.length) {
+      _audioManagerInstance.previous();
+      _audioManagerInstance.next();
+    }
+
+    if (_audioManagerInstance.isPlaying == true) {
+      setState(() {
+        _slider = _audioManagerInstance.duration.inMilliseconds.toDouble();
+      });
+    }
   }
 
   @override
   void dispose() {
-    AudioManager.instance.release();
     super.dispose();
     _audioManagerInstance.release();
   }
@@ -81,7 +95,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
     );
     _audioManagerInstance.audioList = _list;
     _audioManagerInstance.intercepter = true;
-    _audioManagerInstance.play(auto: false, index: _currentIndex);
+    _audioManagerInstance.play(auto: true, index: _currentIndex);
 
     _audioManagerInstance.onEvents((events, args) {
       print("$events, $args");
@@ -165,7 +179,7 @@ class _MyAppAudioState extends State<MyAppAudio> {
                       children: [
                         Center(
                             child: Text(_error != null
-                                ? _error
+                                ? ''
                                 : "${_audioManagerInstance.info.title}  ${_formatDuration(_position)}")),
                         bottomPanel(),
                       ],

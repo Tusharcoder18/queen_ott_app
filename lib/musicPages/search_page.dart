@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dart';
+import 'package:queen_ott_app/musicPages/my_app_audio.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -177,6 +178,7 @@ class DataSearch extends SearchDelegate<String> {
 
   final List<List<String>> musicList;
   final List<String> musicNameList;
+  final List<String> recentMusic = [];
   int currentIndex = 0;
 
   @override
@@ -209,14 +211,37 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // show some result based on the selection
-    return Center(
-      child: Container(
-        height: 100,
-        width: 100,
-        child: Card(
-          color: Colors.blue,
-          child: Center(
-            child: Text(query),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MyAppAudio(
+                musicList: musicList,
+                currentIndex: currentIndex,
+              ),
+            ),
+          );
+        },
+        child: Container(
+          height: 100,
+          width: MediaQuery.of(context).size.width * 0.97,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                child: Image.network(musicList[currentIndex][1]),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Text(musicList[currentIndex][0]),
+            ],
           ),
         ),
       ),
@@ -228,13 +253,17 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     // show when someone searches for something
 
-    final suggestionList =
-        musicNameList.where((p) => p.startsWith(query)).toList();
+    final suggestionList = query.isEmpty
+        ? []
+        : musicNameList.where((p) => p.startsWith(query)).toList();
 
     return ListView.builder(
       itemCount: suggestionList.length,
       itemBuilder: (context, index) => ListTile(
         onTap: () {
+          currentIndex = musicNameList.indexWhere(
+            (p) => p.startsWith(query),
+          );
           showResults(context);
         },
         leading: Icon(Icons.audiotrack),

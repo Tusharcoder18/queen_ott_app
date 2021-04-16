@@ -4,7 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/GuitarLessons/guitar_video_fetchin_service.dart';
 import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dart';
+import 'package:queen_ott_app/musicPages/music_player_services.dart';
 import 'package:queen_ott_app/screens/splash_screen.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
@@ -50,6 +52,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<MusicFetchingService>(
           create: (_) => MusicFetchingService(FirebaseFirestore.instance),
+        ),
+        ChangeNotifierProvider<MusicPlayerServices>(
+          create: (_) => MusicPlayerServices(),
+        ),
+        ChangeNotifierProvider<GuitarService>(
+          create: (_) => GuitarService(FirebaseFirestore.instance),
         ),
       ],
       child: MaterialApp(
