@@ -12,45 +12,6 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
-  List<Video> _videos;
-  // List<String> _videoThumbnailList = [];
-  // List<dynamic> _videoList = [];
-  // List<String> _videoUrlList = [];
-  // List<String> _videoNameList = [];
-  // List<String> _videoDescriptionList = [];
-
-  // Future<void> getInformation() async {
-  //   await context.read<VideoFetchingService>().fetchVideoList();
-  Future<void> getInformation() async {
-    await context.read<VideoFetchingService>().fetchVideoList();
-  }
-
-  //   _videoThumbnailList =
-  //       context.read<VideoFetchingService>().returnVideoThumbnail();
-  //   _videoList = context.read<VideoFetchingService>().returnVideoList();
-  //   _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
-  //   _videoNameList = context.read<VideoFetchingService>().returnVideoNameList();
-  //   _videoDescriptionList =
-  //       context.read<VideoFetchingService>().returnVideoDescriptionList();
-
-  //   setState(() {});
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getInformation();
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-
-    context.read<VideoFetchingService>().fetchVideoList().whenComplete(() {
-      _videos = context.read<VideoFetchingService>().getVideos();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;

@@ -26,7 +26,6 @@ class _SearchPageState extends State<SearchPage> {
     fetchList();
     super.initState();
   }
-
   final double sizedBoxHeight = 20.0;
 
   @override

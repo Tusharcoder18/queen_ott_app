@@ -129,7 +129,7 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
                     thumbnailUrl: gridContents[index].getVideoThumbnail(),
                   );
                 } else if (widget.isSeries) {
-                  return SeasonDetailScreen(gridContents[index]);
+                  return SeriesDetailScreen(gridContents[index]);
                 }
               }));
             },

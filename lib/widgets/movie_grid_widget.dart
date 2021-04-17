@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/models/series.dart';
 import 'package:queen_ott_app/models/video.dart';
-import 'package:queen_ott_app/screens/series_details_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
-import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +45,7 @@ class _MovieGridWidgetState extends State<MovieGridWidget> {
         children: List.generate(gridContents.length, (index) {
           return GestureDetector(
             onTap: () async {
+              print(gridContents[index].getVideoUrl());
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return Test(
                   videoUrl: gridContents[index].getVideoUrl(),

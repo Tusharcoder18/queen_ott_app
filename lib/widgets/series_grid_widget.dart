@@ -57,7 +57,7 @@ class _SeriesGridWidgetState extends State<SeriesGridWidget> {
                   onTap: () async {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return SeasonDetailScreen(gridContents[index]);
+                      return SeriesDetailScreen(gridContents[index]);
                     }));
                   },
                   child: Container(
