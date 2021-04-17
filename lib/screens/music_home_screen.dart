@@ -13,10 +13,11 @@ class MusicHomeScreen extends StatefulWidget {
 class _MusicHomeScreenState extends State<MusicHomeScreen> {
   int _selectedIndex = 0;
 
-  List<Widget> _widgetOption = <Widget> [
+
+  List<Widget> _widgetOption = <Widget>[
     HomePage(),
     SearchPage(),
-    LibraryPage(),
+    //LibraryPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -42,10 +43,11 @@ class _MusicHomeScreenState extends State<MusicHomeScreen> {
               icon: Icon(Icons.search),
               label: 'search',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.audiotrack_rounded),
-              label: 'Library',
-            ),
+
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.audiotrack_rounded),
+            //   label: 'Library',
+            // ),
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
