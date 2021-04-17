@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
         _internet = true;
+        setState(() {});
       } else {
         _internet = false;
       }
@@ -147,11 +148,23 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blue[600],
         onTap: _onItemTapped,
       ),
-      body: Container(
-        child: Center(
-          child: _internet
-              ? _widgetOptions.elementAt(_selectedIndex)
-              : _widgetOptionsNoInternet.elementAt(_selectedIndex),
+      body: RefreshIndicator(
+        onRefresh: () {
+          print('refresh');
+          return _checkInternet();
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ListView(),
+            Container(
+              child: Center(
+                child: _internet
+                    ? _widgetOptions.elementAt(_selectedIndex)
+                    : _widgetOptionsNoInternet.elementAt(_selectedIndex),
+              ),
+            ),
+          ],
         ),
       ),
     );
