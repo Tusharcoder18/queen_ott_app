@@ -5,8 +5,8 @@ import 'package:queen_ott_app/models/series.dart';
 import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/screens/test.dart';
 
-class SeasonDetailScreen extends StatefulWidget {
-  SeasonDetailScreen(
+class SeriesDetailScreen extends StatefulWidget {
+  SeriesDetailScreen(
     this.series,
   );
 
@@ -15,10 +15,10 @@ class SeasonDetailScreen extends StatefulWidget {
   /// this is the series document
 
   @override
-  _SeasonDetailScreenState createState() => _SeasonDetailScreenState();
+  _SeriesDetailScreenState createState() => _SeriesDetailScreenState();
 }
 
-class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
+class _SeriesDetailScreenState extends State<SeriesDetailScreen> {
   Series _series;
 
   @override
@@ -254,6 +254,8 @@ class _SeasonDetailScreenState extends State<SeasonDetailScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () async {
+                                    print(
+                                        'Video Url: ' + _episode.getVideoUrl());
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

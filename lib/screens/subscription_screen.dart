@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:queen_ott_app/models/season.dart';
+import 'package:queen_ott_app/models/series.dart';
+import 'package:queen_ott_app/models/video.dart';
+import 'package:queen_ott_app/screens/series_details_screen.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class SubscriptionScreen extends StatefulWidget {
+  SubscriptionScreen({this.plans, this.prices});
+
+  final List<String> plans;
+  final List<int> prices;
+
   @override
   _SubscriptionScreenState createState() => _SubscriptionScreenState();
 }
@@ -10,10 +19,10 @@ class SubscriptionScreen extends StatefulWidget {
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   int _selectPlan = 0;
   int _amount = 49;
-  bool _terms = false;
-  List<String> _plans = ['Monthly', 'Quaterly', 'Half Yearly', 'Yearly'];
-  List<int> _prices = [49, 120, 150, 250];
-  String _key = 'rzp_test_E9FL3va4DIckGC';
+  bool _termsCheck = false;
+  List<String> _plans;
+  List<int> _prices;
+  String _key = 'rzp_test_E9FL3va4DIckGC'; // Temporary test key
   Razorpay _razorpay;
 
   @override
@@ -24,6 +33,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
+    _plans = widget.plans;
+    _prices = widget.prices;
   }
 
   @override
@@ -128,10 +140,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Row(
               children: [
                 Checkbox(
-                    value: _terms,
+                    value: _termsCheck,
                     onChanged: (value) {
                       setState(() {
-                        _terms = value;
+                        _termsCheck = value;
                       });
                     }),
                 SizedBox(
@@ -151,7 +163,35 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 text: 'Continue',
                 color: Colors.blue,
                 onTap: () {
-                  openCheckout();
+                  // openCheckout();
+                  if (_termsCheck) {
+                    print('Payment init');
+                    final _seriesTitle = 'Guitar Lessons 101';
+                    final _seriesDescription = 'Learn guitar the better way.';
+                    final _seriesThumbnail =
+                        'https://images.unsplash.com/photo-1543945696-4f1116f30c03?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2107&q=80';
+                    final _seriesGenre = ['Music'];
+                    final _seriesSeasons = [
+                      Season(1, [Video('Lesson1', 'Description', '1', '2')])
+                    ];
+
+                    final series = Series(_seriesTitle, _seriesDescription,
+                        _seriesThumbnail, _seriesGenre, _seriesSeasons);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SeriesDetailScreen(series)));
+                  } else {
+                    final snackBar = SnackBar(
+                      content: Text(
+                        'Please accept the terms and conditions!',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      backgroundColor: Colors.grey,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
                 },
                 icon: Icon(Icons.check_circle),
               ),

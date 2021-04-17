@@ -10,6 +10,7 @@ import 'package:queen_ott_app/pages/no_internet_page.dart';
 import 'package:queen_ott_app/pages/shows_page.dart';
 import 'package:queen_ott_app/pages/upcoming_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -37,6 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
       isCreator: false,
     ),
   ];
+  List<String> _plans = ['Monthly', 'Quaterly', 'Half Yearly', 'Yearly'];
+  List<int> _prices = [49, 120, 150, 250];
 
   Future<void> _checkInternet() async {
     try {
@@ -72,27 +75,32 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               width: 20,
               child: Icon(FontAwesomeIcons.bell),
             ),
-            Text(
-              'QUEEN',
-              style:
-                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+            Container(
+              padding: EdgeInsets.only(bottom: 5),
+              height: 50,
+              child: Image.asset('assets/logo.png'),
             ),
             MaterialButton(
               onPressed: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SubscriptionScreen()));
+                        builder: (context) => SubscriptionScreen(
+                              plans: _plans,
+                              prices: _prices,
+                            )));
               },
               color: Colors.blue,
               child: Text(
@@ -101,8 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              height: 50,
-              child: Image.asset('assets/logo.png'),
+              child: IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    // showSearch(
+                    //     context: context,
+                    //     delegate: SearchScreeenDelegate(context));
+                  }),
             ),
           ],
         ),
@@ -134,16 +147,11 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.blue[600],
         onTap: _onItemTapped,
       ),
-      body: RefreshIndicator(
-        onRefresh: () {
-          return _checkInternet();
-        },
-        child: Container(
-          child: Center(
-            child: _internet
-                ? _widgetOptions.elementAt(_selectedIndex)
-                : _widgetOptionsNoInternet.elementAt(_selectedIndex),
-          ),
+      body: Container(
+        child: Center(
+          child: _internet
+              ? _widgetOptions.elementAt(_selectedIndex)
+              : _widgetOptionsNoInternet.elementAt(_selectedIndex),
         ),
       ),
     );

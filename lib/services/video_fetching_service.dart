@@ -15,6 +15,43 @@ class VideoFetchingService extends ChangeNotifier {
   // List<String> _videoDescriptionList = [];
   List<Video> _videos = [];
 
+  // List<List<String>> _genreList = [];
+  // List<String> _genreCollectionList = [
+  //   "VideoActionCollection",
+  //   "VideoAnimationCollection",
+  //   "VideoCrimeCollection",
+  //   "VideoComedyCollection",
+  //   "VideoDramaCollection",
+  //   "VideoFantasyCollection",
+  //   "VideoHistoricalCollection",
+  //   "VideoHorrorCollection",
+  //   "VideoRomanceCollection"
+  // ];
+  //
+  // /// The list contains all the list for all the genre
+
+  /// This is the list for all the genre
+  List<String> _actionList = [];
+  List<String> _animationList = [];
+  List<String> _crimeList = [];
+  List<String> _comedyList = [];
+  List<String> _dramaList = [];
+  List<String> _fantasyList = [];
+  List<String> _historicalList = [];
+  List<String> _horrorList = [];
+  List<String> _romanceList = [];
+
+  /// The variables are for the collection fetching
+  String _videoActionCollection = "VideoActionCollection";
+  String _videoAnimationCollection = "VideoAnimationCollection";
+  String _videoCrimeCollection = "VideoCrimeCollection";
+  String _videoComedyCollection = "VideoComedyCollection";
+  String _videoDramaCollection = "VideoDramaCollection";
+  String _videoFantasyCollection = "VideoFantasyCollection";
+  String _videoHistoricalCollection = "VideoHistoricalCollection";
+  String _videoHorrorCollection = "VideoHorrorCollection";
+  String _videoRomanceCollection = "VideoRomanceCollection";
+
   /// To fetch all the videos that are there in the database
   Future<void> fetchVideoList() async {
     // _videoList = [];
@@ -36,6 +73,7 @@ class VideoFetchingService extends ChangeNotifier {
       final videoDescription = element.data()["description"];
       final thumbnailUrl = element.data()["thumbnailUrl"];
       final videoUrl = element.data()["videoUrl"];
+      // print('Video Url: ' + videoUrl);
 
       Video video = Video(videoTitle, videoDescription, thumbnailUrl, videoUrl);
       _videos.add(video);
@@ -67,23 +105,86 @@ class VideoFetchingService extends ChangeNotifier {
     return _videos;
   }
 
-  // List<dynamic> returnVideoList() {
-  //   return _videoList;
+  /// To fetch the genreFrom the database
+  // Future<void> fetchGenreList() async{
+  //   int i = 0;
+  //   _genreList = [];
+  //   List<String> _documentList = [];
+  //   _genreCollectionList.forEach((element) async{
+  //     print("Genre collection is called $element");
+  //     _documentList = [];
+  //     final collection = await _firebaseFirestore.collection(element).get();
+  //     final List<DocumentSnapshot> documents = collection.docs;
+  //     documents.forEach((elementSub) {
+  //       print("This document is called");
+  //       _documentList.add(elementSub.data()["videoRef"]);
+  //     });
+  //     _genreList.add(_documentList);
+  //   });
+  //   print(_genreList);
   // }
 
-  // List<String> returnVideoThumbnail() {
-  //   return _videoThumbnail;
-  // }
+  Future<List<String>> fetchGivenGenreList({String collectionName}) async {
+    List<String> fetchList = [];
+    final collection =
+        await _firebaseFirestore.collection(collectionName).get();
+    final List<DocumentSnapshot> documents = collection.docs;
 
-  // List<String> returnVideoUrlList() {
-  //   return _videoUrlList;
-  // }
+    documents.forEach((element) {
+      fetchList.add(element.data()["videoRef"]);
+    });
 
-  // List<String> returnVideoNameList() {
-  //   return _videoNameList;
-  // }
+    return fetchList;
+  }
 
-  // List<String> returnVideoDescriptionList() {
-  //   return _videoDescriptionList;
-  // }
+  Future<void> fetchAllGenre() async {
+    _actionList =
+        await fetchGivenGenreList(collectionName: _videoActionCollection);
+    _animationList =
+        await fetchGivenGenreList(collectionName: _videoAnimationCollection);
+    _crimeList =
+        await fetchGivenGenreList(collectionName: _videoCrimeCollection);
+    _comedyList =
+        await fetchGivenGenreList(collectionName: _videoComedyCollection);
+    _dramaList =
+        await fetchGivenGenreList(collectionName: _videoDramaCollection);
+    _fantasyList =
+        await fetchGivenGenreList(collectionName: _videoFantasyCollection);
+    _historicalList =
+        await fetchGivenGenreList(collectionName: _videoHistoricalCollection);
+    _horrorList =
+        await fetchGivenGenreList(collectionName: _videoHorrorCollection);
+    _romanceList =
+        await fetchGivenGenreList(collectionName: _videoRomanceCollection);
+    print(_actionList);
+    print(_animationList);
+    print(_romanceList);
+    print(_horrorList);
+    print(_comedyList);
+  }
+
+  Future<void> fetchActionGenre() async {
+    _actionList = [];
+    final collection =
+        await _firebaseFirestore.collection(_videoActionCollection).get();
+    final List<DocumentSnapshot> documents = collection.docs;
+
+    documents.forEach((element) {
+      _actionList.add(element.data()["videoRef"]);
+    });
+    print(_actionList);
+    await fetchAnimationGenre();
+  }
+
+  Future<void> fetchAnimationGenre() async {
+    _animationList = [];
+    final collection =
+        await _firebaseFirestore.collection(_videoAnimationCollection).get();
+    final List<DocumentSnapshot> documents = collection.docs;
+
+    documents.forEach((element) {
+      _animationList.add(element.data()["videoRef"]);
+    });
+    print(_animationList);
+  }
 }
