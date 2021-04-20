@@ -3,10 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
+  final TextStyle style;
   final Icon icon;
   final Color color;
   final Function onTap;
-  CustomButton({this.text, this.icon, this.color, this.onTap});
+  CustomButton({this.text, this.icon, this.color, this.style, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,10 @@ class CustomButton extends StatelessWidget {
         children: <Widget>[
           icon != null ? icon : Icon(FontAwesomeIcons.sign),
           SizedBox(width: 10),
-          Text(text, style: Theme.of(context).textTheme.headline1),
+          Text(text,
+              style: style != null
+                  ? style
+                  : Theme.of(context).textTheme.headline1),
         ],
       ),
       textColor: color != Colors.white ? Colors.white : Colors.black,

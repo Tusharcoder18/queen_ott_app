@@ -128,7 +128,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 return Container(
                     child: _rowButton(
                         color: index == _selectPlan
-                            ? Colors.blue
+                            ? Colors.yellow
                             : Colors.transparent,
                         text: _plans[index],
                         price: _prices[index]));
@@ -158,7 +158,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               onTap: () {},
               child: CustomButton(
                 text: 'Continue',
-                color: Colors.blue,
+                color: Colors.yellow,
                 onTap: () {
                   // openCheckout();
                   if (_termsCheck) {
@@ -217,7 +217,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         // height: 50,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.lightBlueAccent),
+            border: Border.all(color: Colors.yellowAccent),
             borderRadius: BorderRadius.all(
               Radius.circular(4),
             ),
