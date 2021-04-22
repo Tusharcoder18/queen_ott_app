@@ -17,6 +17,7 @@ class SeriesGridWidget extends StatefulWidget {
 
 class _SeriesGridWidgetState extends State<SeriesGridWidget> {
   List<Series> gridContents = [];
+  bool isLoading = false;
 
   Future<void> fetchSeriesList() async {
     await context
@@ -32,6 +33,9 @@ class _SeriesGridWidgetState extends State<SeriesGridWidget> {
 
   @override
   void initState() {
+    setState(() {
+      isLoading = true;
+    });
     super.initState();
     print('init');
     fetchSeriesList();

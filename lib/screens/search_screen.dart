@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
-import 'package:queen_ott_app/widgets/video_grid_widgetvider.dart';
+import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

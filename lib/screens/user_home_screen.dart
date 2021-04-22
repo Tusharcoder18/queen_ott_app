@@ -12,6 +12,7 @@ import 'package:queen_ott_app/pages/no_internet_page.dart';
 import 'package:queen_ott_app/pages/shows_page.dart';
 import 'package:queen_ott_app/pages/upcoming_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
