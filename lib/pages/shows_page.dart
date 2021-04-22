@@ -89,11 +89,6 @@ class _ShowsPageState extends State<ShowsPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    // BannerWidget(
-                    //   banners[index],
-                    //   screenHeight: screenHeight,
-                    //   screenWidth: screenWidth,
-                    // ),
                   ],
                 ),
               );

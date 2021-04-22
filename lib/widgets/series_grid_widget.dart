@@ -21,11 +21,8 @@ class _SeriesGridWidgetState extends State<SeriesGridWidget> {
   List<Series> gridContents = [];
   bool isLoading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    print('init');
-    context
+  Future<void> fetchSeriesList() async {
+    await context
         .read<SeriesFetchingService>()
         .fetchSeriesList(context)
         .whenComplete(() {
@@ -34,6 +31,13 @@ class _SeriesGridWidgetState extends State<SeriesGridWidget> {
         isLoading = false;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print('init');
+    fetchSeriesList();
   }
 
   @override
