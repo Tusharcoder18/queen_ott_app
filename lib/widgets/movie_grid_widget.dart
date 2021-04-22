@@ -7,10 +7,8 @@ import 'package:queen_ott_app/services/video_fetching_service.dart';
 class MovieGridWidget extends StatefulWidget {
   MovieGridWidget({
     this.physics,
-    this.videos,
   });
 
-  final List<Video> videos;
   final ScrollPhysics physics;
 
   @override
@@ -23,12 +21,12 @@ class _MovieGridWidgetState extends State<MovieGridWidget> {
   @override
   void initState() {
     super.initState();
-    // gridContents = widget.videos;
-    context.read<VideoFetchingService>().fetchVideoList().whenComplete(() {
-      setState(() {
-        gridContents = context.read<VideoFetchingService>().getVideos();
-      });
-    });
+    // // gridContents = widget.videos;
+    // context.read<VideoFetchingService>().fetchVideoList().whenComplete(() {
+    //   setState(() {
+    gridContents = context.read<VideoFetchingService>().getVideos();
+    //   });
+    // });
   }
 
   @override

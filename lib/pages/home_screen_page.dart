@@ -32,6 +32,7 @@ class HomeScreenWidget extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                   prefs.setBool('notificationsEnabled', true);
+                  prefs.setString('notificationsType', 'all');
                   prefs.setBool('isFirstLoaded', false);
                 },
               ),

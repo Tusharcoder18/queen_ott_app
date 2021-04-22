@@ -7,10 +7,8 @@ import 'package:queen_ott_app/services/series_fetching_service.dart';
 class SeriesGridWidget extends StatefulWidget {
   SeriesGridWidget({
     this.physics,
-    this.series,
   });
 
-  final List<Series> series;
   final ScrollPhysics physics;
 
   @override
@@ -19,7 +17,6 @@ class SeriesGridWidget extends StatefulWidget {
 
 class _SeriesGridWidgetState extends State<SeriesGridWidget> {
   List<Series> gridContents = [];
-  bool isLoading = true;
 
   Future<void> fetchSeriesList() async {
     await context

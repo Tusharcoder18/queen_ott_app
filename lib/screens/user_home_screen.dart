@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,10 +86,51 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 20,
-              child: Icon(FontAwesomeIcons.bell),
-            ),
+            IconButton(
+                icon: Icon(FontAwesomeIcons.bell),
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          height: screenHeight * 0.25,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // set the type of notification on tap(observe the naming convention for preference value)
+                              ListTile(
+                                onTap: () {
+                                  prefs.setString('notificationsType', 'all');
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text('All'),
+                              ),
+                              ListTile(
+                                onTap: () {
+                                  prefs.setString(
+                                      'notificationsType', 'coming_soon');
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text('Coming Soon'),
+                              ),
+                              ListTile(
+                                onTap: () {
+                                  prefs.setString(
+                                      'notificationsType', 'updates');
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text('Updates'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }),
             Container(
               padding: EdgeInsets.only(bottom: 5),
               height: 50,
