@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/pages/menu_page.dart';
 import 'package:queen_ott_app/pages/movies_page.dart';
@@ -11,7 +12,6 @@ import 'package:queen_ott_app/pages/no_internet_page.dart';
 import 'package:queen_ott_app/pages/shows_page.dart';
 import 'package:queen_ott_app/pages/upcoming_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -146,13 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               prices: _prices,
                             )));
               },
-              color: Colors.yellow,
+              color: kGoldenColor,
               child: Text(
                 'Subscribe',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1
-                    .copyWith(color: Colors.black),
+                style: TextStyle(color: Colors.black),
               ),
             ),
             Container(
@@ -191,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.yellowAccent,
+        selectedItemColor: Color(0xFFFFD700),
         onTap: _onItemTapped,
       ),
       body: RefreshIndicator(

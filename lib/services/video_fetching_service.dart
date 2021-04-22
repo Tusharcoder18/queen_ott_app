@@ -8,27 +8,7 @@ class VideoFetchingService extends ChangeNotifier {
   FirebaseFirestore _firebaseFirestore;
 
   final String videoInfo = "VideoInfo";
-  // List<dynamic> _videoList = [];
-  // List<String> _videoThumbnail = [];
-  // List<String> _videoUrlList = [];
-  // List<String> _videoNameList = [];
-  // List<String> _videoDescriptionList = [];
   List<Video> _videos = [];
-
-  // List<List<String>> _genreList = [];
-  // List<String> _genreCollectionList = [
-  //   "VideoActionCollection",
-  //   "VideoAnimationCollection",
-  //   "VideoCrimeCollection",
-  //   "VideoComedyCollection",
-  //   "VideoDramaCollection",
-  //   "VideoFantasyCollection",
-  //   "VideoHistoricalCollection",
-  //   "VideoHorrorCollection",
-  //   "VideoRomanceCollection"
-  // ];
-  //
-  // /// The list contains all the list for all the genre
 
   /// This is the list for all the genre
   List<String> _actionList = [];
@@ -54,11 +34,6 @@ class VideoFetchingService extends ChangeNotifier {
 
   /// To fetch all the videos that are there in the database
   Future<void> fetchVideoList() async {
-    // _videoList = [];
-    // _videoThumbnail = [];
-    // _videoUrlList = [];
-    // _videoNameList = [];
-    // _videoDescriptionList = [];
     _videos = [];
     final collection = await _firebaseFirestore.collection(videoInfo).get();
     final List<DocumentSnapshot> documents = collection.docs;
@@ -81,8 +56,6 @@ class VideoFetchingService extends ChangeNotifier {
   }
 
   Future<void> fetchVideoListSubset(List<String> titles) async {
-    // _videoThumbnail = [];
-    // _videoUrlList = [];
     _videos = [];
     final collection = await _firebaseFirestore.collection(videoInfo).get();
     final List<DocumentSnapshot> documents = collection.docs;
@@ -104,25 +77,6 @@ class VideoFetchingService extends ChangeNotifier {
   List<Video> getVideos() {
     return _videos;
   }
-
-  /// To fetch the genreFrom the database
-  // Future<void> fetchGenreList() async{
-  //   int i = 0;
-  //   _genreList = [];
-  //   List<String> _documentList = [];
-  //   _genreCollectionList.forEach((element) async{
-  //     print("Genre collection is called $element");
-  //     _documentList = [];
-  //     final collection = await _firebaseFirestore.collection(element).get();
-  //     final List<DocumentSnapshot> documents = collection.docs;
-  //     documents.forEach((elementSub) {
-  //       print("This document is called");
-  //       _documentList.add(elementSub.data()["videoRef"]);
-  //     });
-  //     _genreList.add(_documentList);
-  //   });
-  //   print(_genreList);
-  // }
 
   Future<List<String>> fetchGivenGenreList({String collectionName}) async {
     List<String> fetchList = [];

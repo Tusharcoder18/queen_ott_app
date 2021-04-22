@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/series_grid_widget.dart';
 
 // This Widget contains all the shows to be displayed under recommended shows
@@ -38,11 +37,11 @@ class _RecommendedShowWidgetState extends State<RecommendedShowWidget> {
                 SeriesGridWidget(
                   physics: NeverScrollableScrollPhysics(),
                 ),
-                BannerWidget(
-                  banners[index],
-                  screenHeight: screenHeight,
-                  screenWidth: screenWidth,
-                ),
+                // BannerWidget(
+                //   banners[index],
+                //   screenHeight: screenHeight,
+                //   screenWidth: screenWidth,
+                // ),
               ],
             ),
           );

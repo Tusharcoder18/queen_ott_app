@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:queen_ott_app/models/video.dart';
-import 'package:queen_ott_app/services/series_fetching_service.dart';
-import 'package:queen_ott_app/services/video_fetching_service.dart';
-import 'package:queen_ott_app/widgets/video_grid_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/models/video.dart';
+import 'package:queen_ott_app/services/video_fetching_service.dart';
+import 'package:queen_ott_app/widgets/video_grid_widgetvider.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -70,12 +69,6 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
 class SearchScreeenDelegate extends SearchDelegate<String> {
-  // List<String> _videoThumbnailList = [];
-  // List<String> _videoUrlList = [];
-  // List<String> _videoNameList = [];
-  // List<String> _seriesThumbnailList = [];
-  // List<dynamic> _seriesList = [];
-  // List<String> _seriesNameList = [];
   List<Video> _searchResults = [];
   List<Video> _videos;
 
@@ -83,30 +76,6 @@ class SearchScreeenDelegate extends SearchDelegate<String> {
     context.read<VideoFetchingService>().fetchVideoList().whenComplete(() {});
     _videos = context.read<VideoFetchingService>().getVideos();
   }
-
-  // Future<void> fetchLists(BuildContext context) async {
-  // await context.read<VideoFetchingService>().fetchVideoList();
-  // await context.read<SeriesFetchingService>().fetchSeriesList();
-
-  // _videoNameList = context.read<VideoFetchingService>().returnVideoNameList();
-  // _seriesNameList =
-  //     context.read<SeriesFetchingService>().returnSeriesNameList();
-  // _videoThumbnailList =
-  //     context.read<VideoFetchingService>().returnVideoThumbnail();
-  // _seriesThumbnailList =
-  //     context.read<SeriesFetchingService>().returnSeriesThumbnail();
-  // _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
-  // _seriesList = context.read<SeriesFetchingService>().returnSeriesList();
-  // }
-
-  // Future<void> fetchData(BuildContext context) async {
-  //   await context
-  //       .read<VideoFetchingService>()
-  //       .fetchVideoListSubset(_searchResults);
-  //   _videoThumbnailList =
-  //       context.read<VideoFetchingService>().returnVideoThumbnail();
-  //   _videoUrlList = context.read<VideoFetchingService>().returnVideoUrlList();
-  // }
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -164,21 +133,6 @@ class SearchScreeenDelegate extends SearchDelegate<String> {
         ),
       );
     } else {
-      // This will traverse through the video list and store the search results in _searchResults
-      // if (_searchResults.isEmpty) {
-      //   _videoNameList.forEach((element) {
-      //     if (element.toLowerCase().startsWith(query.toLowerCase()) &&
-      //         !_searchResults.contains(element)) {
-      //       _searchResults.add(element);
-      //     }
-      //   });
-      // } else {
-      //   _searchResults.removeWhere((element) =>
-      //       !element.toLowerCase().startsWith(query.toLowerCase()));
-      // }
-      // print(_searchResults);
-      // fetchData(context);
-
       if (_searchResults.isEmpty) {
         _videos.forEach((element) {
           var title = element.getVideoTitle();
