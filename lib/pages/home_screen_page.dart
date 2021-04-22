@@ -103,7 +103,13 @@ class HomeScreenWidget extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  ContinueWatchingWidget(),
+                  Container(
+                    child: Column(
+                      children: [
+                        ContinueWatchingWidget(),
+                      ],
+                    ),
+                  ),
                   RecommendedShowWidget(),
                   LanguageShowsWidget(),
                   Center(

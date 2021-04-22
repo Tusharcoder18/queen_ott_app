@@ -57,11 +57,6 @@ class _MoviesPageState extends State<MoviesPage> {
                     MovieGridWidget(
                       physics: NeverScrollableScrollPhysics(),
                     ),
-                    BannerWidget(
-                      banners[index],
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                    ),
                   ],
                 ),
               );
