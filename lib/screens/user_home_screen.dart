@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
-                icon: Icon(FontAwesomeIcons.bell),
+                icon: Icon(FontAwesomeIcons.bell, color: Color(0xFFFFBF00),),
                 onPressed: () async {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               child: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.search, color: Color(0xFFFFBF00),),
                   onPressed: () {
                     // showSearch(
                     //     context: context,
