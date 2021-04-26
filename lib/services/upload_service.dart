@@ -340,6 +340,7 @@ class UploadService extends ChangeNotifier {
     } catch (e) {
       print('No Internet');
       print(e);
+      return [];
     }
   }
   /*

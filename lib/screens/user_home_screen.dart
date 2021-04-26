@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFFFD700),
+        selectedItemColor: kGoldenColor,
         onTap: _onItemTapped,
       ),
       body: RefreshIndicator(

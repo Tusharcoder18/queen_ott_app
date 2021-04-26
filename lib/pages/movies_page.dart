@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:queen_ott_app/models/video.dart';
-import 'package:queen_ott_app/services/video_fetching_service.dart';
-import 'package:queen_ott_app/widgets/banner_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/movie_grid_widget.dart';
 
@@ -16,11 +12,6 @@ class _MoviesPageState extends State<MoviesPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    List<String> banners = [
-      'assets/movieTwo.jpg',
-      'assets/moviePoster.jpg',
-      'assets/movieOne.jpg',
-    ];
     List<String> titles = [
       'Award Winning Movies',
       'Best of 90s',

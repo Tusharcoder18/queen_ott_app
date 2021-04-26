@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dart';
 import 'package:queen_ott_app/musicPages/my_app_audio.dart';
 
@@ -30,8 +31,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -52,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
                   Text(
                     'Search',
                     style: TextStyle(
+                      color: kGoldenColor,
                         fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold,
                         fontSize: 28.0),
@@ -59,6 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                   IconButton(
                     icon: Icon(
                       Icons.search,
+                      color: kGoldenColor,
                       size: 32,
                     ),
                     onPressed: () {
@@ -83,6 +84,7 @@ class _SearchPageState extends State<SearchPage> {
             Text(
               'Search By Genre',
               style: TextStyle(
+                color: kGoldenColor,
                   fontFamily: 'OpenSans',
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
@@ -245,7 +247,6 @@ class DataSearch extends SearchDelegate<String> {
         ),
       ),
     );
-    throw UnimplementedError();
   }
 
   @override
@@ -279,6 +280,5 @@ class DataSearch extends SearchDelegate<String> {
         ),
       ),
     );
-    throw UnimplementedError();
   }
 }

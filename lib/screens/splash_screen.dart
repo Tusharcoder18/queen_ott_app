@@ -1,10 +1,6 @@
-import 'dart:async';
-import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/models/series.dart';
-import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
