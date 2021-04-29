@@ -17,67 +17,70 @@ class SeriesGridWidget extends StatefulWidget {
 
 class _SeriesGridWidgetState extends State<SeriesGridWidget> {
   List<Series> gridContents = [];
+  bool isLoading = false;
+
+  Future<void> fetchSeriesList() async {
+    await context
+        .read<SeriesFetchingService>()
+        .fetchSeriesList(context)
+        .whenComplete(() {
+      setState(() {
+        gridContents = context.read<SeriesFetchingService>().getSeriesList();
+        isLoading = false;
+      });
+    });
+  }
 
   @override
   void initState() {
+    setState(() {
+      isLoading = true;
+    });
     super.initState();
-    // print('init');
-    // context
-    //     .read<SeriesFetchingService>()
-    //     .fetchSeriesList(context)
-    //     .whenComplete(() {
-    //   setState(() {
-    gridContents = context.read<SeriesFetchingService>().getSeriesList();
-    //   });
-    // });
+    print('init');
+    fetchSeriesList();
   }
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      height: screenHeight * 0.42,
-      child: GridView.count(
-        // Creates a 2 row scrollable listview
-        crossAxisCount: 3,
-        physics: widget.physics,
-        childAspectRatio: 0.8,
-        children: List.generate(gridContents.length, (index) {
-          // print(gridContents[index].getSeriesTitle());
-          return GestureDetector(
-            onTap: () async {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return SeriesDetailScreen(gridContents[index]);
-              }));
-            },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.all(5),
-                      height: screenWidth * 0.37,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Colors.pink),
-                      child: ClipRRect(
+    return isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Container(
+            height: screenHeight * 0.2,
+            width: screenWidth,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: gridContents.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return SeriesDetailScreen(gridContents[index]);
+                    }));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          gridContents[index].getSeriesThumbnail(),
-                          fit: BoxFit.cover,
-                          height: screenWidth * 0.54,
-                        ),
+                        color: Colors.pink),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.network(
+                        gridContents[index].getSeriesThumbnail(),
+                        fit: BoxFit.cover,
+                        height: screenHeight * 0.20,
+                        width: screenWidth * 0.30,
                       ),
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           );
-        }),
-      ),
-    );
   }
 }

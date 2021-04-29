@@ -70,11 +70,6 @@ class _MoviesPageState extends State<UpcomingPage> {
                     SeriesGridWidget(
                       physics: NeverScrollableScrollPhysics(),
                     ),
-                    // BannerWidget(
-                    //   banners[index],
-                    //   screenHeight: screenHeight,
-                    //   screenWidth: screenWidth,
-                    // ),
                   ],
                 ),
               );

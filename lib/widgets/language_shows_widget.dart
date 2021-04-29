@@ -12,28 +12,32 @@ class LanguageShowsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Container(
+      height: screenHeight * 0.2,
+      width: screenWidth,
       child: ListView.builder(
           itemCount: languages.length,
-          scrollDirection: Axis.vertical,
+          scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: screenWidth * 0.3,
-                width: double.infinity,
+                height: screenHeight*0.2,
+                width: screenWidth*0.3,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [Colors.green, Colors.lightBlueAccent]),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Center(
-                    child: Text(
-                  languages[index],
-                  style: Theme.of(context).textTheme.headline1,
-                )),
+                  child: Text(
+                    languages[index],
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                ),
               ),
             );
           }),

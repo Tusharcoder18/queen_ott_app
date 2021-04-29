@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:share/share.dart';
 
@@ -54,7 +55,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                   suffixIcon: Icon(Icons.copy),
                   disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.yellowAccent),
+                    borderSide: BorderSide(color: kGoldenColor),
                   ),
                   hintText: 'Referral Code',
                 ),
@@ -76,7 +77,7 @@ class ReferAndEarnScreen extends StatelessWidget {
                 Icons.share,
                 color: Colors.black,
               ),
-              color: Colors.yellow,
+              color: kGoldenColor,
               onTap: () async {
                 try {
                   await Share.share(

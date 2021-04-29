@@ -3,9 +3,6 @@ import 'package:queen_ott_app/models/series.dart';
 import 'package:queen_ott_app/models/video.dart';
 import 'package:queen_ott_app/screens/series_details_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
-import 'package:queen_ott_app/services/series_fetching_service.dart';
-import 'package:queen_ott_app/services/video_fetching_service.dart';
-import 'package:provider/provider.dart';
 
 class VideoGridWidget extends StatefulWidget {
   VideoGridWidget({
@@ -26,6 +23,7 @@ class VideoGridWidget extends StatefulWidget {
   final bool isVideo;
   final bool isSeries;
   final ScrollPhysics physics;
+
   // This is temporary to show results for search functionality
   // final bool isSearchGrid;
   // final List<String> videoThumbnailList;
@@ -39,6 +37,7 @@ class VideoGridWidget extends StatefulWidget {
 
 class _VideoGridWidgetState extends State<VideoGridWidget> {
   List gridContents = [];
+
   // List<String> _videoThumbnailList = [];
   // List<dynamic> _videoList = [];
   // List<String> _videoUrlList = [];
@@ -122,16 +121,21 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
               //   await context
               //       .read<SeriesFetchingService>()
               //       .getSeasonAndEpisodeInfo(inputDocument: _seriesList[index]);
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                if (widget.isVideo) {
-                  return Test(
-                    videoUrl: gridContents[index].getVideoUrl(),
-                    thumbnailUrl: gridContents[index].getVideoThumbnail(),
-                  );
-                } else if (widget.isSeries) {
-                  return SeriesDetailScreen(gridContents[index]);
-                }
-              }));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    if (widget.isVideo) {
+                      return Test(
+                        videoUrl: gridContents[index].getVideoUrl(),
+                        thumbnailUrl: gridContents[index].getVideoThumbnail(),
+                      );
+                    } else if (widget.isSeries) {
+                      return SeriesDetailScreen(gridContents[index]);
+                    }
+                  },
+                ),
+              );
             },
             child: Container(
               child: Row(

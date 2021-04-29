@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queen_ott_app/GuitarLessons/guitar_lessons.dart';
+import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -128,7 +129,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 return Container(
                     child: _rowButton(
                         color: index == _selectPlan
-                            ? Colors.yellow
+                            ? kGoldenColor
                             : Colors.transparent,
                         text: _plans[index],
                         price: _prices[index]));
@@ -158,7 +159,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               onTap: () {},
               child: CustomButton(
                 text: 'Continue',
-                color: Colors.yellow,
+                color: kGoldenColor,
                 onTap: () {
                   // openCheckout();
                   if (_termsCheck) {
@@ -217,7 +218,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         // height: 50,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.yellowAccent),
+            border: Border.all(color: kGoldenColor),
             borderRadius: BorderRadius.all(
               Radius.circular(4),
             ),

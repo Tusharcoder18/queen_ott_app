@@ -12,7 +12,6 @@ class MyAppAudio extends StatefulWidget {
 }
 
 class _MyAppAudioState extends State<MyAppAudio> {
-  String _platformVersion = 'Unknown';
   //final assetsAudioPlayer = AssetsAudioPlayer();
   AudioManager _audioManagerInstance = AudioManager.instance;
   bool isPlaying = false;

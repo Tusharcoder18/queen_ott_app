@@ -6,14 +6,18 @@ import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/widgets/continue_watching_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/language_shows_widget.dart';
-import 'package:queen_ott_app/widgets/recommended_shows_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeScreenWidget extends StatelessWidget {
+class HomeScreenWidget extends StatefulWidget {
   // This is to give font style to the different headings
   // on the screen
 
   // This will be called every time the app starts and if the notifications are not enabled
+  @override
+  _HomeScreenWidgetState createState() => _HomeScreenWidgetState();
+}
+
+class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   showDialogIfNoNotifications(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool notificationsEnabled = prefs.getBool('notificationsEnabled');
@@ -51,6 +55,13 @@ class HomeScreenWidget extends StatelessWidget {
     }
   }
 
+  List<String> _headingList = [
+    'Continue Watching',
+    'Recommended',
+    'Language',
+    'The Globe @ World Own News Channel'
+  ];
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -61,64 +72,46 @@ class HomeScreenWidget extends StatelessWidget {
     _name = _name.split(" ")[0];
 
     Future.delayed(Duration.zero, () => showDialogIfNoNotifications(context));
-    return DefaultTabController(
-      length: 4,
+    return SingleChildScrollView(
       child: Container(
         width: screenWidth,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          // crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Welcome $_name',
-              style:
-                  Theme.of(context).textTheme.headline1.copyWith(fontSize: 20),
-            ),
             Container(
               height: screenHeight * 0.2,
               width: screenWidth,
               color: Colors.pink,
               child: ImageCarousel(),
             ),
-            SizedBox(
-              height: screenHeight * 0.06,
-              child: AppBar(
-                bottom: TabBar(
-                  tabs: [
-                    Tab(
-                      text: 'Continue Watching',
-                    ),
-                    Tab(
-                      text: 'Recommended',
-                    ),
-                    Tab(
-                      text: 'Language',
-                    ),
-                    Tab(
-                      text: 'The Globe @ World Own News Channel',
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  Container(
-                    child: Column(
-                      children: [
-                        ContinueWatchingWidget(),
-                      ],
-                    ),
-                  ),
-                  RecommendedShowWidget(),
-                  LanguageShowsWidget(),
-                  Center(
-                    child: Text('The Globe @ World Own News Channel'),
-                  ),
-                ],
-              ),
-            ),
+            HorizontalScrollHomeWidget(heading: _headingList[0], widget: ContinueWatchingWidget(),),
+            HorizontalScrollHomeWidget(heading: _headingList[1], widget: ContinueWatchingWidget(),),
+            HorizontalScrollHomeWidget(heading: _headingList[2], widget: LanguageShowsWidget(),),
+            HorizontalScrollHomeWidget(heading: _headingList[3], widget: ContinueWatchingWidget(),),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HorizontalScrollHomeWidget extends StatelessWidget {
+
+  HorizontalScrollHomeWidget({@required this.heading, @required this.widget});
+
+  final String heading;
+  final Widget widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(heading),
+            widget,
           ],
         ),
       ),
