@@ -12,6 +12,7 @@ import 'package:queen_ott_app/pages/no_internet_page.dart';
 import 'package:queen_ott_app/pages/shows_page.dart';
 import 'package:queen_ott_app/pages/upcoming_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -77,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,10 +87,51 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 20,
-              child: Icon(FontAwesomeIcons.bell),
-            ),
+            IconButton(
+                icon: Icon(FontAwesomeIcons.bell, color: Color(0xFFFFBF00),),
+                onPressed: () async {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          height: screenHeight * 0.25,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // set the type of notification on tap(observe the naming convention for preference value)
+                              ListTile(
+                                onTap: () {
+                                  prefs.setString('notificationsType', 'all');
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text('All'),
+                              ),
+                              ListTile(
+                                onTap: () {
+                                  prefs.setString(
+                                      'notificationsType', 'coming_soon');
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text('Coming Soon'),
+                              ),
+                              ListTile(
+                                onTap: () {
+                                  prefs.setString(
+                                      'notificationsType', 'updates');
+                                  Navigator.of(context).pop();
+                                },
+                                title: Text('Updates'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }),
             Container(
               padding: EdgeInsets.only(bottom: 5),
               height: 50,
@@ -112,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               child: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.search, color: Color(0xFFFFBF00),),
                   onPressed: () {
                     // showSearch(
                     //     context: context,
@@ -146,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFFFD700),
+        selectedItemColor: kGoldenColor,
         onTap: _onItemTapped,
       ),
       body: RefreshIndicator(

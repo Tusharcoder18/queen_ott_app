@@ -1,16 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/content_creator_screen.dart';
 import 'package:queen_ott_app/screens/test.dart';
-import 'package:queen_ott_app/services/series_fetching_service.dart';
+import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/widgets/add_description_widget.dart';
 import 'package:queen_ott_app/widgets/add_series_button.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:queen_ott_app/widgets/select_genre_widget.dart';
-import 'dart:io';
-import '../services/upload_service.dart';
-import 'package:path_provider/path_provider.dart';
 
 String name;
 File videoFile;
@@ -138,12 +138,6 @@ class _UploadScreenState extends State<UploadScreen> {
                           },
                         ),
                       ),
-                      // CustomButton(
-                      //   text: "Temp button to see fetching",
-                      //   onTap: () async {
-                      //     context.read<SeriesFetchingService>().fetchSeriesList();
-                      //   },
-                      // ),
                     ],
                   ),
                 ),

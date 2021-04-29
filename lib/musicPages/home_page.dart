@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dart';
 import 'package:queen_ott_app/musicPages/my_app_audio.dart';
 import 'package:queen_ott_app/widgets/loading_widget.dart';
@@ -64,6 +65,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           'Welcome Back',
                           style: TextStyle(
+                            color: kGoldenColor,
                               fontFamily: 'OpenSans',
                               fontSize: 28.0,
                               fontWeight: FontWeight.bold),

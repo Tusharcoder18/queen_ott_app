@@ -12,7 +12,7 @@ get darkTheme => ThemeData(
       ),
       brightness: Brightness.dark,
       canvasColor: Colors.black45,
-      accentColor: Colors.yellowAccent,
+      accentColor: Color(0xFFFFBF00),
       accentIconTheme: IconThemeData(color: Colors.white),
       fontFamily: 'OpenSans',
       textTheme: TextTheme(
