@@ -39,4 +39,10 @@ class _TermsOfUseState extends State<TermsOfUse> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    pdfController.dispose();
+    super.dispose();
+  }
 }
