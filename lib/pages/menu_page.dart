@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:queen_ott_app/pages/about_us_page.dart';
 import 'package:queen_ott_app/pages/settings_page.dart';
 import 'package:queen_ott_app/screens/referral_screen.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
@@ -40,6 +41,7 @@ class _MenuPageState extends State<MenuPage> {
       'Support/Help',
       'Subscribe',
       'Settings',
+      'About us'
     ];
     List<IconData> _leadingIcon = [
       FontAwesomeIcons.music,
@@ -50,6 +52,7 @@ class _MenuPageState extends State<MenuPage> {
       Icons.help,
       Icons.subscriptions,
       Icons.settings,
+      Icons.account_box_outlined
     ];
     List<Widget> _pushTo = [
       MusicHomeScreen(),
@@ -63,6 +66,7 @@ class _MenuPageState extends State<MenuPage> {
         prices: _premiumPrices,
       ),
       SettingsPage(isCreator: widget.isCreator),
+      AboutUs(),
     ];
     return Container(
       child: SettingsList(

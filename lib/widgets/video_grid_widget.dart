@@ -124,16 +124,10 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    if (widget.isVideo) {
-                      return Test(
-                        videoUrl: gridContents[index].getVideoUrl(),
-                        thumbnailUrl: gridContents[index].getVideoThumbnail(),
-                      );
-                    } else if (widget.isSeries) {
-                      return SeriesDetailScreen(gridContents[index]);
-                    }
-                  },
+                  builder: (context) => widget.isVideo ? Test(
+                    videoUrl: gridContents[index].getVideoUrl(),
+                    thumbnailUrl: gridContents[index].getVideoThumbnail(),
+                  ) : SeriesDetailScreen(gridContents[index]),
                 ),
               );
             },
