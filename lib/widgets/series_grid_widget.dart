@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:queen_ott_app/models/series.dart';
 import 'package:queen_ott_app/screens/series_details_screen.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
-import 'package:provider/provider.dart';
 
 class SeriesGridWidget extends StatefulWidget {
   SeriesGridWidget({
