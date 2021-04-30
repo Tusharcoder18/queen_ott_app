@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';
 
+
+/// This page is for the Terms of Use
+/// native_pdf_view is used here
+/// the pdf is stored as toc.pdf in assets folder of the project
+
 class TermsOfUse extends StatefulWidget {
   @override
   _TermsOfUseState createState() => _TermsOfUseState();
