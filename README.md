@@ -1,6 +1,6 @@
 # queen_ott_app
 
-A new Flutter project.
+This is the changed description.
 
 ## Getting Started
 
