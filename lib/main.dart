@@ -6,10 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/GuitarLessons/guitar_video_fetchin_service.dart';
 import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dart';
+import 'package:queen_ott_app/screens/payments_test/dummy_payments.dart';
 import 'package:queen_ott_app/screens/splash_screen.dart';
+import 'package:queen_ott_app/screens/subscription_screen.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
+import 'package:queen_ott_app/services/auth_service.dart';
 import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
+import 'package:queen_ott_app/services/subscription_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
@@ -31,36 +35,30 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AuthenticationService>(
-          create: (_) => AuthenticationService(FirebaseAuth.instance),
-        ),
+            create: (_) => AuthenticationService(FirebaseAuth.instance)),
+
         StreamProvider(
-          create: (context) =>
-              context.read<AuthenticationService>().authStateChanges,
-        ),
-        Provider<UploadService>(
-          create: (_) => UploadService(),
-        ),
+            create: (context) =>
+                context.read<AuthenticationService>().authStateChanges),
+        Provider<UploadService>(create: (_) => UploadService()),
+        Provider<AuthBase>(create: (_) => Auth()),
         ChangeNotifierProvider<AddSeriesServices>(
-          create: (_) => AddSeriesServices(FirebaseFirestore.instance),
-        ),
+            create: (_) => AddSeriesServices(FirebaseFirestore.instance)),
         ChangeNotifierProvider<SeriesFetchingService>(
-          create: (_) => SeriesFetchingService(FirebaseFirestore.instance),
-        ),
+            create: (_) => SeriesFetchingService(FirebaseFirestore.instance)),
         ChangeNotifierProvider<VideoFetchingService>(
-          create: (_) => VideoFetchingService(FirebaseFirestore.instance),
-        ),
+            create: (_) => VideoFetchingService(FirebaseFirestore.instance)),
         ChangeNotifierProvider<MusicFetchingService>(
-          create: (_) => MusicFetchingService(FirebaseFirestore.instance),
-        ),
+            create: (_) => MusicFetchingService(FirebaseFirestore.instance)),
         ChangeNotifierProvider<GuitarService>(
-          create: (_) => GuitarService(FirebaseFirestore.instance),
-        ),
+            create: (_) => GuitarService(FirebaseFirestore.instance)),
       ],
       child: MaterialApp(
         title: 'Queen App',
         theme: darkTheme,
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
+        // home: DummyPaymentsScreen(),
       ),
     );
   }

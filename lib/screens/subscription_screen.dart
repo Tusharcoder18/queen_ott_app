@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:queen_ott_app/GuitarLessons/guitar_lessons.dart';
 import 'package:queen_ott_app/constants.dart';
+import 'package:queen_ott_app/screens/payments_test/payment_result_screen.dart';
+import 'package:queen_ott_app/services/subscription_service.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -15,22 +18,26 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
+  // final paymentServices = Provider.of<SubscriptionService>(context);
   int _selectPlan = 0;
   int _amount = 49;
   bool _termsCheck = false;
   List<String> _plans;
   List<int> _prices;
-  String _key = 'rzp_test_E9FL3va4DIckGC'; // Temporary test key
+  // String _key = 'rzp_test_H4Jt3Vhw1RXrNb'; //Shubh's test key
+  // String _key = 'rzp_test_E9FL3va4DIckGC'; // Temporary test key
+  // String _key = 'rzp_live_ZgiDDMAdTtLzjI'; // Live test key
+  String _key = 'rzp_test_QiF0rp5gsQsfoq'; // client's test key
   Razorpay _razorpay;
 
   @override
   void initState() {
     super.initState();
     _razorpay = Razorpay(); // Create Razorpay instance
-
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // Provider.of<SubscriptionService>(context).initial();
 
     _plans = widget.plans;
     _prices = widget.prices;
@@ -38,18 +45,23 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   void dispose() {
-    super.dispose();
-    _razorpay.clear(); // Removes all listeners
+    // Provider.of<SubscriptionService>(context).dispose();
+    _razorpay.clear();
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     print('Success');
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(title: Center(child: Text('Payment Successful')));
-        });
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(
+            child: Text('Payment Successful'),
+          ),
+        );
+      },
+    );
     print(response.orderId);
     print(response.paymentId);
     print(response.signature);
@@ -58,23 +70,34 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   void _handlePaymentError(PaymentFailureResponse response) {
     print('Failure');
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(title: Center(child: Text('Payment Failed')));
-        });
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(
+            child: Text('Payment Failed'),
+          ),
+        );
+      },
+    );
     print(response.message);
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
     print('External Wallet');
     showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-              title: Center(child: Text('Payment Successful(Wallet)')));
-        });
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Center(
+            child: Text(
+              'Payment Successful(Wallet)',
+            ),
+          ),
+        );
+      },
+    );
     print(response.walletName);
   }
 
@@ -84,8 +107,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       'amount': _amount * 100,
       'name': 'Queen OTT',
       'description': 'Subscription to Queen OTT services',
-      ''
-          'prefill': {'contact': '8888888888', 'email': 'test@gmail.com'}
+      'prefill': {
+        'contact': '9969113464', //Add real users phone number.
+        'email': 'test@gmail.com', //Add real users email id.
+      }
     };
 
     try {
@@ -125,25 +150,33 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               crossAxisCount: 2,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              children: List.generate(4, (index) {
-                return Container(
+              children: List.generate(
+                4,
+                (index) {
+                  return Container(
                     child: _rowButton(
-                        color: index == _selectPlan
-                            ? kGoldenColor
-                            : Colors.transparent,
-                        text: _plans[index],
-                        price: _prices[index]));
-              }),
+                      color: index == _selectPlan
+                          ? kGoldenColor
+                          : Colors.transparent,
+                      text: _plans[index],
+                      price: _prices[index],
+                    ),
+                  );
+                },
+              ),
             ),
             Row(
               children: [
                 Checkbox(
-                    value: _termsCheck,
-                    onChanged: (value) {
-                      setState(() {
+                  value: _termsCheck,
+                  onChanged: (value) {
+                    setState(
+                      () {
                         _termsCheck = value;
-                      });
-                    }),
+                      },
+                    );
+                  },
+                ),
                 SizedBox(
                   width: 5,
                 ),
@@ -156,7 +189,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               height: 15,
             ),
             InkWell(
-              onTap: () {},
+              // onTap: () {},
               child: CustomButton(
                 text: 'Continue',
                 color: kGoldenColor,
@@ -164,12 +197,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   // openCheckout();
                   if (_termsCheck) {
                     print('Payment init');
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => GuitarPage(),
-                      ),
-                    );
+                    // Provider.of<SubscriptionService>(context).openCheckout();
+                    openCheckout();
+                    // Navigator.pop(context); // manage the workflow of the app
                   } else {
                     final snackBar = SnackBar(
                       content: Text(
@@ -218,11 +248,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         // height: 50,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border.all(color: kGoldenColor),
-            borderRadius: BorderRadius.all(
-              Radius.circular(4),
-            ),
-            color: color),
+          border: Border.all(color: kGoldenColor),
+          borderRadius: BorderRadius.all(
+            Radius.circular(4),
+          ),
+          color: color,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

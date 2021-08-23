@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:queen_ott_app/pages/legal_file_page.dart';
+import 'package:queen_ott_app/pages/terms_of_services_page.dart';
 import 'package:queen_ott_app/screens/content_creator_screen.dart';
 import 'package:queen_ott_app/screens/sign_in_screen.dart';
 import 'package:queen_ott_app/screens/user_home_screen.dart';
@@ -158,10 +160,19 @@ class _SettingsPageState extends State<SettingsPage> {
                         },
                       ),
                       SettingsTile(
-                          title: 'Legal', leading: Icon(Icons.description)),
+                        title: 'Legal',
+                        leading: Icon(Icons.description),
+                        onPressed: (context) {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LegalFilePage()));
+                        }
+                      ),
                       SettingsTile(
-                          title: 'Terms of Services',
-                          leading: Icon(Icons.description_outlined)),
+                        title: 'Terms of Services',
+                        leading: Icon(Icons.description_outlined),
+                        onPressed: (context) {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsOfService()));
+                        }
+                      ),
                       SettingsTile(
                         title: 'Sign out',
                         leading: Icon(Icons.exit_to_app),

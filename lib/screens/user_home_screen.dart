@@ -20,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _isSubscribed = false;
   int _selectedIndex = 0;
   bool _internet = false;
   List<Widget> _widgetOptions = <Widget>[
@@ -85,88 +86,105 @@ class _HomeScreenState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
-                icon: Icon(
-                  FontAwesomeIcons.bell,
-                  color: Color(0xFFFFBF00),
-                ),
-                onPressed: () async {
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Container(
-                          height: screenHeight * 0.25,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // set the type of notification on tap(observe the naming convention for preference value)
-                              ListTile(
-                                onTap: () {
-                                  prefs.setString('notificationsType', 'all');
-                                  Navigator.of(context).pop();
-                                },
-                                title: Text('All'),
-                              ),
-                              ListTile(
-                                onTap: () {
-                                  prefs.setString(
-                                      'notificationsType', 'coming_soon');
-                                  Navigator.of(context).pop();
-                                },
-                                title: Text('Coming Soon'),
-                              ),
-                              ListTile(
-                                onTap: () {
-                                  prefs.setString(
-                                      'notificationsType', 'updates');
-                                  Navigator.of(context).pop();
-                                },
-                                title: Text('Updates'),
-                              ),
-                            ],
+              icon: Icon(
+                FontAwesomeIcons.bell,
+                color: kGoldenColor,
+                size: 28,
+              ),
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Container(
+                        padding: EdgeInsets.all(0),
+                        height: screenHeight * 0.25,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // set the type of notification on tap(observe the naming convention for preference value)
+                            ListTile(
+                              onTap: () {
+                                prefs.setString('notificationsType', 'all');
+                                Navigator.of(context).pop();
+                              },
+                              title: Text('All'),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                prefs.setString(
+                                  'notificationsType',
+                                  'coming_soon',
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              title: Text('Coming Soon'),
+                            ),
+                            ListTile(
+                              onTap: () {
+                                prefs.setString(
+                                  'notificationsType',
+                                  'updates',
+                                );
+                                Navigator.of(context).pop();
+                              },
+                              title: Text('Updates'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                bottom: 8,
+                left: _isSubscribed
+                    ? MediaQuery.of(context).size.width * 0.14
+                    : MediaQuery.of(context).size.width * 0.01,
+              ),
+              height: 50,
+              child: Image.asset('assets/logo.png'),
+            ),
+            !_isSubscribed
+                ? MaterialButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SubscriptionScreen(
+                            plans: _plans,
+                            prices: _prices,
                           ),
                         ),
                       );
                     },
-                  );
-                }),
+                    color: kGoldenColor,
+                    child: Text(
+                      'Subscribe',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  )
+                : Container(),
             Container(
-              padding: EdgeInsets.only(bottom: 5),
-              height: 50,
-              child: Image.asset('assets/logo.png'),
-            ),
-            MaterialButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubscriptionScreen(
-                              plans: _plans,
-                              prices: _prices,
-                            )));
-              },
-              color: kGoldenColor,
-              child: Text(
-                'Subscribe',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            Container(
+              padding: EdgeInsets.all(0),
               child: IconButton(
-                  icon: Icon(
-                    Icons.search,
-                    color: Color(0xFFFFBF00),
-                  ),
-                  onPressed: () {
-                    // showSearch(
-                    //     context: context,
-                    //     delegate: SearchScreeenDelegate(context));
-                  }),
+                icon: Icon(
+                  Icons.search,
+                  color: kGoldenColor,
+                  size: 28,
+                ),
+                onPressed: () {
+                  // showSearch(
+                  //     context: context,
+                  //     delegate: SearchScreeenDelegate(context));
+                },
+              ),
             ),
           ],
         ),

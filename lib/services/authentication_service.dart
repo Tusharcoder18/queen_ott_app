@@ -57,7 +57,6 @@ class AuthenticationService {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-
       final UserCredential authResult = await _firebaseAuth
           .signInWithCredential(credential)
           .catchError((onError) {

@@ -35,9 +35,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
         child: Column(
           children: [
-            _headerWidget(),
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.06,
+              ),
+              child: Center(
+                child: Container(
+                  height: 100,
+                  child: Image.asset('assets/logo.png'),
+                ),
+              ),
+            ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.18,
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
             _formWidget(),
           ],
@@ -46,21 +56,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _headerWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "QUEEN",
-          style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
-        ),
-        Container(
-          height: 70,
-          child: Image.asset('assets/logo.png'),
-        ),
-      ],
-    );
-  }
+  // Widget _headerWidget() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Text(
+  //         "QUEEN",
+  //         style: Theme.of(context).textTheme.headline1.copyWith(fontSize: 30),
+  //       ),
+  //       Container(
+  //         height: 70,
+  //         child: Image.asset('assets/logo.png'),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _formWidget() {
     return Form(
@@ -144,12 +154,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: TextFormField(
                   obscureText: true,
                   decoration: InputDecoration(
-                      labelStyle: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
-                      border: InputBorder.none,
-                      labelText: "Confirm Password"),
+                    labelStyle: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
+                    border: InputBorder.none,
+                    labelText: "Confirm Password",
+                  ),
                   // ignore: missing_return
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -177,10 +188,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         .getEmailID(emailId: _emailPhone);
                     Provider.of<AddSeriesServices>(context, listen: false)
                         .getEmailId(email: _emailPhone);
-                    print(context.read<AuthenticationService>().signUp(
-                          email: _emailPhone,
-                          password: _password,
-                        ));
+                    print(
+                      context.read<AuthenticationService>().signUp(
+                            email: _emailPhone,
+                            password: _password,
+                          ),
+                    );
                   } else {
                     print("password Not Confirmed");
                   }
@@ -220,8 +233,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <Widget>[
                     Icon(FontAwesomeIcons.google),
                     SizedBox(width: 10),
-                    Text('Sign-up using Google',
-                        style: Theme.of(context).textTheme.headline1),
+                    Text(
+                      'Sign-up using Google',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ],
                 ),
                 textColor: Colors.white,
@@ -240,8 +255,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: <Widget>[
                     Icon(FontAwesomeIcons.facebook),
                     SizedBox(width: 10),
-                    Text('Sign-up using Facebook',
-                        style: Theme.of(context).textTheme.headline1),
+                    Text(
+                      'Sign-up using Facebook',
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ],
                 ),
                 textColor: Colors.white,
@@ -249,26 +266,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(
                 height: 10,
               ),
-              MaterialButton(
-                elevation: 0,
-                minWidth: double.maxFinite,
-                height: 50,
-                onPressed: () {},
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(FontAwesomeIcons.apple),
-                    SizedBox(width: 10),
-                    Text('Sign-up using Apple',
-                        style: Theme.of(context).textTheme.headline1),
-                  ],
-                ),
-                textColor: Colors.black,
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              // MaterialButton(
+              //   elevation: 0,
+              //   minWidth: double.maxFinite,
+              //   height: 50,
+              //   onPressed: () {},
+              //   color: Colors.white,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: <Widget>[
+              //       Icon(FontAwesomeIcons.apple),
+              //       SizedBox(width: 10),
+              //       Text(
+              //         'Sign-up using Apple',
+              //         style: Theme.of(context).textTheme.headline1,
+              //       ),
+              //     ],
+              //   ),
+              //   textColor: Colors.black,
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
               Text(
                 "Need Help?",
                 style: Theme.of(context).textTheme.headline2,
@@ -295,5 +314,4 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-// Widget
 }

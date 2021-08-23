@@ -66,28 +66,29 @@ class _HomePageState extends State<HomePage> {
                           'Welcome Back',
                           style: TextStyle(
                             color: kGoldenColor,
-                              fontFamily: 'OpenSans',
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold),
+                            fontFamily: 'OpenSans',
+                            fontSize: 28.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 40,
                     ),
                     MusicHorizontalScrollWidget(
                       headingText: 'Trending Playlist',
                       musicList: _musicList,
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 40,
                     ),
                     MusicHorizontalScrollWidget(
                       headingText: 'Featured This week',
                       musicList: _musicThisWeekList,
                     ),
                     SizedBox(
-                      height: 50,
+                      height: 40,
                     ),
                     MusicHorizontalScrollWidget(
                       headingText: 'New Arrival',
@@ -171,10 +172,10 @@ class _MusicHorizontalScrollWidgetState
                       child: Column(
                         children: [
                           Container(
-                            height: 120,
+                            height: MediaQuery.of(context).size.height * 0.14,
                             child: CachedNetworkImage(
                               imageUrl: _musicList[index][1],
-                              fit: BoxFit.fitWidth,
+                              fit: BoxFit.contain,
                             ),
                           ),
                           SizedBox(
