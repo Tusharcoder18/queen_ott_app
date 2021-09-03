@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:queen_ott_app/constants.dart';
 import 'package:queen_ott_app/pages/home_screen_page.dart';
 import 'package:queen_ott_app/pages/menu_page.dart';
@@ -12,6 +15,7 @@ import 'package:queen_ott_app/pages/no_internet_page.dart';
 import 'package:queen_ott_app/pages/shows_page.dart';
 import 'package:queen_ott_app/pages/upcoming_page.dart';
 import 'package:queen_ott_app/screens/subscription_screen.dart';
+import 'package:queen_ott_app/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,6 +70,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  bool checkSub(AuthBase auth) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.userId())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.data()['subscribed']) {
+        print("True");
+      }
+    });
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -80,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       DeviceOrientation.portraitUp,
     ]);
     final screenHeight = MediaQuery.of(context).size.height;
+    final authService = Provider.of<AuthBase>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 50,
               child: Image.asset('assets/logo.png'),
             ),
-            !_isSubscribed
+            !checkSub(authService)
                 ? MaterialButton(
                     onPressed: () {
                       Navigator.push(

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth;
@@ -88,43 +88,43 @@ class AuthenticationService {
     print("Google User Signed Out");
   }
 
-  Future<String> signInWithFacebook() async {
-    final FacebookLoginResult result = await facebookLogin.logIn(['email']);
-    switch (result.status) {
-      case FacebookLoginStatus.cancelledByUser:
-        print("Login Cancelled");
-        break;
-      case FacebookLoginStatus.error:
-        print("Login Error!");
-        break;
-      case FacebookLoginStatus.loggedIn:
-        try {
-          final FacebookAccessToken accessToken = result.accessToken;
-          AuthCredential credential =
-              FacebookAuthProvider.credential(accessToken.token);
-          final UserCredential authResult =
-              await _firebaseAuth.signInWithCredential(credential);
-          final User user = authResult.user;
-          return '$user';
-        } catch (e) {
-          print(e);
-        }
-        break;
-    }
-    return null;
-  }
+  // Future<String> signInWithFacebook() async {
+  //   final FacebookLoginResult result = await facebookLogin.logIn(['email']);
+  //   switch (result.status) {
+  //     case FacebookLoginStatus.cancelledByUser:
+  //       print("Login Cancelled");
+  //       break;
+  //     case FacebookLoginStatus.error:
+  //       print("Login Error!");
+  //       break;
+  //     case FacebookLoginStatus.loggedIn:
+  //       try {
+  //         final FacebookAccessToken accessToken = result.accessToken;
+  //         AuthCredential credential =
+  //             FacebookAuthProvider.credential(accessToken.token);
+  //         final UserCredential authResult =
+  //             await _firebaseAuth.signInWithCredential(credential);
+  //         final User user = authResult.user;
+  //         return '$user';
+  //       } catch (e) {
+  //         print(e);
+  //       }
+  //       break;
+  //   }
+  //   return null;
+  // }
 
-  Future<void> signOutFacebook() async {
-    await facebookLogin.logOut();
+  // Future<void> signOutFacebook() async {
+  //   await facebookLogin.logOut();
 
-    print("Facebook User Signed Out");
-  }
+  //   print("Facebook User Signed Out");
+  // }
 
 
   Future<void> signOutFromAll() async {
     signOut();
     signOutGoogle();
-    signOutFacebook();
+    // signOutFacebook();
   }
 
   /// This would return the current user email Id

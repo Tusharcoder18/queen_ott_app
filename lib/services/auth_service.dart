@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:queen_ott_app/models/profile.dart';
 
 abstract class AuthBase {
   String userId();
@@ -9,14 +10,17 @@ abstract class AuthBase {
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> createUserWithEmailAndPassword(String email, String password);
   Future<User> signInWithGoogle();
-  // Future<User> signInWithFacebook();
+  Future<User> signInWithFacebook();
   Future<void> resetPassword(String email);
   Future<void> signOut();
-  // Future<void> setUserData(ProfileModel profile);
+  Future<void> setUserData(ProfileModel profile);
+  Future<void> setSubscribed();
+  // Stream<bool> isSubscribed();
 }
 
 class Auth implements AuthBase {
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   Stream<User> authStateChanges() => _auth.authStateChanges();
@@ -29,7 +33,7 @@ class Auth implements AuthBase {
     final credential = await _auth.signInWithCredential(
       EmailAuthProvider.credential(email: email, password: password),
     );
-    
+
     return credential.user;
   }
 
@@ -60,12 +64,12 @@ class Auth implements AuthBase {
         );
         final User user = userCredential.user;
         if (user != null) {
-        assert(!user.isAnonymous);
-        assert(await user.getIdToken() != null);
-        final User currentUser = FirebaseAuth.instance.currentUser;
-        assert(user.uid == currentUser.uid);
-        print('signInWithGoogle succeeded: $user');
-      }
+          assert(!user.isAnonymous);
+          assert(await user.getIdToken() != null);
+          final User currentUser = FirebaseAuth.instance.currentUser;
+          assert(user.uid == currentUser.uid);
+          print('signInWithGoogle succeeded: $user');
+        }
         return userCredential.user;
       } else {
         throw FirebaseAuthException(
@@ -81,34 +85,34 @@ class Auth implements AuthBase {
     }
   }
 
-  // @override
-  // Future<User> signInWithFacebook() async {
-  //   final fb = FacebookLogin();
-  //   final response = await fb.logIn(permissions: [
-  //     FacebookPermission.publicProfile,
-  //     FacebookPermission.email,
-  //   ]);
-  //   switch (response.status) {
-  //     case FacebookLoginStatus.success:
-  //       final accessToken = response.accessToken;
-  //       final userCredential = await _auth.signInWithCredential(
-  //         FacebookAuthProvider.credential(accessToken.token),
-  //       );
-  //       return userCredential.user;
-  //     case FacebookLoginStatus.cancel:
-  //       throw FirebaseAuthException(
-  //         code: 'ERROR_ABORTED_BY_USER',
-  //         message: 'Sign in aborted by user',
-  //       );
-  //     case FacebookLoginStatus.error:
-  //       throw FirebaseAuthException(
-  //         code: 'ERROR_FACEBOOK_LOGIN_FAILED',
-  //         message: response.error.developerMessage,
-  //       );
-  //     default:
-  //       throw UnimplementedError();
-  //   }
-  // }
+  @override
+  Future<User> signInWithFacebook() async {
+    final fb = FacebookLogin();
+    final response = await fb.logIn(permissions: [
+      FacebookPermission.publicProfile,
+      FacebookPermission.email,
+    ]);
+    switch (response.status) {
+      case FacebookLoginStatus.success:
+        final accessToken = response.accessToken;
+        final userCredential = await _auth.signInWithCredential(
+          FacebookAuthProvider.credential(accessToken.token),
+        );
+        return userCredential.user;
+      case FacebookLoginStatus.cancel:
+        throw FirebaseAuthException(
+          code: 'ERROR_ABORTED_BY_USER',
+          message: 'Sign in aborted by user',
+        );
+      case FacebookLoginStatus.error:
+        throw FirebaseAuthException(
+          code: 'ERROR_FACEBOOK_LOGIN_FAILED',
+          message: response.error.developerMessage,
+        );
+      default:
+        throw UnimplementedError();
+    }
+  }
 
   @override
   Future<void> resetPassword(String email) async {
@@ -127,12 +131,31 @@ class Auth implements AuthBase {
     return _auth.currentUser.uid;
   }
 
+  @override
+  Future<void> setUserData(ProfileModel profile) async {
+    await _firestore.collection('Users').doc(userId()).set(
+          profile.toMap(),
+        );
+  }
+
+  @override
+  Future<void> setSubscribed() async {
+    await _firestore.collection('Users').doc(userId()).update(
+      {
+        'subscribed': true,
+      },
+    );
+  }
 
   // @override
-  // Future<void> setUserData(ProfileModel profile) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
+  // Stream<bool> isSubscribed() {
+  //   print("subCalled");
+  //   return _firestore
+  //       .collection('Users')
   //       .doc(userId())
-  //       .set(profile.toMap());
+  //       .snapshots()
+  //       .map((event) => event.data()['subscribed']);
+    
+  //   // Fetch the subscribed bool from firestore.
   // }
 }

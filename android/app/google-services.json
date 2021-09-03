@@ -1,49 +1,41 @@
 {
   "project_info": {
-    "project_number": "996504561511",
-    "project_id": "queenapp-81e7b",
-    "storage_bucket": "queenapp-81e7b.appspot.com"
+    "project_number": "578797374471",
+    "project_id": "queen-ott",
+    "storage_bucket": "queen-ott.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:996504561511:android:c104c557837632b5b7f1c2",
+        "mobilesdk_app_id": "1:578797374471:android:9a27e35261dc0786522ea2",
         "android_client_info": {
           "package_name": "com.example.queen_ott_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "996504561511-no2df1ucm801ambtd6mfsb1edscbrm45.apps.googleusercontent.com",
+          "client_id": "578797374471-g0lt5sbe5mq3osn00jdno4ukk7c83tn3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.queen_ott_app",
-            "certificate_hash": "fda479a8ad91f97ec697cd82a01ca4211becfa5d"
+            "certificate_hash": "3dc81ec7629c9273dee806663129ac553c970b28"
           }
         },
         {
-          "client_id": "996504561511-uul9u8768i0omejtcqni4f6rct45525o.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.queen_ott_app",
-            "certificate_hash": "1ddbc6f0bc680c0f349c3b1042c231b5ff0b3cd7"
-          }
-        },
-        {
-          "client_id": "996504561511-g6r2r1oh5tcajd8tmjokgvba33vsnjfb.apps.googleusercontent.com",
+          "client_id": "578797374471-dni39o957trtdgrt6hj0gdc07ebqpbv7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB0DWbcNZf1Bckmuz97FtGJ_1OJo8JFkto"
+          "current_key": "AIzaSyBVM9JT7muI-fmkZ0eDjFkqjxZ72qXHZZo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "996504561511-g6r2r1oh5tcajd8tmjokgvba33vsnjfb.apps.googleusercontent.com",
+              "client_id": "578797374471-dni39o957trtdgrt6hj0gdc07ebqpbv7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

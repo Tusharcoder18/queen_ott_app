@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">queen_ott_app</string>
-
-    <string name="facebook_app_id">205755991335748</string>
-
-    <string name="fb_login_protocol_scheme">fb205755991335748</string>
+<string name="app_name">queen_ott_app</string>
+<string name="facebook_app_id">4287998057989415</string>
+<string name="fb_login_protocol_scheme">fb4287998057989415</string>
 </resources>

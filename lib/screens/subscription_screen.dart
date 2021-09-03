@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/GuitarLessons/guitar_lessons.dart';
 import 'package:queen_ott_app/constants.dart';
-import 'package:queen_ott_app/screens/payments_test/payment_result_screen.dart';
-import 'package:queen_ott_app/services/subscription_service.dart';
+import 'package:queen_ott_app/services/auth_service.dart';
 import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -62,6 +60,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         );
       },
     );
+    Provider.of<AuthBase>(context).setSubscribed(); //This is to update the subscribed variable in firestore.
     print(response.orderId);
     print(response.paymentId);
     print(response.signature);
