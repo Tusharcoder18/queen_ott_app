@@ -15,7 +15,6 @@ class _MusicHomeScreenState extends State<MusicHomeScreen> {
   List<Widget> _widgetOption = <Widget>[
     HomePage(),
     SearchPage(),
-    //LibraryPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -41,11 +40,6 @@ class _MusicHomeScreenState extends State<MusicHomeScreen> {
               icon: Icon(Icons.search),
               label: 'search',
             ),
-
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.audiotrack_rounded),
-            //   label: 'Library',
-            // ),
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,

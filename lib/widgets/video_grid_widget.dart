@@ -124,7 +124,8 @@ class _VideoGridWidgetState extends State<VideoGridWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
+                  
+                  builder: (_) {
                     if (widget.isVideo) {
                       return Test(
                         videoUrl: gridContents[index].getVideoUrl(),

@@ -16,24 +16,21 @@ class _HomePageState extends State<HomePage> {
   List<List<String>> _musicList = [];
   List<List<String>> _musicThisWeekList = [];
   List<List<String>> _musicNewArrivalList = [];
+
   Future<void> getMusicInfo() async {
     final list = await context
         .read<MusicFetchingService>()
         .getMusicInfo(collectionName: 'MusicInformation');
     _musicList = list;
-
     _musicThisWeekList =
         context.read<MusicFetchingService>().returnThisWeekList();
+    print(_musicThisWeekList.length);
     _musicNewArrivalList =
         context.read<MusicFetchingService>().returnNewArrivalList();
 
-    if ((_musicList.length > 0) &&
-        (_musicThisWeekList.length > 0) &&
-        (_musicNewArrivalList.length > 0)) {
-      setState(() {
-        loading = false;
-      });
-    }
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -47,61 +44,63 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return loading == true
-        ? LoadingWidget()
-        : ListView(children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          'Welcome Back',
-                          style: TextStyle(
-                            color: kGoldenColor,
-                            fontFamily: 'OpenSans',
-                            fontSize: 28.0,
-                            fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: loading == true
+          ? LoadingWidget()
+          : ListView(children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: 20,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    MusicHorizontalScrollWidget(
-                      headingText: 'Trending Playlist',
-                      musicList: _musicList,
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    MusicHorizontalScrollWidget(
-                      headingText: 'Featured This week',
-                      musicList: _musicThisWeekList,
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    MusicHorizontalScrollWidget(
-                      headingText: 'New Arrival',
-                      musicList: _musicNewArrivalList,
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                  ],
+                          Text(
+                            'Welcome Back',
+                            style: TextStyle(
+                              color: kGoldenColor,
+                              fontFamily: 'OpenSans',
+                              fontSize: 28.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      MusicHorizontalScrollWidget(
+                        headingText: 'Trending Playlist',
+                        musicList: _musicList,
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      MusicHorizontalScrollWidget(
+                        headingText: 'Featured This week',
+                        musicList: _musicThisWeekList,
+                      ),
+                      SizedBox(
+                        height: 40,
+                      ),
+                      MusicHorizontalScrollWidget(
+                        headingText: 'New Arrival',
+                        musicList: _musicNewArrivalList,
+                      ),
+                      SizedBox(
+                        height: 50,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ]);
+            ]),
+    );
   }
 }
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
+import 'package:queen_ott_app/services/auth_service.dart';
 
 class UploadService extends ChangeNotifier {
   String videoUrl;
@@ -95,9 +95,7 @@ class UploadService extends ChangeNotifier {
   Future<List<String>> uploadVideo(BuildContext context,
       {File video, File thumbnail}) async {
     try {
-      final uid = Provider.of<AuthenticationService>(context, listen: false)
-          .currentUser
-          .uid;
+      final uid = Provider.of<Auth>(context, listen: false).userId();
       String name = uid + _videoTitle ?? '';
       UploadTask videoUploadTask = videoRef
           .child(name)
@@ -214,9 +212,11 @@ class UploadService extends ChangeNotifier {
         }
       });
     }
+
     /// If the video being uploaded does not belong to any series then
     else {
-      FirebaseFirestore.instance.collection("VideoInfo")
+      FirebaseFirestore.instance
+          .collection("VideoInfo")
           .add({
             'email': email,
             'uploaderID': uid,
@@ -254,33 +254,41 @@ class UploadService extends ChangeNotifier {
 
       FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-      void addVideoToGenreDatabase({String collectionName}){
+      void addVideoToGenreDatabase({String collectionName}) {
         _firebaseFirestore.collection(collectionName).add({
-          "videoRef" : getUid,
+          "videoRef": getUid,
         });
       }
 
-
       genreList.forEach((element) {
-        switch(element){
-          case "Action": addVideoToGenreDatabase(collectionName: videoActionCollection);
-          break;
-          case "Animation": addVideoToGenreDatabase(collectionName: videoAnimationCollection);
-          break;
-          case "Crime": addVideoToGenreDatabase(collectionName: videoCrimeCollection);
-          break;
-          case "Comedy": addVideoToGenreDatabase(collectionName: videoComedyCollection);
-          break;
-          case "Drama": addVideoToGenreDatabase(collectionName: videoDramaCollection);
-          break;
-          case "Fantasy": addVideoToGenreDatabase(collectionName: videoFantasyCollection);
-          break;
-          case "Historical": addVideoToGenreDatabase(collectionName: videoHistoricalCollection);
-          break;
-          case "Horror": addVideoToGenreDatabase(collectionName: videoHorrorCollection);
-          break;
-          case "Romance": addVideoToGenreDatabase(collectionName: videoRomanceCollection);
-          break;
+        switch (element) {
+          case "Action":
+            addVideoToGenreDatabase(collectionName: videoActionCollection);
+            break;
+          case "Animation":
+            addVideoToGenreDatabase(collectionName: videoAnimationCollection);
+            break;
+          case "Crime":
+            addVideoToGenreDatabase(collectionName: videoCrimeCollection);
+            break;
+          case "Comedy":
+            addVideoToGenreDatabase(collectionName: videoComedyCollection);
+            break;
+          case "Drama":
+            addVideoToGenreDatabase(collectionName: videoDramaCollection);
+            break;
+          case "Fantasy":
+            addVideoToGenreDatabase(collectionName: videoFantasyCollection);
+            break;
+          case "Historical":
+            addVideoToGenreDatabase(collectionName: videoHistoricalCollection);
+            break;
+          case "Horror":
+            addVideoToGenreDatabase(collectionName: videoHorrorCollection);
+            break;
+          case "Romance":
+            addVideoToGenreDatabase(collectionName: videoRomanceCollection);
+            break;
         }
       });
     }

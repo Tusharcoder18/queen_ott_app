@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/widgets/continue_watching_widget.dart';
 import 'package:queen_ott_app/widgets/image_carousel_widget.dart';
 import 'package:queen_ott_app/widgets/language_shows_widget.dart';
@@ -67,10 +64,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    User _user = Provider.of<AuthenticationService>(context).currentUser;
-    String _name = _user.displayName ?? 'User';
-    _name = _name.split(" ")[0];
-
     Future.delayed(Duration.zero, () => showDialogIfNoNotifications(context));
     return SingleChildScrollView(
       child: Container(
@@ -84,10 +77,22 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
               color: Colors.pink,
               child: ImageCarousel(),
             ),
-            HorizontalScrollHomeWidget(heading: _headingList[0], widget: ContinueWatchingWidget(),),
-            HorizontalScrollHomeWidget(heading: _headingList[1], widget: ContinueWatchingWidget(),),
-            HorizontalScrollHomeWidget(heading: _headingList[2], widget: LanguageShowsWidget(),),
-            HorizontalScrollHomeWidget(heading: _headingList[3], widget: ContinueWatchingWidget(),),
+            HorizontalScrollHomeWidget(
+              heading: _headingList[0],
+              widget: ContinueWatchingWidget(),
+            ),
+            HorizontalScrollHomeWidget(
+              heading: _headingList[1],
+              widget: ContinueWatchingWidget(),
+            ),
+            HorizontalScrollHomeWidget(
+              heading: _headingList[2],
+              widget: LanguageShowsWidget(),
+            ),
+            HorizontalScrollHomeWidget(
+              heading: _headingList[3],
+              widget: ContinueWatchingWidget(),
+            ),
           ],
         ),
       ),
@@ -96,7 +101,6 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 }
 
 class HorizontalScrollHomeWidget extends StatelessWidget {
-
   HorizontalScrollHomeWidget({@required this.heading, @required this.widget});
 
   final String heading;

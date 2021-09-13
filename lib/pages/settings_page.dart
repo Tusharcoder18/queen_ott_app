@@ -7,7 +7,6 @@ import 'package:queen_ott_app/screens/content_creator_screen.dart';
 import 'package:queen_ott_app/screens/sign_in_screen.dart';
 import 'package:queen_ott_app/screens/user_home_screen.dart';
 import 'package:queen_ott_app/services/auth_service.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

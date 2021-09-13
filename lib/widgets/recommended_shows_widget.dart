@@ -10,13 +10,13 @@ class RecommendedShowWidget extends StatefulWidget {
 class _RecommendedShowWidgetState extends State<RecommendedShowWidget> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    List<String> banners = [
-      'assets/movieTwo.jpg',
-      'assets/moviePoster.jpg',
-      'assets/movieOne.jpg',
-    ];
+    // final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
+    // List<String> banners = [
+    //   'assets/movieTwo.jpg',
+    //   'assets/moviePoster.jpg',
+    //   'assets/movieOne.jpg',
+    // ];
     return ListView.builder(
         physics: ScrollPhysics(),
         scrollDirection: Axis.vertical,

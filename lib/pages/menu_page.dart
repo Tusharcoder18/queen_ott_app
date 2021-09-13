@@ -16,7 +16,12 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
-  List<String> _premiumPlans = ['Monthly', 'Quaterly', 'Half Yearly', 'Yearly'];
+  List<String> _premiumPlans = [
+    'Monthly',
+    'Quaterly',
+    'Half Yearly',
+    'Yearly',
+  ];
 
   List<int> _premiumPrices = [49, 120, 150, 250];
 
@@ -53,7 +58,10 @@ class _MenuPageState extends State<MenuPage> {
     ];
     List<Widget> _pushTo = [
       MusicHomeScreen(),
-      SubscriptionScreen(plans: _guitarPlans, prices: _guitarPrices),
+      SubscriptionScreen(
+        plans: _guitarPlans,
+        prices: _guitarPrices,
+      ),
       Container(),
       ReferAndEarnScreen(),
       Container(),

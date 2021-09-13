@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queen_ott_app/screens/user_home_screen.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
+import 'package:queen_ott_app/services/auth_service.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
@@ -58,11 +58,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final firebaseUser = context.watch<User>();
     if (firebaseUser != null) {
       Provider.of<UploadService>(context, listen: false).getEmailID(
-        emailId: Provider.of<AuthenticationService>(context, listen: false)
+        emailId: Provider.of<Auth>(context, listen: false)
             .returnCurrentEmailId(),
       );
       Provider.of<AddSeriesServices>(context, listen: false).getEmailId(
-        email: Provider.of<AuthenticationService>(context, listen: false)
+        email: Provider.of<Auth>(context, listen: false)
             .returnCurrentEmailId(),
       );
       return HomeScreen();

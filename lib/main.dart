@@ -9,11 +9,12 @@ import 'package:queen_ott_app/musicPages/musicService/music_fetching_service.dar
 import 'package:queen_ott_app/screens/landing_page.dart';
 import 'package:queen_ott_app/services/add_series_services.dart';
 import 'package:queen_ott_app/services/auth_service.dart';
-import 'package:queen_ott_app/services/authentication_service.dart';
 import 'package:queen_ott_app/services/series_fetching_service.dart';
 import 'package:queen_ott_app/services/upload_service.dart';
 import 'package:queen_ott_app/services/video_fetching_service.dart';
 import 'package:queen_ott_app/themes/dark_theme.dart';
+
+import 'musicPages/home_page.dart';
 
 Future<void> main() async {
   Provider.debugCheckInvalidValueType = null;
@@ -31,12 +32,7 @@ class MyApp extends StatelessWidget {
     ]);
     return MultiProvider(
       providers: [
-        Provider<AuthenticationService>(
-            create: (_) => AuthenticationService(FirebaseAuth.instance)),
         Provider<AuthBase>(create: (_) => Auth()),
-        StreamProvider(
-            create: (context) =>
-                context.read<AuthenticationService>().authStateChanges),
         Provider<UploadService>(create: (_) => UploadService()),
         ChangeNotifierProvider<AddSeriesServices>(
             create: (_) => AddSeriesServices(FirebaseFirestore.instance)),
@@ -53,7 +49,7 @@ class MyApp extends StatelessWidget {
         title: 'Queen App',
         theme: darkTheme,
         debugShowCheckedModeBanner: false,
-        // home: SplashScreen(),        
+        // home: HomePage(),
         home: LandingPage(),
       ),
     );

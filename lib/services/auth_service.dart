@@ -147,15 +147,7 @@ class Auth implements AuthBase {
     );
   }
 
-  // @override
-  // Stream<bool> isSubscribed() {
-  //   print("subCalled");
-  //   return _firestore
-  //       .collection('Users')
-  //       .doc(userId())
-  //       .snapshots()
-  //       .map((event) => event.data()['subscribed']);
-    
-  //   // Fetch the subscribed bool from firestore.
-  // }
+  String returnCurrentEmailId(){
+    return _auth.currentUser.email;
+  }
 }

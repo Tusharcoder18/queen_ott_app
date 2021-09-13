@@ -6,7 +6,10 @@ import 'package:queen_ott_app/widgets/custom_button.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class SubscriptionScreen extends StatefulWidget {
-  SubscriptionScreen({this.plans, this.prices});
+  SubscriptionScreen({
+    this.plans,
+    this.prices,
+  });
 
   final List<String> plans;
   final List<int> prices;
@@ -16,9 +19,8 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-  // final paymentServices = Provider.of<SubscriptionService>(context);
   int _selectPlan = 0;
-  int _amount = 49;
+  int _amount;
   bool _termsCheck = false;
   List<String> _plans;
   List<int> _prices;
@@ -35,7 +37,6 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-    // Provider.of<SubscriptionService>(context).initial();
 
     _plans = widget.plans;
     _prices = widget.prices;
@@ -43,12 +44,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   void dispose() {
-    // Provider.of<SubscriptionService>(context).dispose();
     _razorpay.clear();
+    super.dispose();
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    print('Success');
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -60,14 +60,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         );
       },
     );
-    Provider.of<AuthBase>(context).setSubscribed(); //This is to update the subscribed variable in firestore.
+    Provider.of<AuthBase>(context)
+        .setSubscribed(); //This is to update the subscribed variable in firestore.
     print(response.orderId);
     print(response.paymentId);
     print(response.signature);
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print('Failure');
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -83,7 +83,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    print('External Wallet');
+    String valName = response.walletName;
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -91,13 +91,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         return AlertDialog(
           title: Center(
             child: Text(
-              'Payment Successful(Wallet)',
+              'Payment Successful via $valName',
             ),
           ),
         );
       },
     );
-    print(response.walletName);
   }
 
   void openCheckout() {
@@ -109,7 +108,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       'prefill': {
         'contact': '9969113464', //Add real users phone number.
         'email': 'test@gmail.com', //Add real users email id.
-      }
+      },
+      
     };
 
     try {
@@ -226,20 +226,19 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     return InkWell(
       onTap: () {
         setState(() {
-          if (text == 'Monthly') {
+          if (text == _plans[0]) {
             _selectPlan = 0;
-            _amount = 49;
-          } else if (text == 'Quaterly') {
+            _amount = _prices[0];
+          } else if (text == _plans[1]) {
             _selectPlan = 1;
-            _amount = 120;
-          } else if (text == 'Half Yearly') {
+            _amount = _prices[1];
+          } else if (text == _plans[2]) {
             _selectPlan = 2;
-            _amount = 150;
-          } else if (text == 'Yearly') {
+            _amount = _prices[2];
+          } else if (text == _plans[3]) {
             _selectPlan = 3;
-            _amount = 250;
+            _amount = _prices[3];
           }
-          print(_selectPlan);
         });
       },
       child: Container(

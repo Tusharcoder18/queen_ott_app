@@ -19,7 +19,6 @@ class _SearchPageState extends State<SearchPage> {
     musicList.forEach((element) {
       musicNameList.add(element[0]);
     });
-    print(musicNameList);
   }
 
   @override
@@ -27,6 +26,7 @@ class _SearchPageState extends State<SearchPage> {
     fetchList();
     super.initState();
   }
+
   final double sizedBoxHeight = 20.0;
 
   @override
@@ -51,7 +51,7 @@ class _SearchPageState extends State<SearchPage> {
                   Text(
                     'Search',
                     style: TextStyle(
-                      color: kGoldenColor,
+                        color: kGoldenColor,
                         fontFamily: 'OpenSans',
                         fontWeight: FontWeight.bold,
                         fontSize: 28.0),
@@ -66,7 +66,9 @@ class _SearchPageState extends State<SearchPage> {
                       showSearch(
                         context: context,
                         delegate: DataSearch(
-                            musicList: musicList, musicNameList: musicNameList),
+                          musicList: musicList,
+                          musicNameList: musicNameList,
+                        ),
                       );
                     },
                   ),
@@ -84,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
             Text(
               'Search By Genre',
               style: TextStyle(
-                color: kGoldenColor,
+                  color: kGoldenColor,
                   fontFamily: 'OpenSans',
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),

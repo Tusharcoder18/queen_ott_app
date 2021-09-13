@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -89,7 +90,17 @@ class _HomeScreenState extends State<HomeScreen> {
     _checkInternet().whenComplete(() {
       setState(() {});
     });
+    // _getUserName("1odY1XeoFJgIiS42ryTkyg7CO9a2");
   }
+
+  // Future<void> _getUserName(String id) async {
+  //   FirebaseFirestore.instance.collection('Users').doc(id).get().then((value) {
+  //     print(value);
+  //     setState(() {
+  //       _userName = value.data['UserName'].toString();
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

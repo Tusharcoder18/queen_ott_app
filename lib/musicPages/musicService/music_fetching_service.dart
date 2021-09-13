@@ -30,7 +30,7 @@ class MusicFetchingService extends ChangeNotifier {
         if (element.data()["new"] == true) {
           _musicNewArrivalList.add(infoList);
         }
-        if (element.data()["thisWeek"] == true) {
+        if (element.data()["thisweek"] == true) {
           _musicThisWeekList.add(infoList);
         }
         _musicList.add(infoList);
